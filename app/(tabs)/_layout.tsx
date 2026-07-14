@@ -31,8 +31,43 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Bosh sahifa",
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="courses"
+        options={{
+          title: "O'quv",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="book.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="research"
+        options={{
+          title: "Ilmiy",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="flask.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="compounds"
+        options={{
+          title: "Birikmalar",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="atom" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="quiz"
+        options={{
+          title: "Quiz",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="checkmark.circle.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profil",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
         }}
       />
     </Tabs>
