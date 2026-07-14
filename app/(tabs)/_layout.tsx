@@ -29,45 +29,38 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="reactions"
         options={{
-          title: "Bosh sahifa",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="courses"
-        options={{
-          title: "O'quv",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="book.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="research"
-        options={{
-          title: "Ilmiy",
+          title: "Reaksiyalar",
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="flask.fill" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="compounds"
+        name="periodic"
         options={{
-          title: "Birikmalar",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="atom" color={color} />,
+          title: "Davriy",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="quiz"
+        name="index"
         options={{
-          title: "Quiz",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="checkmark.circle.fill" color={color} />,
+          title: "Bosh",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="calculators"
         options={{
-          title: "Profil",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          title: "Kalkulatorlar",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="chevron.right" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: "Chat",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="bubble.left.fill" color={color} />,
         }}
       />
     </Tabs>

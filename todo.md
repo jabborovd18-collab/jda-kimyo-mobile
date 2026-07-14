@@ -1,91 +1,247 @@
-# JDA Kimyo Mobile — TODO List
+# JDA Kimyo Mobile — TODO List (Yangilangan)
 
-## Asosiy Xususiyatlar
-
-### Navigatsiya va Tuzilish
-- [x] Tab bar navigatsiyasini sozlash (Home, Courses, Research, Compounds, Quiz, Profile)
-- [x] Har bir tab uchun asosiy ekranlarni yaratish
-- [x] Ekranlar orasida navigatsiyani sozlash
-
-### 1. Bosh Sahifa (Home Screen)
-- [x] Xush kelibsiz xabari va foydalanuvchi nomi ko'rsatish
-- [x] 4 ta asosiy bo'lim kartasi yaratish (O'quv, Ilmiy, Birikmalar, Quiz)
-- [x] Oxirgi o'rganilgan mavzuni ko'rsatish
-- [x] Profil ikonasiga bosish orqali profilga o'tish
-
-### 2. O'quv Kurslari (Courses Section)
-- [x] 6 ta bosqichni ro'yxatini yaratish
-- [x] Har bir bosqichning progress bar'ini ko'rsatish
-- [ ] Bosqichga bosish → Dars mazmuni
-- [ ] Dars mazmunini ko'rsatish (matn, formulalar, misollar)
-- [ ] 3D modellarni ko'rsatish (agar mavjud bo'lsa)
-- [ ] Keyingi/Oldingi darsga o'tish tugmalari
-- [ ] Progress saqlash (AsyncStorage)
-
-### 3. Ilmiy Bo'lim (Research Section)
-- [x] 4 ta yo'nalishni ro'yxatini yaratish
-- [ ] Har bir yo'nalishning batafsil mazmunini yaratish
-- [ ] Chuqurlashgan mavzular (CFT, MO, Termodinamika)
-- [ ] Ilmiy maqolalar ro'yxati
-- [ ] Maqolalarga havola qo'shish
-
-### 4. Birikmalar Bazasi (Compounds Database)
-- [ ] Birikmalar ma'lumotlari bazasini yaratish (120+ birikma)
-- [x] Qidiruv funksiyasini amalga oshirish (formula, nom, markaziy atom)
-- [x] Filtrlar: tur (Kation, Anion, Neytral), geometriya
-- [x] Birikmalar kartalarini ko'rsatish
-- [ ] Birikma kartasiga bosish → Batafsil ma'lumot
-- [ ] 3D modellarni ko'rsatish (web-view orqali)
-
-### 5. Quiz va Testlar (Quiz Section)
-- [ ] Quiz ma'lumotlari bazasini yaratish (500+ savol)
-- [x] Mavzular bo'yicha test ro'yxati
-- [ ] Test o'tish interfeysi
-- [ ] Savolga javob berish (multiple choice)
-- [ ] Test natijalarini ko'rsatish
-- [ ] Natijalarni saqlash (AsyncStorage)
-- [ ] Natijalarni PDF shaklida yuklab olish (opsional)
-
-### 6. Shaxsiy Kabinet (Profile Screen)
-- [x] Foydalanuvchi profilini ko'rsatish
-- [x] Umumiy statistika (o'rganilgan darslar, o'tkazilgan testlar, oʻrtacha natija)
-- [ ] Profilni tahrirlash funksiyasi
-- [x] Chiqish tugmasi
-
-### 7. Sozlamalar (Settings Screen)
-- [x] Qora/Oq rejim almashuvi
-- [x] Til tanlash (Oʻzbek, Ingliz)
-- [x] Bildirishnomalar sozlamalari
-- [x] Maʼlumotlarni tozalash
-- [x] Ilovaning versiyasini ko'rsatish
-
-## Dizayn va UI
-- [ ] Branding (logo, ranglar, shriftlar) qo'shish
-- [ ] iOS HIG muvofiqlik tekshirish
-- [ ] Qora/Oq rejimda barcha ekranlarni tekshirish
-- [ ] Responsive dizayn tekshirish (turli ekran o'lchamlari)
-- [ ] Animatsiyalar va o'tishlar (opsional)
-
-## Texnik Vazifalar
-- [ ] AsyncStorage orqali ma'lumotlarni saqlash va o'qish
-- [ ] 3D modellari ko'rsatish uchun web-view integratsiyasi
-- [ ] Qidiruv va filtrlash algoritmini optimallash
-- [ ] Ilovaning performance'ini tekshirish
-- [ ] Xatolarni boshqarish va user feedback
-
-## Sinov va Debugging
-- [ ] Barcha ekranlarda navigatsiyani tekshirish
-- [ ] Barcha tugmalar va interaktiv elementlarni tekshirish
-- [ ] iOS va Android'da test qilish
-- [ ] Xatolarni va edge case'larni tekshirish
-- [ ] Performance va yuklash vaqtini tekshirish
-
-## Deployment
-- [ ] Ilovani Google Play Store'ga yuklash (Android)
-- [ ] Ilovani Apple App Store'ga yuklash (iOS)
-- [ ] Ilovaning versiyasini yangilash
+## 🎯 Asosiy Maqsad
+Oliy Kimyo uchun to'liq o'quv platformasi - 5 ta asosiy oyna
 
 ---
 
-## Tugallangan Vazifalar
-(Bu bo'lim tugallangan vazifalarni ko'rsatadi)
+## 📱 TAB BAR (5 ta oyna)
+- [ ] Tab bar'ni 5 ta oynaga o'zgartirish
+  - [ ] Reaksiyalar
+  - [ ] Davriy jadval
+  - [ ] Bosh sahifa (CENTER)
+  - [ ] Kalkulatorlar
+  - [ ] Chat
+
+---
+
+## 🏠 1. BOSH SAHIFA (HOME)
+
+### Quiz va Natijalar
+- [ ] Quiz statistika ko'rsatgichi
+  - [ ] O'tkazilgan testlar soni
+  - [ ] O'rtacha natija
+  - [ ] Eng yaxshi natija
+- [ ] Shaxsiy reytinglar (Mening natijalarim)
+- [ ] Global reytinglar (Barcha foydalanuvchilar)
+  - [ ] Top 10 reytingi
+  - [ ] Mening o'rnim
+
+### 3D Molekulalar (Tez kunda)
+- [ ] 3D laboratoriya bo'limiga o'tish tugmasi
+- [ ] Asosiy molekulalar ko'rsatgichi (H₂O, CO₂, NH₃, CH₄)
+
+### Ilmiy Elektron Adabiyotlar
+- [ ] Yangi maqolalar ro'yxati
+  - [ ] Maqola nomi
+  - [ ] Muallif
+  - [ ] Yil
+  - [ ] Qisqa tavsif
+- [ ] Barcha maqolalarni ko'rish tugmasi
+
+### Oliy Kimyoning Fanlari (Kurslar)
+- [ ] Kurslar ro'yxati
+  - [ ] Kurs nomi
+  - [ ] Progress bar
+  - [ ] O'tkazilgan foiz
+- [ ] Barcha kurslarni ko'rish tugmasi
+
+### Ommaviy Chat
+- [ ] Oxirgi xabarlar ko'rsatgichi
+  - [ ] Foydalanuvchi nomi
+  - [ ] Xabar mazmuni
+  - [ ] Vaqt
+- [ ] Chat'ga o'tish tugmasi
+
+---
+
+## ⚗️ 2. REAKSIYALAR OYNASI
+
+### Qidiruv va Filtrlar
+- [ ] Qidiruv input'i
+  - [ ] Reaktantlar bo'yicha qidiruv
+  - [ ] Mahsulotlar bo'yicha qidiruv
+  - [ ] Reaksiya turi bo'yicha qidiruv
+- [ ] Kategoriyalar (ixtiyoriy)
+  - [ ] Asidlik-baziklik
+  - [ ] Redoks
+  - [ ] Sintez
+  - [ ] Boshqa
+
+### Reaksiyalar Ro'yxati
+- [ ] Ko'p reaksiyalar (iloji boricha ko'p)
+  - [ ] Reaksiya tenglamasi
+  - [ ] Reaksiya turi
+  - [ ] Temperatura
+  - [ ] Bosim
+
+### Batafsil Reaksiya Ma'lumoti
+- [ ] Reaksiya tenglamasi va teng koeffitsientlari
+- [ ] Reaksiya turi
+- [ ] Sharoit:
+  - [ ] Temperatura
+  - [ ] Bosim
+  - [ ] Katalizator (agar kerak)
+  - [ ] Eritmaning intensivligi
+- [ ] Texnika nomi
+- [ ] O'rtaliq hosil bo'ladigan modda
+- [ ] Energiya (Ekzotermik/Endotermik)
+- [ ] Amaliy qadamlar
+- [ ] Statistika (Unumlilik, vaqt)
+- [ ] Manbalar
+
+---
+
+## 📊 3. DAVRIY JADVAL OYNASI
+
+### Interaktiv Davriy Jadval
+- [ ] Davriy jadvalning vizual ko'rinishi
+- [ ] Elementlarni qidiruv
+- [ ] Zoom funksiyasi (+/-)
+- [ ] Elementga bosish → Ma'lumot kartasi
+
+### Element Ma'lumoti
+- [ ] Asosiy ma'lumotlar
+  - [ ] Atom raqami
+  - [ ] Atom massasi
+  - [ ] Elektronlar tuzilishi
+  - [ ] Valentlik
+  - [ ] Elektronegativlik
+- [ ] Kristall tuzilishi
+  - [ ] Fazasi
+  - [ ] Erimish nuqtasi
+  - [ ] Qaynatish nuqtasi
+  - [ ] Zichlik
+- [ ] Elektronlar tuzilishi
+  - [ ] Orbital diagramma
+  - [ ] Valentlik elektronlari
+- [ ] Kimyoviy bog'lanish
+  - [ ] Eng keng tarqalgan bog'lanishlar
+  - [ ] Bog'lanish energiyasi
+- [ ] Isotoplar
+- [ ] Tabiat va foydalanish
+- [ ] Manbalar
+
+---
+
+## 🧮 4. KALKULATORLAR OYNASI
+
+### Qidiruv va Kategoriyalar
+- [ ] Kalkulyatorlarni qidiruv
+- [ ] Kategoriyalar:
+  - [ ] Asosiy (Mollik, pH, Konsentratsiya, Massa, Foiz)
+  - [ ] Ilmiy (Termodinamika, Spektroskopiya, Kristall maydon, Redoks)
+  - [ ] Boshqa
+
+### Asosiy Kalkulatorlar
+- [ ] Mollik kalkulyatori
+  - [ ] Input: Molyar massa, Massa, Hajm
+  - [ ] Output: Mollar soni, Mollik, Konsentratsiya
+- [ ] pH kalkulyatori
+  - [ ] Input: [H⁺], pOH, Ka
+  - [ ] Output: pH, pOH, [OH⁻], Acididity/Basicity
+- [ ] Konsentratsiya kalkulyatori
+  - [ ] Input: Massa, Hajm, Molyar massa
+  - [ ] Output: Konsentratsiya (g/L, mol/L, %)
+- [ ] Massa kalkulyatori
+  - [ ] Input: Mollar soni, Molyar massa
+  - [ ] Output: Massa (g)
+- [ ] Foiz tarkibi kalkulyatori
+  - [ ] Input: Elementlar massasi
+  - [ ] Output: Foiz tarkibi
+
+### Ilmiy Kalkulatorlar
+- [ ] Termodinamika kalkulyatori
+  - [ ] Input: ΔH, ΔS, T
+  - [ ] Output: ΔG, Spontanlik, K (equilibrium)
+- [ ] Spektroskopiya kalkulyatori
+  - [ ] Input: Tolba uzunligi, Absorbtsiya, Konsentratsiya
+  - [ ] Output: Energiya, Chastota, Moliy ekstinksiya
+- [ ] Kristall maydon kalkulyatori
+  - [ ] Input: Kompleks, Ligand turi, Geometriya
+  - [ ] Output: d-orbital splitting, Elektronlar tuzilishi, Spin state, Magnetik moment
+- [ ] Redoks reaksiya kalkulyatori
+  - [ ] Input: Oxidizer, Reducer, Muhit
+  - [ ] Output: Teng koeffitsientlari, E°cell, Spontanlik
+- [ ] Osmotik bosim kalkulyatori
+  - [ ] Input: Konsentratsiya, Temperatura
+  - [ ] Output: Osmotik bosim
+- [ ] Ionizatsiya kalkulyatori
+  - [ ] Input: Ka, Konsentratsiya
+  - [ ] Output: [H⁺], pH, Ionizatsiya darajasi
+- [ ] Boshqa kalkulatorlar (kerak bo'lsa)
+
+---
+
+## 💬 5. CHAT OYNASI (Twitter-ga o'xshash)
+
+### Chat Interfeysi
+- [ ] Xabarlar ro'yxati
+  - [ ] Foydalanuvchi nomi
+  - [ ] Avatar
+  - [ ] Xabar mazmuni
+  - [ ] Vaqt
+  - [ ] Like/Dislike tugmalari
+- [ ] Onlayn foydalanuvchilar soni
+- [ ] Filtrlar (Barcha, Yangi, Eng ko'p like'langan)
+
+### Xabar Yozish
+- [ ] Xabar input'i
+- [ ] Yuborish tugmasi
+- [ ] Xabar tarixini saqlash
+
+### Boshqa Funksiyalar
+- [ ] Xabarni o'chirish (o'zingizning xabari)
+- [ ] Xabarni tahrirlash (o'zingizning xabari)
+- [ ] Foydalanuvchi profiliga o'tish
+
+---
+
+## 🔧 TEXNIK XUSUSIYATLAR
+
+### State Management
+- [ ] AsyncStorage - Lokal ma'lumotlarni saqlash
+- [ ] React Context - Global state
+- [ ] Quiz natijalarini saqlash
+- [ ] Chat xabarlarini saqlash
+
+### API Integratsiyasi (Keyinroq)
+- [ ] Reaksiyalar API
+- [ ] Davriy jadval API
+- [ ] Kalkulatorlar API
+- [ ] Chat API (Real-time emas)
+- [ ] Reytinglar API
+
+### Dizayn va UI
+- [ ] iOS HIG muvofiqlik
+- [ ] Dark/Light mode
+- [ ] Responsive design
+- [ ] Smooth animations
+
+---
+
+## 📊 STATISTIKA
+
+- [ ] Quiz statistika
+- [ ] Reytinglar
+- [ ] O'rganish jarayoni
+- [ ] Foydalanish statistikasi
+
+---
+
+## 🚀 DEPLOYMENT
+
+- [ ] Expo Go'da test qilish
+- [ ] APK yaratish (Android)
+- [ ] IPA yaratish (iOS)
+- [ ] App Store'ga joylashtirish
+
+---
+
+## 📝 ESLATMALAR
+
+1. **Ma'lumotlar:** Siz berib borarsiz
+2. **Reaksiyalar:** Ko'p reaksiyalar, kategoriyalar ixtiyoriy
+3. **Chat:** Real-time emas, Twitter-ga o'xshash
+4. **Kalkulatorlar:** Ko'p kalkulatorlar + qidiruv
+5. **Davriy jadval:** Jadval + elementlar ma'lumoti (keyinroq)
