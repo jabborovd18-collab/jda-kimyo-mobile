@@ -5,13 +5,11 @@ Oliy Kimyo uchun to'liq o'quv platformasi - 5 ta asosiy oyna
 
 ---
 
-## 📱 TAB BAR (5 ta oyna)
-- [ ] Tab bar'ni 5 ta oynaga o'zgartirish
-  - [ ] Reaksiyalar
-  - [ ] Davriy jadval
-  - [ ] Bosh sahifa (CENTER)
-  - [ ] Kalkulatorlar
-  - [ ] Chat
+## 📱 BOTTOM NAVIGATION (5 ta oyna)
+- [x] Bottom navigation dizaynini o'zgartirish (CENTER katta aylana)
+  - [x] Chap: Reaksiyalar, Davriy jadval
+  - [x] CENTER: Bosh sahifa (katta aylana)
+  - [x] O'ng: Kalkulatorlar, Chat
 
 ---
 
