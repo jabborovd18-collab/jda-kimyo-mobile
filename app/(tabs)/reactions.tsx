@@ -4,77 +4,67 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Modal,
+  Pressable,
 } from "react-native";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { ScreenContainer } from "@/components/screen-container";
+import reactionsData from "@/lib/data/reactions.json";
+
+interface Reaction {
+  id: number;
+  name: string;
+  equation: string;
+  category: string;
+  conditions: string;
+  catalyst: string;
+  technique: string;
+  products: string;
+  intensity: string;
+}
 
 /**
  * Reactions Screen - Reaksiyalar
- * Qidiruv, Kategoriyalar, Batafsil ma'lumot
+ * 100+ reaksiya, Qidiruv, Kategoriyalar, Batafsil ma'lumot
  */
 export default function ReactionsScreen() {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedReaction, setSelectedReaction] = useState<Reaction | null>(null);
 
-  const reactions = [
-    {
-      id: 1,
-      equation: "2H₂ + O₂ → 2H₂O",
-      type: "Sintez",
-      temperature: "300-400°C",
-      catalyst: "Pt, Ni, Fe",
-      intensity: "0.5 mol/L",
-      intermediate: "H₂O₂",
-    },
-    {
-      id: 2,
-      equation: "2Na + Cl₂ → 2NaCl",
-      type: "Sintez",
-      temperature: "25°C",
-      catalyst: "Yo'q",
-      intensity: "1.0 mol/L",
-      intermediate: "Yo'q",
-    },
-    {
-      id: 3,
-      equation: "CaCO₃ → CaO + CO₂",
-      type: "Parchalanish",
-      temperature: "825°C",
-      catalyst: "Yo'q",
-      intensity: "Qattiq",
-      intermediate: "Yo'q",
-    },
-    {
-      id: 4,
-      equation: "2KMnO₄ + 16HCl → 2KCl + 2MnCl₂ + 5Cl₂ + 8H₂O",
-      type: "Redoks",
-      temperature: "25°C",
-      catalyst: "Yo'q",
-      intensity: "0.1 mol/L",
-      intermediate: "Cl₂",
-    },
-    {
-      id: 5,
-      equation: "CH₄ + 2O₂ → CO₂ + 2H₂O",
-      type: "Yonish",
-      temperature: "300-400°C",
-      catalyst: "Yo'q",
-      intensity: "1.0 mol/L",
-      intermediate: "CO",
-    },
+  const categories = [
+    "all",
+    "Sintez",
+    "Oksidlanish",
+    "Asid-baza",
+    "Dehidratatsiya",
+    "Dehidrogenatsiya",
+    "Fermentatsiya",
   ];
 
-  const categories = ["all", "Sintez", "Parchalanish", "Redoks", "Yonish"];
+  const getCategoryColor = (category: string) => {
+    const categoryColors: Record<string, string> = {
+      Sintez: "#FF6B6B",
+      Oksidlanish: "#4ECDC4",
+      "Asid-baza": "#FFE66D",
+      Dehidratatsiya: "#95E1D3",
+      Dehidrogenatsiya: "#C7CEEA",
+      Fermentatsiya: "#B19CD9",
+    };
+    return categoryColors[category] || "#999";
+  };
 
-  const filteredReactions = reactions.filter((reaction) => {
-    const matchesSearch =
-      reaction.equation.toLowerCase().includes(searchText.toLowerCase()) ||
-      reaction.type.toLowerCase().includes(searchText.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || reaction.type === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredReactions = useMemo(() => {
+    return (reactionsData as Reaction[]).filter((reaction) => {
+      const matchesSearch =
+        reaction.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        reaction.equation.toLowerCase().includes(searchText.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "all" || reaction.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchText, selectedCategory]);
 
   return (
     <ScreenContainer className="p-4">
@@ -86,7 +76,7 @@ export default function ReactionsScreen() {
               ⚗️ Reaksiyalar
             </Text>
             <Text className="text-sm text-muted">
-              Kimyoviy reaksiyalarni qidiruv va o'rganish
+              {filteredReactions.length} ta reaksiya topildi
             </Text>
           </View>
 
@@ -135,30 +125,37 @@ export default function ReactionsScreen() {
           <View className="gap-3">
             {filteredReactions.length > 0 ? (
               filteredReactions.map((reaction) => (
-                <TouchableOpacity
+                <Pressable
                   key={reaction.id}
+                  onPress={() => setSelectedReaction(reaction)}
                   className="bg-surface rounded-lg p-4 border border-border active:opacity-80"
                 >
-                  {/* Equation */}
-                  <Text className="text-base font-bold text-primary mb-2">
-                    {reaction.equation}
-                  </Text>
-
-                  {/* Type */}
-                  <View className="flex-row items-center gap-2 mb-3">
-                    <View className="bg-primary/10 px-2 py-1 rounded">
-                      <Text className="text-xs text-primary font-semibold">
-                        {reaction.type}
+                  {/* Name & Category */}
+                  <View className="flex-row items-start justify-between mb-2 gap-2">
+                    <Text className="flex-1 text-base font-bold text-foreground">
+                      {reaction.name}
+                    </Text>
+                    <View
+                      className="px-2 py-1 rounded"
+                      style={{ backgroundColor: getCategoryColor(reaction.category) }}
+                    >
+                      <Text className="text-xs font-semibold text-white">
+                        {reaction.category}
                       </Text>
                     </View>
                   </View>
 
+                  {/* Equation */}
+                  <Text className="text-sm font-mono text-primary mb-3">
+                    {reaction.equation}
+                  </Text>
+
                   {/* Details */}
                   <View className="gap-2 border-t border-border pt-3">
                     <View className="flex-row justify-between">
-                      <Text className="text-xs text-muted">Temperatura:</Text>
+                      <Text className="text-xs text-muted">Sharoit:</Text>
                       <Text className="text-xs font-semibold text-foreground">
-                        {reaction.temperature}
+                        {reaction.conditions}
                       </Text>
                     </View>
                     <View className="flex-row justify-between">
@@ -168,19 +165,9 @@ export default function ReactionsScreen() {
                       </Text>
                     </View>
                     <View className="flex-row justify-between">
-                      <Text className="text-xs text-muted">
-                        Eritmaning intensivligi:
-                      </Text>
+                      <Text className="text-xs text-muted">Intensivlik:</Text>
                       <Text className="text-xs font-semibold text-foreground">
                         {reaction.intensity}
-                      </Text>
-                    </View>
-                    <View className="flex-row justify-between">
-                      <Text className="text-xs text-muted">
-                        O'rtaliq hosil bo'ladigan:
-                      </Text>
-                      <Text className="text-xs font-semibold text-foreground">
-                        {reaction.intermediate}
                       </Text>
                     </View>
                   </View>
@@ -189,18 +176,110 @@ export default function ReactionsScreen() {
                   <Text className="text-sm text-primary font-semibold mt-3">
                     Batafsil ma'lumot →
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               ))
             ) : (
               <View className="items-center justify-center py-8">
-                <Text className="text-lg text-muted">
-                  Reaksiya topilmadi
-                </Text>
+                <Text className="text-lg text-muted">Reaksiya topilmadi</Text>
               </View>
             )}
           </View>
         </View>
       </ScrollView>
+
+      {/* Reaction Details Modal */}
+      <Modal visible={!!selectedReaction} animationType="slide" transparent>
+        <View className="flex-1 bg-black/50">
+          <View className="flex-1 bg-background rounded-t-3xl mt-auto">
+            <ScrollView showsVerticalScrollIndicator={false} className="p-6">
+              {selectedReaction && (
+                <View className="gap-4">
+                  {/* Close Button */}
+                  <Pressable onPress={() => setSelectedReaction(null)} className="self-end">
+                    <Text className="text-2xl text-foreground">✕</Text>
+                  </Pressable>
+
+                  {/* Title */}
+                  <View className="gap-2">
+                    <Text className="text-2xl font-bold text-foreground">
+                      {selectedReaction.name}
+                    </Text>
+                    <View
+                      className="px-3 py-1 rounded self-start"
+                      style={{ backgroundColor: getCategoryColor(selectedReaction.category) }}
+                    >
+                      <Text className="text-xs font-semibold text-white">
+                        {selectedReaction.category}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* Equation */}
+                  <View className="bg-surface border border-border rounded-lg p-4 gap-2">
+                    <Text className="text-xs font-semibold text-muted">
+                      REAKSIYA TENGLAMASI
+                    </Text>
+                    <Text className="text-lg font-mono text-foreground">
+                      {selectedReaction.equation}
+                    </Text>
+                  </View>
+
+                  {/* Details Grid */}
+                  <View className="gap-3">
+                    {[
+                      {
+                        label: "SHAROIT",
+                        value: selectedReaction.conditions,
+                        icon: "🌡️",
+                      },
+                      {
+                        label: "KATALIZATOR",
+                        value: selectedReaction.catalyst,
+                        icon: "⚙️",
+                      },
+                      {
+                        label: "TEKNIKA",
+                        value: selectedReaction.technique,
+                        icon: "🧪",
+                      },
+                      {
+                        label: "O'RTA MAHSULOT",
+                        value: selectedReaction.products,
+                        icon: "🧬",
+                      },
+                      {
+                        label: "INTENSIVLIGI",
+                        value: selectedReaction.intensity,
+                        icon: "💥",
+                      },
+                    ].map((item) => (
+                      <View
+                        key={item.label}
+                        className="bg-surface border border-border rounded-lg p-4 gap-2"
+                      >
+                        <Text className="text-xs font-semibold text-muted">
+                          {item.icon} {item.label}
+                        </Text>
+                        <Text className="text-base text-foreground">{item.value}</Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  {/* Close Button */}
+                  <TouchableOpacity
+                    onPress={() => setSelectedReaction(null)}
+                    className="bg-primary rounded-lg py-3 mt-4"
+                  >
+                    <Text className="text-center font-semibold text-background">
+                      Yopish
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </ScreenContainer>
   );
 }
