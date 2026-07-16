@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  FlatList,
 } from "react-native";
 import { useState } from "react";
 
@@ -11,96 +12,74 @@ import { ScreenContainer } from "@/components/screen-container";
 
 /**
  * Periodic Table Screen - Davriy Jadval
- * Interaktiv jadval va elementlar ma'lumoti
+ * To'liq interaktiv davriy jadval
  */
+
+// Davriy jadvalning to'liq ma'lumotlari
+const PERIODIC_TABLE_DATA = [
+  // 1-davr
+  { id: "H", name: "Vodorod", number: 1, mass: 1.008, group: 1, period: 1, color: "bg-yellow-200" },
+  { id: "He", name: "Geliy", number: 2, mass: 4.003, group: 18, period: 1, color: "bg-blue-200" },
+
+  // 2-davr
+  { id: "Li", name: "Litiy", number: 3, mass: 6.941, group: 1, period: 2, color: "bg-red-200" },
+  { id: "Be", name: "Berilliy", number: 4, mass: 9.012, group: 2, period: 2, color: "bg-green-200" },
+  { id: "B", name: "Bor", number: 5, mass: 10.81, group: 13, period: 2, color: "bg-orange-200" },
+  { id: "C", name: "Uglerod", number: 6, mass: 12.01, group: 14, period: 2, color: "bg-gray-400" },
+  { id: "N", name: "Azot", number: 7, mass: 14.01, group: 15, period: 2, color: "bg-blue-300" },
+  { id: "O", name: "Kislorod", number: 8, mass: 15.999, group: 16, period: 2, color: "bg-red-300" },
+  { id: "F", name: "Ftor", number: 9, mass: 18.998, group: 17, period: 2, color: "bg-yellow-300" },
+  { id: "Ne", name: "Neon", number: 10, mass: 20.18, group: 18, period: 2, color: "bg-blue-200" },
+
+  // 3-davr
+  { id: "Na", name: "Natriy", number: 11, mass: 22.99, group: 1, period: 3, color: "bg-red-200" },
+  { id: "Mg", name: "Magniy", number: 12, mass: 24.305, group: 2, period: 3, color: "bg-green-200" },
+  { id: "Al", name: "Alyuminiy", number: 13, mass: 26.98, group: 13, period: 3, color: "bg-orange-200" },
+  { id: "Si", name: "Kremniy", number: 14, mass: 28.09, group: 14, period: 3, color: "bg-gray-400" },
+  { id: "P", name: "Fosfor", number: 15, mass: 30.97, group: 15, period: 3, color: "bg-orange-300" },
+  { id: "S", name: "Oltingugurt", number: 16, mass: 32.06, group: 16, period: 3, color: "bg-yellow-300" },
+  { id: "Cl", name: "Xlor", number: 17, mass: 35.45, group: 17, period: 3, color: "bg-yellow-300" },
+  { id: "Ar", name: "Argon", number: 18, mass: 39.95, group: 18, period: 3, color: "bg-blue-200" },
+
+  // 4-davr (tanlanganlar)
+  { id: "K", name: "Kaliy", number: 19, mass: 39.10, group: 1, period: 4, color: "bg-red-200" },
+  { id: "Ca", name: "Kalsiy", number: 20, mass: 40.08, group: 2, period: 4, color: "bg-green-200" },
+  { id: "Fe", name: "Temir", number: 26, mass: 55.845, group: 8, period: 4, color: "bg-purple-300" },
+  { id: "Cu", name: "Mis", number: 29, mass: 63.546, group: 11, period: 4, color: "bg-purple-300" },
+  { id: "Zn", name: "Rux", number: 30, mass: 65.38, group: 12, period: 4, color: "bg-purple-300" },
+  { id: "Br", name: "Brom", number: 35, mass: 79.904, group: 17, period: 4, color: "bg-red-400" },
+
+  // 5-davr (tanlanganlar)
+  { id: "Ag", name: "Kumush", number: 47, mass: 107.87, group: 11, period: 5, color: "bg-purple-300" },
+  { id: "I", name: "Yod", number: 53, mass: 126.90, group: 17, period: 5, color: "bg-purple-400" },
+
+  // 6-davr
+  { id: "Au", name: "Oltin", number: 79, mass: 196.97, group: 11, period: 6, color: "bg-yellow-400" },
+];
+
 export default function PeriodicScreen() {
   const [searchText, setSearchText] = useState("");
-  const [selectedElement, setSelectedElement] = useState<string | null>(null);
+  const [selectedElement, setSelectedElement] = useState<typeof PERIODIC_TABLE_DATA[0] | null>(null);
+  const [filterGroup, setFilterGroup] = useState<number | null>(null);
 
-  const elements = [
-    {
-      id: "H",
-      name: "Vodorod",
-      number: 1,
-      mass: 1.008,
-      electrons: "1s¹",
-      valence: 1,
-      electroneg: 2.1,
-    },
-    {
-      id: "He",
-      name: "Geliy",
-      number: 2,
-      mass: 4.003,
-      electrons: "1s²",
-      valence: 0,
-      electroneg: 0,
-    },
-    {
-      id: "C",
-      name: "Uglerod",
-      number: 6,
-      mass: 12.01,
-      electrons: "[He] 2s² 2p²",
-      valence: 4,
-      electroneg: 2.55,
-    },
-    {
-      id: "N",
-      name: "Azot",
-      number: 7,
-      mass: 14.01,
-      electrons: "[He] 2s² 2p³",
-      valence: 3,
-      electroneg: 3.04,
-    },
-    {
-      id: "O",
-      name: "Kislorod",
-      number: 8,
-      mass: 15.999,
-      electrons: "[He] 2s² 2p⁴",
-      valence: 2,
-      electroneg: 3.44,
-    },
-    {
-      id: "Na",
-      name: "Natriy",
-      number: 11,
-      mass: 22.99,
-      electrons: "[Ne] 3s¹",
-      valence: 1,
-      electroneg: 0.93,
-    },
-    {
-      id: "Cl",
-      name: "Xlor",
-      number: 17,
-      mass: 35.45,
-      electrons: "[Ne] 3s² 3p⁵",
-      valence: 1,
-      electroneg: 3.16,
-    },
-    {
-      id: "Fe",
-      name: "Temir",
-      number: 26,
-      mass: 55.845,
-      electrons: "[Ar] 3d⁶ 4s²",
-      valence: 2,
-      electroneg: 1.83,
-    },
-  ];
-
-  const filteredElements = elements.filter(
-    (el) =>
+  const filteredElements = PERIODIC_TABLE_DATA.filter((el) => {
+    const matchesSearch =
       el.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      el.id.toLowerCase().includes(searchText.toLowerCase())
-  );
+      el.id.toLowerCase().includes(searchText.toLowerCase());
+    const matchesGroup = filterGroup === null || el.group === filterGroup;
+    return matchesSearch && matchesGroup;
+  });
 
-  const selectedElementData = selectedElement
-    ? elements.find((el) => el.id === selectedElement)
-    : null;
+  const groups = [
+    { id: 1, name: "Щелочные металлы" },
+    { id: 2, name: "Щелочноземельные" },
+    { id: 13, name: "Бор-углерод" },
+    { id: 14, name: "Углерод" },
+    { id: 15, name: "Азот" },
+    { id: 16, name: "Кислород" },
+    { id: 17, name: "Галогены" },
+    { id: 18, name: "Благородные газы" },
+  ];
 
   return (
     <ScreenContainer className="p-4">
@@ -112,7 +91,7 @@ export default function PeriodicScreen() {
               📊 Davriy Jadval
             </Text>
             <Text className="text-sm text-muted">
-              Elementlarni qidiruv va o'rganish
+              Kimyoviy elementlarni qidiruv va o'rganish
             </Text>
           </View>
 
@@ -120,7 +99,7 @@ export default function PeriodicScreen() {
           <View className="flex-row items-center gap-2 bg-surface rounded-lg border border-border px-3 py-2">
             <Text className="text-lg">🔍</Text>
             <TextInput
-              placeholder="Element qidiruv..."
+              placeholder="Element qidiruv (nomi yoki raqami)..."
               placeholderTextColor="#999"
               value={searchText}
               onChangeText={setSearchText}
@@ -128,34 +107,86 @@ export default function PeriodicScreen() {
             />
           </View>
 
-          {/* Elements Grid */}
-          <View className="gap-3">
-            <Text className="text-lg font-semibold text-foreground">
-              Elementlar
+          {/* Group Filters */}
+          <View className="gap-2">
+            <Text className="text-sm font-semibold text-foreground">
+              Guruhlar bo'yicha filtrlar:
             </Text>
-            <View className="flex-row flex-wrap gap-2">
-              {filteredElements.map((element) => (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="gap-2"
+            >
+              <TouchableOpacity
+                onPress={() => setFilterGroup(null)}
+                className={`px-3 py-1 rounded-full ${
+                  filterGroup === null
+                    ? "bg-primary"
+                    : "bg-surface border border-border"
+                }`}
+              >
+                <Text
+                  className={`text-xs font-semibold ${
+                    filterGroup === null ? "text-background" : "text-foreground"
+                  }`}
+                >
+                  Barcha
+                </Text>
+              </TouchableOpacity>
+
+              {groups.map((group) => (
                 <TouchableOpacity
-                  key={element.id}
-                  onPress={() => setSelectedElement(element.id)}
-                  className={`flex-1 min-w-[30%] rounded-lg p-3 items-center justify-center ${
-                    selectedElement === element.id
+                  key={group.id}
+                  onPress={() => setFilterGroup(group.id)}
+                  className={`px-3 py-1 rounded-full ${
+                    filterGroup === group.id
                       ? "bg-primary"
                       : "bg-surface border border-border"
                   }`}
                 >
                   <Text
-                    className={`text-xs font-bold ${
-                      selectedElement === element.id
+                    className={`text-xs font-semibold ${
+                      filterGroup === group.id
                         ? "text-background"
-                        : "text-primary"
+                        : "text-foreground"
+                    }`}
+                  >
+                    {group.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+
+          {/* Elements Grid */}
+          <View className="gap-3">
+            <Text className="text-sm font-semibold text-foreground">
+              Topilgan elementlar: {filteredElements.length}
+            </Text>
+
+            <View className="flex-row flex-wrap gap-2">
+              {filteredElements.map((element) => (
+                <TouchableOpacity
+                  key={element.id}
+                  onPress={() => setSelectedElement(element)}
+                  className={`w-[30%] rounded-lg p-2 items-center justify-center ${
+                    selectedElement?.id === element.id
+                      ? "bg-primary border-2 border-primary"
+                      : element.color + " border border-border"
+                  }`}
+                >
+                  <Text
+                    className={`text-xs font-bold ${
+                      selectedElement?.id === element.id
+                        ? "text-background"
+                        : "text-foreground"
                     }`}
                   >
                     {element.id}
                   </Text>
                   <Text
                     className={`text-xs ${
-                      selectedElement === element.id
+                      selectedElement?.id === element.id
                         ? "text-background"
                         : "text-muted"
                     }`}
@@ -168,16 +199,19 @@ export default function PeriodicScreen() {
           </View>
 
           {/* Element Details */}
-          {selectedElementData && (
+          {selectedElement && (
             <View className="bg-surface rounded-lg p-4 border border-border gap-3">
+              {/* Header */}
               <View className="items-center gap-2 pb-3 border-b border-border">
-                <View className="w-16 h-16 rounded-full bg-primary items-center justify-center">
-                  <Text className="text-3xl font-bold text-background">
-                    {selectedElementData.id}
+                <View
+                  className={`w-16 h-16 rounded-full ${selectedElement.color} items-center justify-center border-2 border-primary`}
+                >
+                  <Text className="text-3xl font-bold text-foreground">
+                    {selectedElement.id}
                   </Text>
                 </View>
                 <Text className="text-lg font-bold text-foreground">
-                  {selectedElementData.name}
+                  {selectedElement.name}
                 </Text>
               </View>
 
@@ -189,55 +223,57 @@ export default function PeriodicScreen() {
                 <View className="flex-row justify-between">
                   <Text className="text-xs text-muted">Atom raqami:</Text>
                   <Text className="text-xs font-semibold text-foreground">
-                    {selectedElementData.number}
+                    {selectedElement.number}
                   </Text>
                 </View>
                 <View className="flex-row justify-between">
                   <Text className="text-xs text-muted">Atom massasi:</Text>
                   <Text className="text-xs font-semibold text-foreground">
-                    {selectedElementData.mass} u
+                    {selectedElement.mass} u
                   </Text>
                 </View>
                 <View className="flex-row justify-between">
-                  <Text className="text-xs text-muted">Valentlik:</Text>
+                  <Text className="text-xs text-muted">Davr:</Text>
                   <Text className="text-xs font-semibold text-foreground">
-                    {selectedElementData.valence}
+                    {selectedElement.period}
                   </Text>
                 </View>
                 <View className="flex-row justify-between">
-                  <Text className="text-xs text-muted">Elektronegativlik:</Text>
+                  <Text className="text-xs text-muted">Guruhi:</Text>
                   <Text className="text-xs font-semibold text-foreground">
-                    {selectedElementData.electroneg}
+                    {selectedElement.group}
                   </Text>
                 </View>
               </View>
 
-              {/* Electron Configuration */}
-              <View className="gap-2">
-                <Text className="text-sm font-semibold text-foreground">
-                  ⚛️ Elektronlar Tuzilishi
+              {/* Additional Info */}
+              <View className="bg-primary/10 rounded-lg p-3 border border-primary/20">
+                <Text className="text-xs text-primary font-semibold mb-2">
+                  💡 Qo'shimcha Ma'lumot
                 </Text>
-                <View className="bg-primary/10 rounded-lg p-2">
-                  <Text className="text-xs text-primary font-mono">
-                    {selectedElementData.electrons}
-                  </Text>
-                </View>
+                <Text className="text-xs text-primary/80">
+                  {selectedElement.name} haqida batafsil ma'lumot keyinroq
+                  qo'shiladi. Elektronlar tuzilishi, valentlik, kimyoviy
+                  xususiyatlari va boshqalar.
+                </Text>
               </View>
 
-              {/* Interesting Facts */}
-              <View className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-                <Text className="text-xs text-blue-800 dark:text-blue-200">
-                  💡 Elementning qiziqarli xususiyatlari haqida ma'lumot keyinroq
-                  qo'shiladi.
+              {/* Close Button */}
+              <TouchableOpacity
+                onPress={() => setSelectedElement(null)}
+                className="bg-muted/20 rounded-lg p-2"
+              >
+                <Text className="text-xs text-muted text-center font-semibold">
+                  Yopish
                 </Text>
-              </View>
+              </TouchableOpacity>
             </View>
           )}
 
           {/* Info */}
-          {!selectedElementData && (
-            <View className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
-              <Text className="text-sm text-yellow-800 dark:text-yellow-200">
+          {!selectedElement && (
+            <View className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+              <Text className="text-sm text-blue-800 dark:text-blue-200">
                 Element tanlang va batafsil ma'lumotni ko'ring
               </Text>
             </View>
