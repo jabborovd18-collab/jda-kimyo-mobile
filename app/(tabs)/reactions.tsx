@@ -55,14 +55,39 @@ export default function ReactionsScreen() {
     return categoryColors[category] || "#999";
   };
 
+  // Indeksni oddiy raqamga o'tkazish funksiyasi
+  const normalizeFormula = (text: string): string => {
+    // H2 → H₂, O2 → O₂, va boshqalar
+    return text.replace(/(\D)(\d+)/g, (match, letter, number) => {
+      const subscripts: Record<string, string> = {
+        '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄',
+        '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉'
+      };
+      return letter + number.split('').map((d: string) => subscripts[d] || d).join('');
+    });
+  };
+
   const filteredReactions = useMemo(() => {
+    const normalizedSearch = normalizeFormula(searchText.toLowerCase());
+    const searchLower = searchText.toLowerCase();
+    
     return (reactionsData as Reaction[]).filter((reaction) => {
-      const matchesSearch =
-        reaction.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        reaction.equation.toLowerCase().includes(searchText.toLowerCase());
+      // Nomi bo'yicha qidiruv
+      const matchesName = reaction.name.toLowerCase().includes(searchLower);
+      
+      // Tenglamada qidiruv (indeks bilan va indekssiz)
+      const equationLower = reaction.equation.toLowerCase();
+      const normalizedEquation = normalizeFormula(equationLower);
+      const matchesEquation = 
+        equationLower.includes(searchLower) || 
+        normalizedEquation.includes(normalizedSearch) ||
+        equationLower.includes(normalizeFormula(searchLower));
+      
+      // Kategoriya bo'yicha filtr
       const matchesCategory =
         selectedCategory === "all" || reaction.category === selectedCategory;
-      return matchesSearch && matchesCategory;
+      
+      return (matchesName || matchesEquation) && matchesCategory;
     });
   }, [searchText, selectedCategory]);
 
@@ -84,7 +109,7 @@ export default function ReactionsScreen() {
           <View className="flex-row items-center gap-2 bg-surface rounded-lg border border-border px-3 py-2">
             <Text className="text-lg">🔍</Text>
             <TextInput
-              placeholder="Reaksiya qidiruv..."
+              placeholder="Reaksiya qidiruv (H2, O2, Suv, ...)"
               placeholderTextColor="#999"
               value={searchText}
               onChangeText={setSearchText}
