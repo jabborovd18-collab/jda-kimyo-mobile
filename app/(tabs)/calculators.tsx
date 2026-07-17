@@ -10,6 +10,8 @@ export default function CalculatorsScreen() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedCalculator, setSelectedCalculator] = useState<Calculator | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
+  const [calculationResult, setCalculationResult] = useState<string | null>(null);
 
   // Qidiruv va filtrash
   const displayedCalculators =
@@ -21,7 +23,32 @@ export default function CalculatorsScreen() {
 
   const handleCalculatorPress = (calc: Calculator) => {
     setSelectedCalculator(calc);
+    setInputValues({});
+    setCalculationResult(null);
     setModalVisible(true);
+  };
+
+  const handleCalculate = () => {
+    if (!selectedCalculator) return;
+
+    // Agar kalkulyatorning hisoblash funksiyasi bo'lsa, uni chaqir
+    if (selectedCalculator.calculate) {
+      try {
+        // Kirishlari raqamlarga o'tkazish
+        const numericInputs: Record<string, number> = {};
+        selectedCalculator.inputs.forEach((input) => {
+          const value = parseFloat(inputValues[input.name] || "0");
+          numericInputs[input.name] = value;
+        });
+
+        const result = selectedCalculator.calculate(numericInputs);
+        setCalculationResult(String(result));
+      } catch (error) {
+        setCalculationResult("Xato: Hisoblash muvaffaqiyatsiz");
+      }
+    } else {
+      setCalculationResult("Bu kalkulyator hozir mavjud emas");
+    }
   };
 
   return (
@@ -106,11 +133,16 @@ export default function CalculatorsScreen() {
                   onPress={() => handleCalculatorPress(item)}
                   className="bg-surface rounded-lg p-4 mb-3 border border-border active:opacity-70"
                 >
-                  <View className="gap-1">
-                    <Text className="text-base font-semibold text-foreground">{item.name}</Text>
-                    <Text className="text-xs text-muted">{item.category}</Text>
-                    <Text className="text-sm text-muted mt-1">{item.description}</Text>
-                    <Text className="text-xs text-primary mt-2 font-mono">{item.formula}</Text>
+                  <View className="gap-2">
+                    <View className="flex-row items-center gap-3">
+                      <Text className="text-3xl">{item.emoji}</Text>
+                      <View className="flex-1">
+                        <Text className="text-base font-semibold text-foreground">{item.name}</Text>
+                        <Text className="text-xs text-muted">{item.category}</Text>
+                      </View>
+                    </View>
+                    <Text className="text-sm text-muted">{item.description}</Text>
+                    <Text className="text-xs text-primary font-mono">{item.formula}</Text>
                   </View>
                 </TouchableOpacity>
               )}
@@ -126,12 +158,17 @@ export default function CalculatorsScreen() {
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
               {selectedCalculator && (
                 <View className="gap-4">
-                  {/* Header */}
+                  {/* Header with emoji */}
                   <View className="gap-2">
-                    <Text className="text-2xl font-bold text-foreground">
-                      {selectedCalculator.name}
-                    </Text>
-                    <Text className="text-xs text-muted">{selectedCalculator.category}</Text>
+                    <View className="flex-row items-center gap-3">
+                      <Text className="text-5xl">{selectedCalculator.emoji}</Text>
+                      <View className="flex-1">
+                        <Text className="text-2xl font-bold text-foreground">
+                          {selectedCalculator.name}
+                        </Text>
+                        <Text className="text-xs text-muted">{selectedCalculator.category}</Text>
+                      </View>
+                    </View>
                   </View>
 
                   {/* Tavsif */}
@@ -161,6 +198,13 @@ export default function CalculatorsScreen() {
                             className="text-foreground"
                             style={{ color: colors.foreground }}
                             keyboardType="decimal-pad"
+                            value={inputValues[input.name] || ""}
+                            onChangeText={(text) => {
+                              setInputValues({
+                                ...inputValues,
+                                [input.name]: text,
+                              });
+                            }}
                           />
                         </View>
                       ))}
@@ -168,15 +212,20 @@ export default function CalculatorsScreen() {
                   )}
 
                   {/* Chiqish */}
-                  <View className="bg-primary/10 rounded-lg p-4 border border-primary">
-                    <Text className="text-sm text-muted mb-2">Natija:</Text>
-                    <Text className="text-lg font-bold text-primary">
-                      {selectedCalculator.output} ({selectedCalculator.unit})
-                    </Text>
-                  </View>
+                  {calculationResult && (
+                    <View className="bg-primary/10 rounded-lg p-4 border border-primary">
+                      <Text className="text-sm text-muted mb-2">Natija:</Text>
+                      <Text className="text-2xl font-bold text-primary">
+                        {calculationResult} {selectedCalculator.unit}
+                      </Text>
+                    </View>
+                  )}
 
                   {/* Hisoblash tugmasi */}
-                  <TouchableOpacity className="bg-primary rounded-lg p-4 active:opacity-80">
+                  <TouchableOpacity
+                    onPress={handleCalculate}
+                    className="bg-primary rounded-lg p-4 active:opacity-80"
+                  >
                     <Text className="text-center text-base font-semibold text-background">
                       Hisoblash
                     </Text>

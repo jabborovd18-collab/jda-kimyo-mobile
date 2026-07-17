@@ -15,7 +15,7 @@ import {
   initialWindowMetrics,
 } from "react-native-safe-area-context";
 import type { EdgeInsets, Metrics, Rect } from "react-native-safe-area-context";
-import LottieView from "lottie-react-native";
+// import LottieView from "lottie-react-native"; // Disabled for web compatibility
 
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/_core/manus-runtime";
@@ -92,13 +92,8 @@ export default function RootLayout() {
   // Show splash screen animation
   if (!splashFinished) {
     return (
-      <View style={{ flex: 1, backgroundColor: "#090B1D" }}>
-        <LottieView
-          source={require("@/assets/animations/splash.json")}
-          autoPlay
-          loop={false}
-          style={{ flex: 1 }}
-        />
+      <View style={{ flex: 1, backgroundColor: "#090B1D", justifyContent: "center", alignItems: "center" }}>
+        {/* Splash screen - simple version for web compatibility */}
       </View>
     );
   }
