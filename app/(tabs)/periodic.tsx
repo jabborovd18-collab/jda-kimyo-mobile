@@ -16,85 +16,114 @@ import { useColors } from "@/hooks/use-colors";
 
 /**
  * Periodic Table Screen - Davriy Jadval
- * Namunaga mos ravishda yaratilgan
+ * 118 ta element, qidiruv, filtrash, batafsil ma'lumot
  */
 
 export default function PeriodicScreen() {
   const [searchText, setSearchText] = useState("");
   const [selectedElement, setSelectedElement] = useState<PeriodicElement | null>(null);
-  const [filterPeriod, setFilterPeriod] = useState<number | null>(null);
+  const [filterCategory, setFilterCategory] = useState<string | null>(null);
   const colors = useColors();
 
   const filteredElements = searchText
     ? searchElements(searchText)
-    : filterPeriod
-      ? PERIODIC_TABLE.filter((el) => el.period === filterPeriod)
+    : filterCategory
+      ? PERIODIC_TABLE.filter((el) => el.category === filterCategory)
       : PERIODIC_TABLE;
 
-  const periods = [1, 2, 3, 4, 5, 6, 7];
+  const categories = ["Alkali metal", "Alkaline earth metal", "Transition metal", "Metal", "Metalloid", "Nonmetal", "Halogen", "Noble gas"];
+
+  const getCategoryEmoji = (category: string) => {
+    const emojiMap: Record<string, string> = {
+      "Alkali metal": "🔴",
+      "Alkaline earth metal": "🟠",
+      "Transition metal": "🟣",
+      "Metal": "🟡",
+      "Metalloid": "⬜",
+      "Nonmetal": "🟢",
+      "Halogen": "🟠",
+      "Noble gas": "🔵",
+    };
+    return emojiMap[category] || "⚛️";
+  };
+
+  const getCategoryColor = (category: string) => {
+    const colorMap: Record<string, string> = {
+      "Alkali metal": "#FF6B6B",
+      "Alkaline earth metal": "#FFA500",
+      "Transition metal": "#9D84B7",
+      "Metal": "#FFD700",
+      "Metalloid": "#A9A9A9",
+      "Nonmetal": "#90EE90",
+      "Halogen": "#FFB6C1",
+      "Noble gas": "#87CEEB",
+    };
+    return colorMap[category] || "#999";
+  };
 
   return (
     <ScreenContainer className="p-0">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* Header */}
-        <View className="bg-primary/10 px-4 pt-4 pb-2 gap-2">
+        <View className="bg-gradient-to-r from-primary/20 to-primary/10 px-4 pt-4 pb-4 gap-3">
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-2">
-              <Text className="text-2xl">📊</Text>
-              <Text className="text-2xl font-bold text-foreground">Davriy Jadval</Text>
+              <Text className="text-3xl">📊</Text>
+              <View>
+                <Text className="text-2xl font-bold text-foreground">Davriy Jadval</Text>
+                <Text className="text-xs text-muted">118 ta element</Text>
+              </View>
             </View>
-            <TouchableOpacity className="w-8 h-8 rounded-lg bg-surface border border-border items-center justify-center">
-              <Text className="text-lg">⚙️</Text>
-            </TouchableOpacity>
           </View>
-        </View>
 
-        <View className="px-4 py-4 gap-4">
           {/* Search */}
           <View className="flex-row items-center gap-2 bg-surface rounded-lg border border-border px-3 py-2">
             <Text className="text-lg">🔍</Text>
             <TextInput
-              placeholder="Element qidiruv..."
-              placeholderTextColor="#999"
+              placeholder="Element qidiruv (H, O, Fe...)"
+              placeholderTextColor={colors.muted}
               value={searchText}
               onChangeText={setSearchText}
               className="flex-1 text-foreground text-sm"
+              style={{ color: colors.foreground }}
             />
           </View>
+        </View>
 
-          {/* Period Filters */}
+        <View className="px-4 py-4 gap-4">
+          {/* Category Filters */}
           <View className="gap-2">
-            <Text className="text-xs font-semibold text-muted uppercase">Davr bo'yicha filtrlar:</Text>
+            <Text className="text-xs font-semibold text-muted uppercase">Kategoriya bo'yicha:</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="gap-2">
               <TouchableOpacity
-                onPress={() => setFilterPeriod(null)}
-                className={`px-3 py-1.5 rounded-full ${
-                  filterPeriod === null ? "bg-primary" : "bg-surface border border-border"
+                onPress={() => setFilterCategory(null)}
+                className={`px-3 py-2 rounded-full ${
+                  filterCategory === null ? "bg-primary" : "bg-surface border border-border"
                 }`}
               >
                 <Text
                   className={`text-xs font-semibold ${
-                    filterPeriod === null ? "text-background" : "text-foreground"
+                    filterCategory === null ? "text-background" : "text-foreground"
                   }`}
                 >
                   Barcha
                 </Text>
               </TouchableOpacity>
 
-              {periods.map((period) => (
+              {categories.map((category) => (
                 <TouchableOpacity
-                  key={period}
-                  onPress={() => setFilterPeriod(period)}
-                  className={`px-3 py-1.5 rounded-full ${
-                    filterPeriod === period ? "bg-primary" : "bg-surface border border-border"
+                  key={category}
+                  onPress={() => setFilterCategory(category)}
+                  className={`px-3 py-2 rounded-full ${
+                    filterCategory === category ? "bg-primary" : "bg-surface border border-border"
                   }`}
                 >
                   <Text
                     className={`text-xs font-semibold ${
-                      filterPeriod === period ? "text-background" : "text-foreground"
+                      filterCategory === category ? "text-background" : "text-foreground"
                     }`}
                   >
-                    {period}-davr
+                    {getCategoryEmoji(category)} {category.substring(0, 8)}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -103,174 +132,156 @@ export default function PeriodicScreen() {
 
           {/* Elements Grid */}
           <View className="gap-2">
-            <Text className="text-xs font-semibold text-muted">
-              Topilgan: {filteredElements.length} ta element
+            <Text className="text-sm font-semibold text-foreground">
+              {filteredElements.length} ta element
             </Text>
 
-            <View className="flex-row flex-wrap gap-1.5">
-              {filteredElements.map((element) => (
+            <FlatList
+              data={filteredElements}
+              keyExtractor={(item) => item.id}
+              scrollEnabled={false}
+              numColumns={4}
+              columnWrapperStyle={{ gap: 8, marginBottom: 8 }}
+              renderItem={({ item }) => (
                 <TouchableOpacity
-                  key={element.id}
-                  onPress={() => setSelectedElement(element)}
-                  className={`flex-1 min-w-[30%] rounded-lg p-2 items-center justify-center border-2 ${
-                    selectedElement?.id === element.id
-                      ? "bg-primary border-primary"
-                      : ELEMENT_COLORS[element.category] + " border-border"
-                  }`}
-                  style={{ minHeight: 70 }}
+                  onPress={() => setSelectedElement(item)}
+                  className="flex-1 rounded-lg border border-border p-2 active:opacity-70"
+                  style={{
+                    backgroundColor: getCategoryColor(item.category) + "20",
+                    borderColor: getCategoryColor(item.category),
+                  }}
                 >
-                  <Text
-                    className={`text-lg font-bold ${
-                      selectedElement?.id === element.id ? "text-background" : "text-foreground"
-                    }`}
-                  >
-                    {element.symbol}
-                  </Text>
-                  <Text
-                    className={`text-xs ${
-                      selectedElement?.id === element.id ? "text-background/80" : "text-muted"
-                    }`}
-                  >
-                    {element.name}
-                  </Text>
-                  <Text
-                    className={`text-xs font-semibold ${
-                      selectedElement?.id === element.id ? "text-background" : "text-foreground"
-                    }`}
-                  >
-                    {element.number}
-                  </Text>
+                  <View className="gap-1">
+                    <Text className="text-xs text-muted text-center">{item.number}</Text>
+                    <Text className="text-lg font-bold text-foreground text-center">{item.symbol}</Text>
+                    <Text className="text-xs text-muted text-center leading-tight">{item.name.substring(0, 8)}</Text>
+                    <Text className="text-xs text-primary text-center font-mono">{item.mass.toFixed(2)}</Text>
+                  </View>
                 </TouchableOpacity>
-              ))}
-            </View>
+              )}
+            />
           </View>
         </View>
       </ScrollView>
 
-      {/* Element Details Modal */}
-      <Modal visible={!!selectedElement} transparent animationType="slide">
-        {selectedElement && (
-          <View className="flex-1 bg-background">
+      {/* Element Detail Modal */}
+      <Modal visible={selectedElement !== null} animationType="slide" transparent>
+        <View className="flex-1 bg-background/80">
+          <ScreenContainer className="p-4 justify-between">
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-              {/* Header */}
-              <View className="bg-primary/10 px-4 pt-4 pb-4 gap-3 border-b border-border">
-                <View className="flex-row items-center justify-between">
-                  <TouchableOpacity onPress={() => setSelectedElement(null)}>
-                    <Text className="text-2xl">←</Text>
-                  </TouchableOpacity>
-                  <View className="items-center gap-2">
-                    <View className="w-16 h-16 rounded-full bg-primary items-center justify-center border-2 border-primary">
-                      <Text className="text-4xl font-bold text-background">{selectedElement.symbol}</Text>
+              {selectedElement && (
+                <View className="gap-4">
+                  {/* Header with Element Card */}
+                  <View
+                    className="rounded-xl p-6 gap-3"
+                    style={{ backgroundColor: getCategoryColor(selectedElement.category) + "30" }}
+                  >
+                    <View className="flex-row items-center justify-between">
+                      <View>
+                        <Text className="text-5xl font-bold text-foreground">{selectedElement.symbol}</Text>
+                        <Text className="text-lg text-muted">{selectedElement.name}</Text>
+                      </View>
+                      <View className="items-end gap-1">
+                        <Text className="text-2xl">{getCategoryEmoji(selectedElement.category)}</Text>
+                        <Text className="text-xs text-muted">#{selectedElement.number}</Text>
+                      </View>
                     </View>
-                    <Text className="text-lg font-bold text-foreground">{selectedElement.name}</Text>
-                    <Text className="text-xs text-muted">{selectedElement.mass.toFixed(3)} (g/mol)</Text>
+                    <View className="flex-row gap-2">
+                      <View className="flex-1 bg-surface rounded-lg p-2">
+                        <Text className="text-xs text-muted">Massa</Text>
+                        <Text className="text-sm font-bold text-foreground">{selectedElement.mass.toFixed(3)}</Text>
+                      </View>
+                      <View className="flex-1 bg-surface rounded-lg p-2">
+                        <Text className="text-xs text-muted">Davr</Text>
+                        <Text className="text-sm font-bold text-foreground">{selectedElement.period}</Text>
+                      </View>
+                      <View className="flex-1 bg-surface rounded-lg p-2">
+                        <Text className="text-xs text-muted">Guruh</Text>
+                        <Text className="text-sm font-bold text-foreground">{selectedElement.group}</Text>
+                      </View>
+                    </View>
                   </View>
-                  <View className="w-8" />
-                </View>
 
-                {/* Category Badge */}
-                <View className="items-center">
-                  <View className="bg-primary px-3 py-1 rounded-full">
-                    <Text className="text-xs font-bold text-background uppercase">
-                      {selectedElement.category}
-                    </Text>
+                  {/* Description */}
+                  <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+                    <Text className="text-sm font-semibold text-foreground">Tavsif</Text>
+                    <Text className="text-sm text-muted leading-relaxed">{selectedElement.description}</Text>
                   </View>
-                </View>
-              </View>
 
-              <View className="px-4 py-4 gap-4">
-                {/* Description */}
-                <View className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-                  <View className="flex-row items-center gap-2 mb-2">
-                    <Text className="text-lg">📝</Text>
-                    <Text className="text-xs font-semibold text-blue-900 dark:text-blue-200">Eslatma</Text>
+                  {/* Physical Properties */}
+                  <View className="bg-surface rounded-lg p-4 border border-border gap-3">
+                    <Text className="text-sm font-semibold text-foreground">Fizik Xususiyatlari</Text>
+                    <View className="gap-2">
+                      <View className="flex-row justify-between">
+                        <Text className="text-sm text-muted">Zichlik:</Text>
+                        <Text className="text-sm font-mono text-foreground">{selectedElement.density} g/cm³</Text>
+                      </View>
+                      <View className="flex-row justify-between">
+                        <Text className="text-sm text-muted">Erivish nuqtasi:</Text>
+                        <Text className="text-sm font-mono text-foreground">{selectedElement.meltingPoint}°C</Text>
+                      </View>
+                      <View className="flex-row justify-between">
+                        <Text className="text-sm text-muted">Qaynash nuqtasi:</Text>
+                        <Text className="text-sm font-mono text-foreground">{selectedElement.boilingPoint}°C</Text>
+                      </View>
+                    </View>
                   </View>
-                  <Text className="text-xs text-blue-800 dark:text-blue-200 leading-relaxed">
-                    {selectedElement.description}
-                  </Text>
-                </View>
 
-                {/* Basic Info */}
-                <View className="gap-2">
-                  <Text className="text-sm font-semibold text-foreground">📋 Asosiy Ma'lumotlar</Text>
-                  <View className="bg-surface rounded-lg p-3 border border-border gap-2">
-                    <InfoRow label="Atom raqami:" value={selectedElement.number.toString()} />
-                    <InfoRow label="Atom og'irligi:" value={selectedElement.mass.toFixed(3)} />
-                    <InfoRow label="Davr:" value={selectedElement.period.toString()} />
-                    <InfoRow label="Guruhi:" value={selectedElement.group.toString()} />
-                    <InfoRow label="Kashf etilgan yili:" value={selectedElement.discovered.toString()} />
-                    <InfoRow label="Kashf etgan shaxs:" value={selectedElement.discoverer} />
+                  {/* Atomic Properties */}
+                  <View className="bg-surface rounded-lg p-4 border border-border gap-3">
+                    <Text className="text-sm font-semibold text-foreground">Atom Xususiyatlari</Text>
+                    <View className="gap-2">
+                      <View className="flex-row justify-between">
+                        <Text className="text-sm text-muted">Protonlar:</Text>
+                        <Text className="text-sm font-mono text-foreground">{selectedElement.protons}</Text>
+                      </View>
+                      <View className="flex-row justify-between">
+                        <Text className="text-sm text-muted">Elektronlar:</Text>
+                        <Text className="text-sm font-mono text-foreground">{selectedElement.electrons}</Text>
+                      </View>
+                      <View className="flex-row justify-between">
+                        <Text className="text-sm text-muted">Neytronlar:</Text>
+                        <Text className="text-sm font-mono text-foreground">{selectedElement.neutrons}</Text>
+                      </View>
+                      <View className="gap-1 mt-2 pt-2 border-t border-border">
+                        <Text className="text-xs text-muted">Elektron Konfiguratsiyasi:</Text>
+                        <Text className="text-xs font-mono text-primary">{selectedElement.electronConfiguration}</Text>
+                      </View>
+                    </View>
                   </View>
-                </View>
 
-                {/* Physical Properties */}
-                <View className="gap-2">
-                  <Text className="text-sm font-semibold text-foreground">🌡️ Fizik Xususiyatlar</Text>
-                  <View className="bg-surface rounded-lg p-3 border border-border gap-2">
-                    <InfoRow label="Zichligi:" value={selectedElement.density.toFixed(2) + " g/cm³"} />
-                    <InfoRow label="Erish nuqtasi:" value={selectedElement.meltingPoint.toFixed(1) + "°C"} />
-                    <InfoRow label="Quynash nuqtasi:" value={selectedElement.boilingPoint.toFixed(1) + "°C"} />
-                  </View>
-                </View>
-
-                {/* Electron Configuration */}
-                <View className="gap-2">
-                  <Text className="text-sm font-semibold text-foreground">⚛️ Elektron Qobig'i</Text>
-                  <View className="bg-surface rounded-lg p-3 border border-border gap-2">
-                    <Text className="text-xs text-muted">Konfiguratsiya:</Text>
-                    <Text className="text-xs font-mono text-foreground">{selectedElement.electronConfiguration}</Text>
-                  </View>
-                </View>
-
-                {/* Particle Count */}
-                <View className="gap-2">
-                  <Text className="text-sm font-semibold text-foreground">🔬 Zarrachalar</Text>
-                  <View className="flex-row gap-2">
-                    <View className="flex-1 bg-red-100 dark:bg-red-900/20 rounded-lg p-3 border border-red-200 dark:border-red-800 items-center">
-                      <Text className="text-xs font-bold text-red-900 dark:text-red-200 uppercase mb-1">Elektronlar</Text>
-                      <Text className="text-2xl font-bold text-red-600 dark:text-red-400">
-                        {selectedElement.electrons}
+                  {/* Discovery Info */}
+                  <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+                    <Text className="text-sm font-semibold text-foreground">Kashfiyot</Text>
+                    <View className="gap-1">
+                      <Text className="text-sm text-muted">
+                        Yil: <Text className="text-foreground font-mono">{selectedElement.discovered}</Text>
+                      </Text>
+                      <Text className="text-sm text-muted">
+                        Kashfiyotchi: <Text className="text-foreground">{selectedElement.discoverer}</Text>
                       </Text>
                     </View>
-                    <View className="flex-1 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg p-3 border border-yellow-200 dark:border-yellow-800 items-center">
-                      <Text className="text-xs font-bold text-yellow-900 dark:text-yellow-200 uppercase mb-1">Protonlar</Text>
-                      <Text className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-                        {selectedElement.protons}
-                      </Text>
-                    </View>
-                    <View className="flex-1 bg-blue-100 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800 items-center">
-                      <Text className="text-xs font-bold text-blue-900 dark:text-blue-200 uppercase mb-1">Neytronlar</Text>
-                      <Text className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                        {selectedElement.neutrons}
-                      </Text>
-                    </View>
+                  </View>
+
+                  {/* Category Badge */}
+                  <View className="flex-row items-center gap-2 bg-primary/10 rounded-lg p-3 border border-primary">
+                    <Text className="text-lg">{getCategoryEmoji(selectedElement.category)}</Text>
+                    <Text className="text-sm font-semibold text-foreground">{selectedElement.category}</Text>
                   </View>
                 </View>
-
-                {/* Close Button */}
-                <TouchableOpacity
-                  onPress={() => setSelectedElement(null)}
-                  className="bg-primary rounded-lg py-3 items-center"
-                >
-                  <Text className="text-sm font-bold text-background">Yopish</Text>
-                </TouchableOpacity>
-              </View>
+              )}
             </ScrollView>
-          </View>
-        )}
+
+            {/* Close Button */}
+            <TouchableOpacity
+              onPress={() => setSelectedElement(null)}
+              className="bg-primary rounded-lg p-4 mt-4 active:opacity-80"
+            >
+              <Text className="text-center text-base font-semibold text-background">Yopish</Text>
+            </TouchableOpacity>
+          </ScreenContainer>
+        </View>
       </Modal>
     </ScreenContainer>
-  );
-}
-
-/**
- * Info Row Component
- */
-function InfoRow({ label, value }: { label: string; value: string }) {
-  return (
-    <View className="flex-row justify-between items-center">
-      <Text className="text-xs text-muted">{label}</Text>
-      <Text className="text-xs font-semibold text-foreground">{value}</Text>
-    </View>
   );
 }

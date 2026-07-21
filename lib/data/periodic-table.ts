@@ -212,13 +212,27 @@ export function getElementsByPeriod(period: number): PeriodicElement[] {
   return PERIODIC_TABLE.filter((el) => el.period === period);
 }
 
-// Qidiruv funksiyasi
+// Qidiruv funksiyasi - nomi, simvoli, raqami, kategoriyasi va tavsifi bo'yicha qidiruv
 export function searchElements(query: string): PeriodicElement[] {
   const lowerQuery = query.toLowerCase();
   return PERIODIC_TABLE.filter(
     (el) =>
       el.name.toLowerCase().includes(lowerQuery) ||
       el.symbol.toLowerCase().includes(lowerQuery) ||
-      el.number.toString().includes(lowerQuery)
+      el.number.toString().includes(lowerQuery) ||
+      el.category.toLowerCase().includes(lowerQuery) ||
+      el.description.toLowerCase().includes(lowerQuery) ||
+      el.discoverer.toLowerCase().includes(lowerQuery)
   );
+}
+
+// Kategoriya bo'yicha qidiruv
+export function getElementsByCategory(category: string): PeriodicElement[] {
+  return PERIODIC_TABLE.filter((el) => el.category.toLowerCase() === category.toLowerCase());
+}
+
+// Barcha kategoriyalarni olish
+export function getAllCategories(): string[] {
+  const categories = new Set(PERIODIC_TABLE.map((el) => el.category));
+  return Array.from(categories).sort();
 }
