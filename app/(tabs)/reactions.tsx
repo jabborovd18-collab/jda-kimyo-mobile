@@ -81,9 +81,27 @@ export default function ReactionsScreen() {
     });
   };
 
+  // Indeksni oddiy raqamga o'tkazish (H₂ → H2)
+  const removeSubscripts = (text: string): string => {
+    const subscriptMap: Record<string, string> = {
+      "₀": "0",
+      "₁": "1",
+      "₂": "2",
+      "₃": "3",
+      "₄": "4",
+      "₅": "5",
+      "₆": "6",
+      "₇": "7",
+      "₈": "8",
+      "₉": "9",
+    };
+    return text.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => subscriptMap[match] || match);
+  };
+
   const filteredReactions = useMemo(() => {
     const normalizedSearch = normalizeFormula(searchText.toLowerCase());
     const searchLower = searchText.toLowerCase();
+    const searchWithoutSubscripts = removeSubscripts(searchLower);
 
     return (reactionsData as Reaction[]).filter((reaction) => {
       // Nomi bo'yicha qidiruv
@@ -91,11 +109,15 @@ export default function ReactionsScreen() {
 
       // Tenglamada qidiruv (indeks bilan va indekssiz)
       const equationLower = reaction.equation.toLowerCase();
+      const equationWithoutSubscripts = removeSubscripts(equationLower);
       const normalizedEquation = normalizeFormula(equationLower);
+      
       const matchesEquation =
-        equationLower.includes(searchLower) ||
-        normalizedEquation.includes(normalizedSearch) ||
-        equationLower.includes(normalizeFormula(searchLower));
+        equationLower.includes(searchLower) || // Exact match
+        normalizedEquation.includes(normalizedSearch) || // Normalized match
+        equationLower.includes(normalizeFormula(searchLower)) || // Formula with subscripts
+        equationWithoutSubscripts.includes(searchWithoutSubscripts) || // Formula without subscripts (H3PO4 → h3po4)
+        equationLower.includes(searchWithoutSubscripts); // Search without subscripts in equation
 
       // Kategoriya bo'yicha filtr
       const matchesCategory =
