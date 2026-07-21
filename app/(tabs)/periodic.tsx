@@ -5,82 +5,81 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
-  FlatList,
   Dimensions,
 } from "react-native";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { ScreenContainer } from "@/components/screen-container";
-import { PERIODIC_TABLE, searchElements, PeriodicElement, ELEMENT_COLORS } from "@/lib/data/periodic-table";
+import { PERIODIC_TABLE, searchElements } from "@/lib/data/periodic-table";
 import { useColors } from "@/hooks/use-colors";
 
 /**
  * Periodic Table Screen - Davriy Jadval
- * 118 ta element, qidiruv, filtrash, batafsil ma'lumot
+ * To'g'ri struktura: 7 davr, 18 guruh
  */
+
+const PERIODS = 7;
+const GROUPS = 18;
+
+// Element kategoriyasi bo'yicha ranglar
+const getCategoryColor = (number: number): string => {
+  // Alkali metallar (1-davr, 1-guruh)
+  if (number === 3 || number === 11 || number === 19 || number === 37 || number === 55 || number === 87) return "#FF6B6B";
+  // Alkaline earth metallar (2-guruh)
+  if (number === 4 || number === 12 || number === 20 || number === 38 || number === 56 || number === 88) return "#FFA500";
+  // Transition metallar (3-12 guruh)
+  if ((number >= 21 && number <= 30) || (number >= 39 && number <= 48) || (number >= 72 && number <= 80) || (number >= 104 && number <= 112)) return "#9D84B7";
+  // Lantanidlar
+  if (number >= 58 && number <= 71) return "#B19CD9";
+  // Aktinidlar
+  if (number >= 90 && number <= 103) return "#D4A5D4";
+  // Metallar (13-guruh)
+  if (number === 13 || number === 31 || number === 49 || number === 81 || number === 113) return "#FFD700";
+  // Metalloidlar
+  if (number === 5 || number === 14 || number === 32 || number === 33 || number === 51 || number === 52 || number === 84 || number === 85) return "#A9A9A9";
+  // Nonmetallar
+  if (number === 1 || number === 6 || number === 7 || number === 8 || number === 15 || number === 16 || number === 34) return "#90EE90";
+  // Halogenlar (17-guruh)
+  if (number === 9 || number === 17 || number === 35 || number === 53 || number === 85 || number === 117) return "#FFB6C1";
+  // Noble gaslar (18-guruh)
+  if (number === 2 || number === 10 || number === 18 || number === 36 || number === 54 || number === 86 || number === 118) return "#87CEEB";
+  
+  return "#999";
+};
 
 export default function PeriodicScreen() {
   const [searchText, setSearchText] = useState("");
-  const [selectedElement, setSelectedElement] = useState<PeriodicElement | null>(null);
-  const [filterCategory, setFilterCategory] = useState<string | null>(null);
+  const [selectedElement, setSelectedElement] = useState<any>(null);
   const colors = useColors();
 
-  const filteredElements = searchText
-    ? searchElements(searchText)
-    : filterCategory
-      ? PERIODIC_TABLE.filter((el) => el.category === filterCategory)
-      : PERIODIC_TABLE;
+  // Davriy jadvalning to'g'ri strukturasi
+  const periodicGrid: (any | null)[][] = Array(PERIODS).fill(null).map(() => Array(GROUPS).fill(null));
 
-  const categories = ["Alkali metal", "Alkaline earth metal", "Transition metal", "Metal", "Metalloid", "Nonmetal", "Halogen", "Noble gas"];
+  // Elementlarni to'g'ri joyga qo'yish
+  PERIODIC_TABLE.forEach((el) => {
+    if (el.period >= 1 && el.period <= PERIODS && el.group >= 1 && el.group <= GROUPS) {
+      periodicGrid[el.period - 1][el.group - 1] = el;
+    }
+  });
 
-  const getCategoryEmoji = (category: string) => {
-    const emojiMap: Record<string, string> = {
-      "Alkali metal": "🔴",
-      "Alkaline earth metal": "🟠",
-      "Transition metal": "🟣",
-      "Metal": "🟡",
-      "Metalloid": "⬜",
-      "Nonmetal": "🟢",
-      "Halogen": "🟠",
-      "Noble gas": "🔵",
-    };
-    return emojiMap[category] || "⚛️";
-  };
-
-  const getCategoryColor = (category: string) => {
-    const colorMap: Record<string, string> = {
-      "Alkali metal": "#FF6B6B",
-      "Alkaline earth metal": "#FFA500",
-      "Transition metal": "#9D84B7",
-      "Metal": "#FFD700",
-      "Metalloid": "#A9A9A9",
-      "Nonmetal": "#90EE90",
-      "Halogen": "#FFB6C1",
-      "Noble gas": "#87CEEB",
-    };
-    return colorMap[category] || "#999";
-  };
+  // Qidiruv
+  const filteredElements = useMemo(() => {
+    if (!searchText) return [];
+    return searchElements(searchText);
+  }, [searchText]);
 
   return (
     <ScreenContainer className="p-0">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* Header */}
-        <View className="bg-gradient-to-r from-primary/20 to-primary/10 px-4 pt-4 pb-4 gap-3">
-          <View className="flex-row items-center justify-between">
-            <View className="flex-row items-center gap-2">
-              <Text className="text-3xl">📊</Text>
-              <View>
-                <Text className="text-2xl font-bold text-foreground">Davriy Jadval</Text>
-                <Text className="text-xs text-muted">118 ta element</Text>
-              </View>
-            </View>
-          </View>
-
+        <View className="bg-primary/10 px-4 pt-4 pb-3 gap-2">
+          <Text className="text-2xl font-bold text-foreground">📊 Davriy Jadval</Text>
+          
           {/* Search */}
           <View className="flex-row items-center gap-2 bg-surface rounded-lg border border-border px-3 py-2">
             <Text className="text-lg">🔍</Text>
             <TextInput
-              placeholder="Element qidiruv (H, O, Fe...)"
+              placeholder="Element qidiruv..."
               placeholderTextColor={colors.muted}
               value={searchText}
               onChangeText={setSearchText}
@@ -90,78 +89,56 @@ export default function PeriodicScreen() {
           </View>
         </View>
 
-        <View className="px-4 py-4 gap-4">
-          {/* Category Filters */}
-          <View className="gap-2">
-            <Text className="text-xs font-semibold text-muted uppercase">Kategoriya bo'yicha:</Text>
+        {/* Search Results */}
+        {searchText && filteredElements.length > 0 && (
+          <View className="px-4 py-3 bg-surface/50 border-b border-border gap-2">
+            <Text className="text-xs font-semibold text-muted uppercase">Qidiruv Natijalari ({filteredElements.length})</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="gap-2">
-              <TouchableOpacity
-                onPress={() => setFilterCategory(null)}
-                className={`px-3 py-2 rounded-full ${
-                  filterCategory === null ? "bg-primary" : "bg-surface border border-border"
-                }`}
-              >
-                <Text
-                  className={`text-xs font-semibold ${
-                    filterCategory === null ? "text-background" : "text-foreground"
-                  }`}
-                >
-                  Barcha
-                </Text>
-              </TouchableOpacity>
-
-              {categories.map((category) => (
+              {filteredElements.map((el) => (
                 <TouchableOpacity
-                  key={category}
-                  onPress={() => setFilterCategory(category)}
-                  className={`px-3 py-2 rounded-full ${
-                    filterCategory === category ? "bg-primary" : "bg-surface border border-border"
-                  }`}
+                  key={el.id}
+                  onPress={() => setSelectedElement(el)}
+                  className="px-3 py-2 rounded-lg border border-border active:opacity-70"
+                  style={{ backgroundColor: getCategoryColor(el.number) + "30", borderColor: getCategoryColor(el.number) }}
                 >
-                  <Text
-                    className={`text-xs font-semibold ${
-                      filterCategory === category ? "text-background" : "text-foreground"
-                    }`}
-                  >
-                    {getCategoryEmoji(category)} {category.substring(0, 8)}
-                  </Text>
+                  <Text className="text-sm font-bold text-foreground">{el.symbol}</Text>
+                  <Text className="text-xs text-muted">{el.name}</Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
           </View>
+        )}
 
-          {/* Elements Grid */}
-          <View className="gap-2">
-            <Text className="text-sm font-semibold text-foreground">
-              {filteredElements.length} ta element
-            </Text>
-
-            <FlatList
-              data={filteredElements}
-              keyExtractor={(item) => item.id}
-              scrollEnabled={false}
-              numColumns={4}
-              columnWrapperStyle={{ gap: 8, marginBottom: 8 }}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => setSelectedElement(item)}
-                  className="flex-1 rounded-lg border border-border p-2 active:opacity-70"
-                  style={{
-                    backgroundColor: getCategoryColor(item.category) + "20",
-                    borderColor: getCategoryColor(item.category),
-                  }}
-                >
-                  <View className="gap-1">
-                    <Text className="text-xs text-muted text-center">{item.number}</Text>
-                    <Text className="text-lg font-bold text-foreground text-center">{item.symbol}</Text>
-                    <Text className="text-xs text-muted text-center leading-tight">{item.name.substring(0, 8)}</Text>
-                    <Text className="text-xs text-primary text-center font-mono">{item.mass.toFixed(2)}</Text>
+        {/* Periodic Table Grid */}
+        {!searchText && (
+          <View className="px-2 py-4 gap-1">
+            {periodicGrid.map((row, periodIndex) => (
+              <View key={periodIndex} className="flex-row gap-1 justify-start">
+                {row.map((element, groupIndex) => (
+                  <View key={`${periodIndex}-${groupIndex}`} className="flex-1">
+                    {element ? (
+                      <TouchableOpacity
+                        onPress={() => setSelectedElement(element)}
+                        className="rounded-md p-1 border border-border active:opacity-70"
+                        style={{
+                          backgroundColor: getCategoryColor(element.number) + "40",
+                          borderColor: getCategoryColor(element.number),
+                          minHeight: 50,
+                        }}
+                      >
+                        <Text className="text-xs text-muted text-center">{element.number}</Text>
+                        <Text className="text-sm font-bold text-foreground text-center">{element.symbol}</Text>
+                        <Text className="text-xs text-muted text-center leading-tight">{element.mass.toFixed(2)}</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <View className="flex-1" />
+                    )}
                   </View>
-                </TouchableOpacity>
-              )}
-            />
+                ))}
+              </View>
+            ))}
           </View>
-        </View>
+        )}
       </ScrollView>
 
       {/* Element Detail Modal */}
@@ -171,10 +148,10 @@ export default function PeriodicScreen() {
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
               {selectedElement && (
                 <View className="gap-4">
-                  {/* Header with Element Card */}
+                  {/* Header */}
                   <View
                     className="rounded-xl p-6 gap-3"
-                    style={{ backgroundColor: getCategoryColor(selectedElement.category) + "30" }}
+                    style={{ backgroundColor: getCategoryColor(selectedElement.number) + "30" }}
                   >
                     <View className="flex-row items-center justify-between">
                       <View>
@@ -182,8 +159,7 @@ export default function PeriodicScreen() {
                         <Text className="text-lg text-muted">{selectedElement.name}</Text>
                       </View>
                       <View className="items-end gap-1">
-                        <Text className="text-2xl">{getCategoryEmoji(selectedElement.category)}</Text>
-                        <Text className="text-xs text-muted">#{selectedElement.number}</Text>
+                        <Text className="text-2xl font-bold text-primary">#{selectedElement.number}</Text>
                       </View>
                     </View>
                     <View className="flex-row gap-2">
@@ -265,8 +241,7 @@ export default function PeriodicScreen() {
 
                   {/* Category Badge */}
                   <View className="flex-row items-center gap-2 bg-primary/10 rounded-lg p-3 border border-primary">
-                    <Text className="text-lg">{getCategoryEmoji(selectedElement.category)}</Text>
-                    <Text className="text-sm font-semibold text-foreground">{selectedElement.category}</Text>
+                    <Text className="text-lg font-bold text-foreground">{selectedElement.category}</Text>
                   </View>
                 </View>
               )}
