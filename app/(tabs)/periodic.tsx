@@ -15,8 +15,8 @@ import { useColors } from "@/hooks/use-colors";
 import periodicElements from "@/lib/data/periodic-elements.json";
 
 /**
- * Periodic Table Screen - Davriy Jadval (ptable.com uslubida)
- * To'rtburchak kartalar bilan 118 ta element
+ * Enhanced Periodic Table Screen - Davriy Jadval (ptable.com uslubida)
+ * Period va Group labels bilan, Lanthanide/Actinide rows
  */
 
 export default function PeriodicScreen() {
@@ -24,7 +24,7 @@ export default function PeriodicScreen() {
   const [selectedElement, setSelectedElement] = useState<any>(null);
   const colors = useColors();
   const screenWidth = Dimensions.get("window").width;
-  const cardSize = (screenWidth - 24) / 6; // 6 ta kartaning eni
+  const cardSize = (screenWidth - 60) / 6; // 6 ta kartaning eni (labels uchun joy)
 
   // Qidiruv
   const filteredElements = useMemo(() => {
@@ -45,9 +45,37 @@ export default function PeriodicScreen() {
     const maxPeriod = 7;
     const maxGroup = 18;
 
+    // Group raqamlari (yuqori)
+    const groupHeader = (
+      <View key="group-header" className="flex-row gap-1 mb-2">
+        <View style={{ width: 30 }} />
+        {Array.from({ length: maxGroup }).map((_, i) => (
+          <View
+            key={`group-${i + 1}`}
+            style={{ width: cardSize, height: 24 }}
+            className="items-center justify-center"
+          >
+            <Text className="text-xs font-bold text-muted">{i + 1}</Text>
+          </View>
+        ))}
+      </View>
+    );
+    grid.push(groupHeader);
+
     // Har bir davr uchun qator yaratish
     for (let period = 1; period <= maxPeriod; period++) {
       const row: any[] = [];
+
+      // Period raqami (chap)
+      row.push(
+        <View
+          key={`period-${period}`}
+          style={{ width: 30, height: cardSize }}
+          className="items-center justify-center"
+        >
+          <Text className="text-xs font-bold text-muted">{period}</Text>
+        </View>
+      );
 
       for (let group = 1; group <= maxGroup; group++) {
         const element = periodicElements.find(
@@ -69,13 +97,24 @@ export default function PeriodicScreen() {
                 alignItems: "center",
               }}
             >
-              <Text className="text-xs text-muted text-center">{element.number}</Text>
-              <Text className="text-base font-bold text-foreground text-center">{element.symbol}</Text>
-              <Text className="text-xs text-muted text-center">{element.mass.toFixed(2)}</Text>
+              <Text className="text-xs text-muted text-center">
+                {element.number}
+              </Text>
+              <Text className="text-sm font-bold text-foreground text-center">
+                {element.symbol}
+              </Text>
+              <Text className="text-xs text-muted text-center">
+                {element.mass.toFixed(2)}
+              </Text>
             </TouchableOpacity>
           );
         } else {
-          row.push(<View key={`${period}-${group}-empty`} style={{ width: cardSize, height: cardSize }} />);
+          row.push(
+            <View
+              key={`${period}-${group}-empty`}
+              style={{ width: cardSize, height: cardSize }}
+            />
+          );
         }
       }
 
@@ -86,6 +125,86 @@ export default function PeriodicScreen() {
       );
     }
 
+    // Lanthanidlar qatori (6-davr)
+    const lanthanideRow = (
+      <View key="lanthanide-row" className="mt-4 gap-1">
+        <Text className="text-xs font-semibold text-muted ml-8">
+          Lantanidlar (Lanthanoids) - 6-davr
+        </Text>
+        <View className="flex-row gap-1 ml-8">
+          {periodicElements
+            .filter((el) => el.period === 6 && el.category === "Lanthanoid")
+            .sort((a, b) => a.number - b.number)
+            .map((element) => (
+              <TouchableOpacity
+                key={`lanthanide-${element.number}`}
+                onPress={() => setSelectedElement(element)}
+                className="rounded-lg p-1 border-2 active:opacity-70"
+                style={{
+                  width: cardSize,
+                  height: cardSize,
+                  backgroundColor: element.color + "40",
+                  borderColor: element.color,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text className="text-xs text-muted text-center">
+                  {element.number}
+                </Text>
+                <Text className="text-sm font-bold text-foreground text-center">
+                  {element.symbol}
+                </Text>
+                <Text className="text-xs text-muted text-center">
+                  {element.mass.toFixed(2)}
+                </Text>
+              </TouchableOpacity>
+            ))}
+        </View>
+      </View>
+    );
+    grid.push(lanthanideRow);
+
+    // Aktinidlar qatori (7-davr)
+    const actinideRow = (
+      <View key="actinide-row" className="mt-2 gap-1">
+        <Text className="text-xs font-semibold text-muted ml-8">
+          Aktinidlar (Actinoids) - 7-davr
+        </Text>
+        <View className="flex-row gap-1 ml-8">
+          {periodicElements
+            .filter((el) => el.period === 7 && el.category === "Actinoid")
+            .sort((a, b) => a.number - b.number)
+            .map((element) => (
+              <TouchableOpacity
+                key={`actinide-${element.number}`}
+                onPress={() => setSelectedElement(element)}
+                className="rounded-lg p-1 border-2 active:opacity-70"
+                style={{
+                  width: cardSize,
+                  height: cardSize,
+                  backgroundColor: element.color + "40",
+                  borderColor: element.color,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text className="text-xs text-muted text-center">
+                  {element.number}
+                </Text>
+                <Text className="text-sm font-bold text-foreground text-center">
+                  {element.symbol}
+                </Text>
+                <Text className="text-xs text-muted text-center">
+                  {element.mass.toFixed(2)}
+                </Text>
+              </TouchableOpacity>
+            ))}
+        </View>
+      </View>
+    );
+    grid.push(actinideRow);
+
     return grid;
   };
 
@@ -94,7 +213,9 @@ export default function PeriodicScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* Header */}
         <View className="bg-primary/10 px-4 pt-4 pb-3 gap-2">
-          <Text className="text-2xl font-bold text-foreground">📊 Davriy Jadval</Text>
+          <Text className="text-2xl font-bold text-foreground">
+            📊 Davriy Jadval
+          </Text>
 
           {/* Search */}
           <View className="flex-row items-center gap-2 bg-surface rounded-lg border border-border px-3 py-2">
@@ -133,7 +254,9 @@ export default function PeriodicScreen() {
                     borderColor: item.color,
                   }}
                 >
-                  <Text className="text-sm font-bold text-foreground">{item.symbol}</Text>
+                  <Text className="text-sm font-bold text-foreground">
+                    {item.symbol}
+                  </Text>
                   <Text className="text-xs text-muted">{item.name}</Text>
                 </TouchableOpacity>
               )}
@@ -218,9 +341,50 @@ export default function PeriodicScreen() {
                     </View>
                   </View>
 
+                  {/* Electron Configuration */}
+                  <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+                    <Text className="text-sm font-semibold text-foreground">
+                      Elektron Konfiguratsiyasi
+                    </Text>
+                    <Text className="text-sm font-mono text-primary">
+                      {selectedElement.electronConfig}
+                    </Text>
+                  </View>
+
+                  {/* Oxidation States */}
+                  <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+                    <Text className="text-sm font-semibold text-foreground">
+                      Oksidatsiya Darajalari
+                    </Text>
+                    <View className="flex-row gap-2 flex-wrap">
+                      {selectedElement.oxidationStates.map((state: string, idx: number) => (
+                        <View
+                          key={idx}
+                          className="px-3 py-1 rounded-full bg-primary/20"
+                        >
+                          <Text className="text-sm font-mono text-primary">
+                            {state}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+
+                  {/* Uses */}
+                  <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+                    <Text className="text-sm font-semibold text-foreground">
+                      Qo'llanilishi
+                    </Text>
+                    <Text className="text-sm text-muted leading-relaxed">
+                      {selectedElement.uses}
+                    </Text>
+                  </View>
+
                   {/* Category Info */}
                   <View className="bg-surface rounded-lg p-4 border border-border gap-2">
-                    <Text className="text-sm font-semibold text-foreground">Kategoriya</Text>
+                    <Text className="text-sm font-semibold text-foreground">
+                      Kategoriya
+                    </Text>
                     <View className="flex-row gap-2 flex-wrap">
                       <View
                         className="px-3 py-2 rounded-lg"
@@ -240,7 +404,9 @@ export default function PeriodicScreen() {
 
                   {/* Additional Info */}
                   <View className="bg-surface rounded-lg p-4 border border-border gap-3">
-                    <Text className="text-sm font-semibold text-foreground">Ma'lumotlar</Text>
+                    <Text className="text-sm font-semibold text-foreground">
+                      Ma'lumotlar
+                    </Text>
                     <View className="gap-2">
                       <View className="flex-row justify-between">
                         <Text className="text-sm text-muted">Atom raqami:</Text>
@@ -277,43 +443,63 @@ export default function PeriodicScreen() {
 
                   {/* Color Legend */}
                   <View className="bg-surface rounded-lg p-4 border border-border gap-2">
-                    <Text className="text-sm font-semibold text-foreground">Kategoriya Ranglari</Text>
+                    <Text className="text-sm font-semibold text-foreground">
+                      Kategoriya Ranglari
+                    </Text>
                     <View className="gap-2">
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded bg-red-300" />
-                        <Text className="text-sm text-foreground">Alkali metallar</Text>
+                        <Text className="text-sm text-foreground">
+                          Alkali metallar
+                        </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded bg-orange-300" />
-                        <Text className="text-sm text-foreground">Alkaline earth metallar</Text>
+                        <Text className="text-sm text-foreground">
+                          Alkaline earth metallar
+                        </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded" style={{ backgroundColor: "#9D84B7" }} />
-                        <Text className="text-sm text-foreground">Transition metallar</Text>
+                        <Text className="text-sm text-foreground">
+                          Transition metallar
+                        </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded" style={{ backgroundColor: "#B19CD9" }} />
-                        <Text className="text-sm text-foreground">Lantanidlar</Text>
+                        <Text className="text-sm text-foreground">
+                          Lantanidlar
+                        </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded" style={{ backgroundColor: "#D4A5D4" }} />
-                        <Text className="text-sm text-foreground">Aktinidlar</Text>
+                        <Text className="text-sm text-foreground">
+                          Aktinidlar
+                        </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded bg-yellow-300" />
-                        <Text className="text-sm text-foreground">Metallar va Halogenlar</Text>
+                        <Text className="text-sm text-foreground">
+                          Metallar va Halogenlar
+                        </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded bg-gray-400" />
-                        <Text className="text-sm text-foreground">Metalloidlar</Text>
+                        <Text className="text-sm text-foreground">
+                          Metalloidlar
+                        </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded bg-green-300" />
-                        <Text className="text-sm text-foreground">Nonmetallar</Text>
+                        <Text className="text-sm text-foreground">
+                          Nonmetallar
+                        </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
                         <View className="w-6 h-6 rounded bg-blue-300" />
-                        <Text className="text-sm text-foreground">Inert gazlar</Text>
+                        <Text className="text-sm text-foreground">
+                          Inert gazlar
+                        </Text>
                       </View>
                     </View>
                   </View>

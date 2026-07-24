@@ -9,7 +9,13 @@
     "group": 1,
     "category": "Nonmetal",
     "categoryUz": "Qo'zg'almas",
-    "color": "#90EE90"
+    "color": "#90EE90",
+    "electronConfig": "1s¹",
+    "oxidationStates": [
+      "+1",
+      "-1"
+    ],
+    "uses": "Yoqilg'i, kimyoviy ishlab chiqarish, suv hosil qilish"
   },
   {
     "number": 2,
@@ -21,7 +27,12 @@
     "group": 18,
     "category": "Noble gas",
     "categoryUz": "Inert gaz",
-    "color": "#87CEEB"
+    "color": "#87CEEB",
+    "electronConfig": "1s²",
+    "oxidationStates": [
+      "0"
+    ],
+    "uses": "Balon, sho'rvalar, ilmiy tadqiqotlar"
   },
   {
     "number": 3,
@@ -33,7 +44,12 @@
     "group": 1,
     "category": "Alkali metal",
     "categoryUz": "Alkali metall",
-    "color": "#FFB6C1"
+    "color": "#FFB6C1",
+    "electronConfig": "[He] 2s¹",
+    "oxidationStates": [
+      "+1"
+    ],
+    "uses": "Batareya, psixiatrik dori, keramika"
   },
   {
     "number": 4,
@@ -45,7 +61,12 @@
     "group": 2,
     "category": "Alkaline earth",
     "categoryUz": "Alkaline earth",
-    "color": "#FFA500"
+    "color": "#FFA500",
+    "electronConfig": "[He] 2s²",
+    "oxidationStates": [
+      "+2"
+    ],
+    "uses": "Alyuminiy qotishmasi, rentgen oynalari"
   },
   {
     "number": 5,
@@ -57,7 +78,12 @@
     "group": 13,
     "category": "Metalloid",
     "categoryUz": "Metalloid",
-    "color": "#A9A9A9"
+    "color": "#A9A9A9",
+    "electronConfig": "[He] 2s² 2p¹",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Shisha, detergentlar, qo'zg'almas kimyoviy moddalar"
   },
   {
     "number": 6,
@@ -69,7 +95,14 @@
     "group": 14,
     "category": "Nonmetal",
     "categoryUz": "Qo'zg'almas",
-    "color": "#90EE90"
+    "color": "#90EE90",
+    "electronConfig": "[He] 2s² 2p²",
+    "oxidationStates": [
+      "+4",
+      "-4",
+      "+2"
+    ],
+    "uses": "Organik moddalar, qo'zg'almas, energiya"
   },
   {
     "number": 7,
@@ -81,7 +114,14 @@
     "group": 15,
     "category": "Nonmetal",
     "categoryUz": "Qo'zg'almas",
-    "color": "#90EE90"
+    "color": "#90EE90",
+    "electronConfig": "[He] 2s² 2p³",
+    "oxidationStates": [
+      "-3",
+      "+3",
+      "+5"
+    ],
+    "uses": "O'g'it, kimyoviy moddalar, siqilgan gaz"
   },
   {
     "number": 8,
@@ -93,7 +133,13 @@
     "group": 16,
     "category": "Nonmetal",
     "categoryUz": "Qo'zg'almas",
-    "color": "#90EE90"
+    "color": "#90EE90",
+    "electronConfig": "[He] 2s² 2p⁴",
+    "oxidationStates": [
+      "-2",
+      "-1"
+    ],
+    "uses": "Respiration, yonish, suv"
   },
   {
     "number": 9,
@@ -105,7 +151,12 @@
     "group": 17,
     "category": "Halogen",
     "categoryUz": "Halogen",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[He] 2s² 2p⁵",
+    "oxidationStates": [
+      "-1"
+    ],
+    "uses": "Tish pastasi, uranium boyitish, refrigerant"
   },
   {
     "number": 10,
@@ -117,7 +168,12 @@
     "group": 18,
     "category": "Noble gas",
     "categoryUz": "Inert gaz",
-    "color": "#87CEEB"
+    "color": "#87CEEB",
+    "electronConfig": "[He] 2s² 2p⁶",
+    "oxidationStates": [
+      "0"
+    ],
+    "uses": "Neon lampalar, reklama"
   },
   {
     "number": 11,
@@ -129,7 +185,12 @@
     "group": 1,
     "category": "Alkali metal",
     "categoryUz": "Alkali metall",
-    "color": "#FFB6C1"
+    "color": "#FFB6C1",
+    "electronConfig": "[Ne] 3s¹",
+    "oxidationStates": [
+      "+1"
+    ],
+    "uses": "Tuz, kimyoviy moddalar, lampalar"
   },
   {
     "number": 12,
@@ -141,7 +202,12 @@
     "group": 2,
     "category": "Alkaline earth",
     "categoryUz": "Alkaline earth",
-    "color": "#FFA500"
+    "color": "#FFA500",
+    "electronConfig": "[Ne] 3s²",
+    "oxidationStates": [
+      "+2"
+    ],
+    "uses": "Alyuminiy qotishmasi, yonuvchi moddalar"
   },
   {
     "number": 13,
@@ -153,7 +219,12 @@
     "group": 13,
     "category": "Metal",
     "categoryUz": "Metall",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[Ne] 3s² 3p¹",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Samolyotlar, paketlar, qurilish"
   },
   {
     "number": 14,
@@ -165,7 +236,12 @@
     "group": 14,
     "category": "Metalloid",
     "categoryUz": "Metalloid",
-    "color": "#A9A9A9"
+    "color": "#A9A9A9",
+    "electronConfig": "[Ne] 3s² 3p²",
+    "oxidationStates": [
+      "+4"
+    ],
+    "uses": "Elektronika, shisha, qurilish"
   },
   {
     "number": 15,
@@ -177,7 +253,14 @@
     "group": 15,
     "category": "Nonmetal",
     "categoryUz": "Qo'zg'almas",
-    "color": "#90EE90"
+    "color": "#90EE90",
+    "electronConfig": "[Ne] 3s² 3p³",
+    "oxidationStates": [
+      "-3",
+      "+3",
+      "+5"
+    ],
+    "uses": "O'g'it, olovga chidamli moddalar"
   },
   {
     "number": 16,
@@ -189,7 +272,14 @@
     "group": 16,
     "category": "Nonmetal",
     "categoryUz": "Qo'zg'almas",
-    "color": "#90EE90"
+    "color": "#90EE90",
+    "electronConfig": "[Ne] 3s² 3p⁴",
+    "oxidationStates": [
+      "-2",
+      "+4",
+      "+6"
+    ],
+    "uses": "Sulfat kislota, o'g'it, dori"
   },
   {
     "number": 17,
@@ -201,7 +291,15 @@
     "group": 17,
     "category": "Halogen",
     "categoryUz": "Halogen",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[Ne] 3s² 3p⁵",
+    "oxidationStates": [
+      "-1",
+      "+1",
+      "+5",
+      "+7"
+    ],
+    "uses": "Suv tozalash, kimyoviy moddalar, tuz"
   },
   {
     "number": 18,
@@ -213,7 +311,12 @@
     "group": 18,
     "category": "Noble gas",
     "categoryUz": "Inert gaz",
-    "color": "#87CEEB"
+    "color": "#87CEEB",
+    "electronConfig": "[Ne] 3s² 3p⁶",
+    "oxidationStates": [
+      "0"
+    ],
+    "uses": "Sho'rvalar, yig'ilish, elektronika"
   },
   {
     "number": 19,
@@ -225,7 +328,12 @@
     "group": 1,
     "category": "Alkali metal",
     "categoryUz": "Alkali metall",
-    "color": "#FFB6C1"
+    "color": "#FFB6C1",
+    "electronConfig": "[Ar] 4s¹",
+    "oxidationStates": [
+      "+1"
+    ],
+    "uses": "O'g'it, dori, kimyoviy moddalar"
   },
   {
     "number": 20,
@@ -237,7 +345,12 @@
     "group": 2,
     "category": "Alkaline earth",
     "categoryUz": "Alkaline earth",
-    "color": "#FFA500"
+    "color": "#FFA500",
+    "electronConfig": "[Ar] 4s²",
+    "oxidationStates": [
+      "+2"
+    ],
+    "uses": "Qurilish, dori, o'g'it"
   },
   {
     "number": 21,
@@ -249,7 +362,12 @@
     "group": 3,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d¹ 4s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Alyuminiy qotishmasi, lampalar"
   },
   {
     "number": 22,
@@ -261,7 +379,14 @@
     "group": 4,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d² 4s²",
+    "oxidationStates": [
+      "+2",
+      "+3",
+      "+4"
+    ],
+    "uses": "Samolyotlar, protezlar, rang"
   },
   {
     "number": 23,
@@ -273,7 +398,15 @@
     "group": 5,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d³ 4s²",
+    "oxidationStates": [
+      "+2",
+      "+3",
+      "+4",
+      "+5"
+    ],
+    "uses": "Po'lat, qotishma, katalizator"
   },
   {
     "number": 24,
@@ -285,7 +418,14 @@
     "group": 6,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d⁵ 4s¹",
+    "oxidationStates": [
+      "+2",
+      "+3",
+      "+6"
+    ],
+    "uses": "Xromlashtirish, rang, qotishma"
   },
   {
     "number": 25,
@@ -297,7 +437,15 @@
     "group": 7,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d⁵ 4s²",
+    "oxidationStates": [
+      "+2",
+      "+3",
+      "+4",
+      "+7"
+    ],
+    "uses": "Po'lat, batareya, katalizator"
   },
   {
     "number": 26,
@@ -309,7 +457,13 @@
     "group": 8,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d⁶ 4s²",
+    "oxidationStates": [
+      "+2",
+      "+3"
+    ],
+    "uses": "Po'lat, qurilish, dori"
   },
   {
     "number": 27,
@@ -321,7 +475,13 @@
     "group": 9,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d⁷ 4s²",
+    "oxidationStates": [
+      "+2",
+      "+3"
+    ],
+    "uses": "Katalizator, rang, batareya"
   },
   {
     "number": 28,
@@ -333,7 +493,12 @@
     "group": 10,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d⁸ 4s²",
+    "oxidationStates": [
+      "+2"
+    ],
+    "uses": "Qotishma, xromlashtirish, batareya"
   },
   {
     "number": 29,
@@ -345,7 +510,13 @@
     "group": 11,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d¹⁰ 4s¹",
+    "oxidationStates": [
+      "+1",
+      "+2"
+    ],
+    "uses": "Elektr, qotishma, dori"
   },
   {
     "number": 30,
@@ -357,7 +528,12 @@
     "group": 12,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Ar] 3d¹⁰ 4s²",
+    "oxidationStates": [
+      "+2"
+    ],
+    "uses": "Qotishma, xromlashtirish, dori"
   },
   {
     "number": 31,
@@ -369,7 +545,12 @@
     "group": 13,
     "category": "Metal",
     "categoryUz": "Metall",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[Ar] 3d¹⁰ 4s² 4p¹",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Elektronika, qo'zg'almas, diod"
   },
   {
     "number": 32,
@@ -381,7 +562,12 @@
     "group": 14,
     "category": "Metalloid",
     "categoryUz": "Metalloid",
-    "color": "#A9A9A9"
+    "color": "#A9A9A9",
+    "electronConfig": "[Ar] 3d¹⁰ 4s² 4p²",
+    "oxidationStates": [
+      "+4"
+    ],
+    "uses": "Elektronika, optika, qo'zg'almas"
   },
   {
     "number": 33,
@@ -393,7 +579,14 @@
     "group": 15,
     "category": "Metalloid",
     "categoryUz": "Metalloid",
-    "color": "#A9A9A9"
+    "color": "#A9A9A9",
+    "electronConfig": "[Ar] 3d¹⁰ 4s² 4p³",
+    "oxidationStates": [
+      "-3",
+      "+3",
+      "+5"
+    ],
+    "uses": "Elektronika, o'g'it, dori"
   },
   {
     "number": 34,
@@ -405,7 +598,14 @@
     "group": 16,
     "category": "Nonmetal",
     "categoryUz": "Qo'zg'almas",
-    "color": "#90EE90"
+    "color": "#90EE90",
+    "electronConfig": "[Ar] 3d¹⁰ 4s² 4p⁴",
+    "oxidationStates": [
+      "-2",
+      "+4",
+      "+6"
+    ],
+    "uses": "Elektronika, rang, dori"
   },
   {
     "number": 35,
@@ -417,7 +617,14 @@
     "group": 17,
     "category": "Halogen",
     "categoryUz": "Halogen",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[Ar] 3d¹⁰ 4s² 4p⁵",
+    "oxidationStates": [
+      "-1",
+      "+1",
+      "+5"
+    ],
+    "uses": "Dori, o'g'it, kimyoviy moddalar"
   },
   {
     "number": 36,
@@ -429,7 +636,12 @@
     "group": 18,
     "category": "Noble gas",
     "categoryUz": "Inert gaz",
-    "color": "#87CEEB"
+    "color": "#87CEEB",
+    "electronConfig": "[Ar] 3d¹⁰ 4s² 4p⁶",
+    "oxidationStates": [
+      "0"
+    ],
+    "uses": "Lampalar, sho'rvalar, elektronika"
   },
   {
     "number": 37,
@@ -441,7 +653,12 @@
     "group": 1,
     "category": "Alkali metal",
     "categoryUz": "Alkali metall",
-    "color": "#FFB6C1"
+    "color": "#FFB6C1",
+    "electronConfig": "[Kr] 5s¹",
+    "oxidationStates": [
+      "+1"
+    ],
+    "uses": "Fotolement, katalizator"
   },
   {
     "number": 38,
@@ -453,199 +670,12 @@
     "group": 2,
     "category": "Alkaline earth",
     "categoryUz": "Alkaline earth",
-    "color": "#FFA500"
-  },
-  {
-    "number": 39,
-    "symbol": "Y",
-    "name": "Ittrium",
-    "nameEn": "Yttrium",
-    "mass": 88.906,
-    "period": 5,
-    "group": 3,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 40,
-    "symbol": "Zr",
-    "name": "Tsirkoniy",
-    "nameEn": "Zirconium",
-    "mass": 91.224,
-    "period": 5,
-    "group": 4,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 41,
-    "symbol": "Nb",
-    "name": "Niobiy",
-    "nameEn": "Niobium",
-    "mass": 92.906,
-    "period": 5,
-    "group": 5,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 42,
-    "symbol": "Mo",
-    "name": "Molibden",
-    "nameEn": "Molybdenum",
-    "mass": 95.95,
-    "period": 5,
-    "group": 6,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 43,
-    "symbol": "Tc",
-    "name": "Texnetsiy",
-    "nameEn": "Technetium",
-    "mass": 98,
-    "period": 5,
-    "group": 7,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 44,
-    "symbol": "Ru",
-    "name": "Ruteny",
-    "nameEn": "Ruthenium",
-    "mass": 101.07,
-    "period": 5,
-    "group": 8,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 45,
-    "symbol": "Rh",
-    "name": "Rodiy",
-    "nameEn": "Rhodium",
-    "mass": 102.91,
-    "period": 5,
-    "group": 9,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 46,
-    "symbol": "Pd",
-    "name": "Palladiy",
-    "nameEn": "Palladium",
-    "mass": 106.42,
-    "period": 5,
-    "group": 10,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 47,
-    "symbol": "Ag",
-    "name": "Kumush",
-    "nameEn": "Silver",
-    "mass": 107.87,
-    "period": 5,
-    "group": 11,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 48,
-    "symbol": "Cd",
-    "name": "Kadmiy",
-    "nameEn": "Cadmium",
-    "mass": 112.41,
-    "period": 5,
-    "group": 12,
-    "category": "Transition metal",
-    "categoryUz": "Transition metall",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 49,
-    "symbol": "In",
-    "name": "Indiy",
-    "nameEn": "Indium",
-    "mass": 114.82,
-    "period": 5,
-    "group": 13,
-    "category": "Metal",
-    "categoryUz": "Metall",
-    "color": "#FFD700"
-  },
-  {
-    "number": 50,
-    "symbol": "Sn",
-    "name": "Qalay",
-    "nameEn": "Tin",
-    "mass": 118.71,
-    "period": 5,
-    "group": 14,
-    "category": "Metal",
-    "categoryUz": "Metall",
-    "color": "#FFD700"
-  },
-  {
-    "number": 51,
-    "symbol": "Sb",
-    "name": "Surma",
-    "nameEn": "Antimony",
-    "mass": 121.76,
-    "period": 5,
-    "group": 15,
-    "category": "Metalloid",
-    "categoryUz": "Metalloid",
-    "color": "#A9A9A9"
-  },
-  {
-    "number": 52,
-    "symbol": "Te",
-    "name": "Tellur",
-    "nameEn": "Tellurium",
-    "mass": 127.6,
-    "period": 5,
-    "group": 16,
-    "category": "Metalloid",
-    "categoryUz": "Metalloid",
-    "color": "#A9A9A9"
-  },
-  {
-    "number": 53,
-    "symbol": "I",
-    "name": "Yod",
-    "nameEn": "Iodine",
-    "mass": 126.9,
-    "period": 5,
-    "group": 17,
-    "category": "Halogen",
-    "categoryUz": "Halogen",
-    "color": "#FFD700"
-  },
-  {
-    "number": 54,
-    "symbol": "Xe",
-    "name": "Ksenon",
-    "nameEn": "Xenon",
-    "mass": 131.29,
-    "period": 5,
-    "group": 18,
-    "category": "Noble gas",
-    "categoryUz": "Inert gaz",
-    "color": "#87CEEB"
+    "color": "#FFA500",
+    "electronConfig": "[Kr] 5s²",
+    "oxidationStates": [
+      "+2"
+    ],
+    "uses": "Olovga chidamli moddalar, dori"
   },
   {
     "number": 55,
@@ -657,7 +687,12 @@
     "group": 1,
     "category": "Alkali metal",
     "categoryUz": "Alkali metall",
-    "color": "#FFB6C1"
+    "color": "#FFB6C1",
+    "electronConfig": "[Xe] 6s¹",
+    "oxidationStates": [
+      "+1"
+    ],
+    "uses": "Atomli soat, fotolement"
   },
   {
     "number": 56,
@@ -669,7 +704,12 @@
     "group": 2,
     "category": "Alkaline earth",
     "categoryUz": "Alkaline earth",
-    "color": "#FFA500"
+    "color": "#FFA500",
+    "electronConfig": "[Xe] 6s²",
+    "oxidationStates": [
+      "+2"
+    ],
+    "uses": "X-ray, dori, kimyoviy moddalar"
   },
   {
     "number": 57,
@@ -681,7 +721,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 5d¹ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Qotishma, optika, katalizator"
   },
   {
     "number": 58,
@@ -693,7 +738,13 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f¹ 5d¹ 6s²",
+    "oxidationStates": [
+      "+3",
+      "+4"
+    ],
+    "uses": "Katalizator, shisha, qotishma"
   },
   {
     "number": 59,
@@ -705,7 +756,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f³ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Magnit, qotishma, rang"
   },
   {
     "number": 60,
@@ -717,7 +773,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f⁴ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Magnit, laser, qotishma"
   },
   {
     "number": 61,
@@ -729,7 +790,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f⁵ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Radioaktiv, katalizator"
   },
   {
     "number": 62,
@@ -741,7 +807,13 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f⁶ 6s²",
+    "oxidationStates": [
+      "+2",
+      "+3"
+    ],
+    "uses": "Magnit, laser, dori"
   },
   {
     "number": 63,
@@ -753,7 +825,13 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f⁷ 6s²",
+    "oxidationStates": [
+      "+2",
+      "+3"
+    ],
+    "uses": "Rang, lampalar, magnit"
   },
   {
     "number": 64,
@@ -765,7 +843,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f⁷ 5d¹ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "MRI, magnit, neutron absorber"
   },
   {
     "number": 65,
@@ -777,7 +860,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f⁹ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Magnit, rang, laser"
   },
   {
     "number": 66,
@@ -789,7 +877,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f¹⁰ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Magnit, laser, qotishma"
   },
   {
     "number": 67,
@@ -801,7 +894,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f¹¹ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Magnit, laser, dori"
   },
   {
     "number": 68,
@@ -813,7 +911,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f¹² 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Fiber optika, laser, qotishma"
   },
   {
     "number": 69,
@@ -825,7 +928,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f¹³ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "X-ray, laser, qotishma"
   },
   {
     "number": 70,
@@ -837,7 +945,13 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f¹⁴ 6s²",
+    "oxidationStates": [
+      "+2",
+      "+3"
+    ],
+    "uses": "Laser, qotishma, dori"
   },
   {
     "number": 71,
@@ -849,7 +963,12 @@
     "group": 3,
     "category": "Lanthanoid",
     "categoryUz": "Lanthanoid",
-    "color": "#B19CD9"
+    "color": "#B19CD9",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹ 6s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Katalizator, PET scanner, qotishma"
   },
   {
     "number": 72,
@@ -861,7 +980,12 @@
     "group": 4,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d² 6s²",
+    "oxidationStates": [
+      "+4"
+    ],
+    "uses": "Yadro reaktori, qotishma"
   },
   {
     "number": 73,
@@ -873,7 +997,12 @@
     "group": 5,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d³ 6s²",
+    "oxidationStates": [
+      "+5"
+    ],
+    "uses": "Elektronika, qotishma, dori"
   },
   {
     "number": 74,
@@ -885,7 +1014,12 @@
     "group": 6,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d⁴ 6s²",
+    "oxidationStates": [
+      "+6"
+    ],
+    "uses": "Lampalar, qotishma, yadro"
   },
   {
     "number": 75,
@@ -897,7 +1031,14 @@
     "group": 7,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d⁵ 6s²",
+    "oxidationStates": [
+      "+4",
+      "+6",
+      "+7"
+    ],
+    "uses": "Katalizator, qotishma, dori"
   },
   {
     "number": 76,
@@ -909,7 +1050,14 @@
     "group": 8,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d⁶ 6s²",
+    "oxidationStates": [
+      "+4",
+      "+6",
+      "+8"
+    ],
+    "uses": "Katalizator, qotishma, dori"
   },
   {
     "number": 77,
@@ -921,7 +1069,13 @@
     "group": 9,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d⁷ 6s²",
+    "oxidationStates": [
+      "+3",
+      "+4"
+    ],
+    "uses": "Katalizator, qotishma, dori"
   },
   {
     "number": 78,
@@ -933,7 +1087,13 @@
     "group": 10,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d⁹ 6s¹",
+    "oxidationStates": [
+      "+2",
+      "+4"
+    ],
+    "uses": "Katalizator, qotishma, dori"
   },
   {
     "number": 79,
@@ -945,7 +1105,13 @@
     "group": 11,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹⁰ 6s¹",
+    "oxidationStates": [
+      "+1",
+      "+3"
+    ],
+    "uses": "Zargarlik, elektronika, dori"
   },
   {
     "number": 80,
@@ -957,7 +1123,13 @@
     "group": 12,
     "category": "Transition metal",
     "categoryUz": "Transition metall",
-    "color": "#9D84B7"
+    "color": "#9D84B7",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹⁰ 6s²",
+    "oxidationStates": [
+      "+1",
+      "+2"
+    ],
+    "uses": "Termometr, lampalar, dori"
   },
   {
     "number": 81,
@@ -969,7 +1141,13 @@
     "group": 13,
     "category": "Metal",
     "categoryUz": "Metall",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹",
+    "oxidationStates": [
+      "+1",
+      "+3"
+    ],
+    "uses": "Elektronika, dori, optika"
   },
   {
     "number": 82,
@@ -981,7 +1159,13 @@
     "group": 14,
     "category": "Metal",
     "categoryUz": "Metall",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²",
+    "oxidationStates": [
+      "+2",
+      "+4"
+    ],
+    "uses": "Batareya, shisha, dori"
   },
   {
     "number": 83,
@@ -993,7 +1177,13 @@
     "group": 15,
     "category": "Metal",
     "categoryUz": "Metall",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³",
+    "oxidationStates": [
+      "+3",
+      "+5"
+    ],
+    "uses": "Dori, qotishma, katalizator"
   },
   {
     "number": 84,
@@ -1005,7 +1195,13 @@
     "group": 16,
     "category": "Metalloid",
     "categoryUz": "Metalloid",
-    "color": "#A9A9A9"
+    "color": "#A9A9A9",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴",
+    "oxidationStates": [
+      "+2",
+      "+4"
+    ],
+    "uses": "Radioaktiv, antistatik"
   },
   {
     "number": 85,
@@ -1017,7 +1213,14 @@
     "group": 17,
     "category": "Halogen",
     "categoryUz": "Halogen",
-    "color": "#FFD700"
+    "color": "#FFD700",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵",
+    "oxidationStates": [
+      "-1",
+      "+1",
+      "+5"
+    ],
+    "uses": "Radioaktiv, dori"
   },
   {
     "number": 86,
@@ -1029,7 +1232,12 @@
     "group": 18,
     "category": "Noble gas",
     "categoryUz": "Inert gaz",
-    "color": "#87CEEB"
+    "color": "#87CEEB",
+    "electronConfig": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶",
+    "oxidationStates": [
+      "0"
+    ],
+    "uses": "Radioaktiv, dori"
   },
   {
     "number": 87,
@@ -1041,7 +1249,12 @@
     "group": 1,
     "category": "Alkali metal",
     "categoryUz": "Alkali metall",
-    "color": "#FFB6C1"
+    "color": "#FFB6C1",
+    "electronConfig": "[Rn] 7s¹",
+    "oxidationStates": [
+      "+1"
+    ],
+    "uses": "Radioaktiv, tadqiqot"
   },
   {
     "number": 88,
@@ -1053,7 +1266,12 @@
     "group": 2,
     "category": "Alkaline earth",
     "categoryUz": "Alkaline earth",
-    "color": "#FFA500"
+    "color": "#FFA500",
+    "electronConfig": "[Rn] 7s²",
+    "oxidationStates": [
+      "+2"
+    ],
+    "uses": "Radioaktiv, dori"
   },
   {
     "number": 89,
@@ -1065,7 +1283,12 @@
     "group": 3,
     "category": "Actinoid",
     "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
+    "color": "#D4A5D4",
+    "electronConfig": "[Rn] 6d¹ 7s²",
+    "oxidationStates": [
+      "+3"
+    ],
+    "uses": "Radioaktiv, tadqiqot"
   },
   {
     "number": 90,
@@ -1077,19 +1300,12 @@
     "group": 3,
     "category": "Actinoid",
     "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 91,
-    "symbol": "Pa",
-    "name": "Protaktiniy",
-    "nameEn": "Protactinium",
-    "mass": 231.04,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
+    "color": "#D4A5D4",
+    "electronConfig": "[Rn] 6d² 7s²",
+    "oxidationStates": [
+      "+4"
+    ],
+    "uses": "Yadro energiya, qotishma"
   },
   {
     "number": 92,
@@ -1101,318 +1317,11 @@
     "group": 3,
     "category": "Actinoid",
     "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 93,
-    "symbol": "Np",
-    "name": "Neptuniy",
-    "nameEn": "Neptunium",
-    "mass": 237,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 94,
-    "symbol": "Pu",
-    "name": "Plyutoniy",
-    "nameEn": "Plutonium",
-    "mass": 244,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 95,
-    "symbol": "Am",
-    "name": "Amerikiy",
-    "nameEn": "Americium",
-    "mass": 243,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 96,
-    "symbol": "Cm",
-    "name": "Kiriy",
-    "nameEn": "Curium",
-    "mass": 247,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 97,
-    "symbol": "Bk",
-    "name": "Berkelly",
-    "nameEn": "Berkelium",
-    "mass": 247,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 98,
-    "symbol": "Cf",
-    "name": "Kaliforniy",
-    "nameEn": "Californium",
-    "mass": 251,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 99,
-    "symbol": "Es",
-    "name": "Eynshteyniy",
-    "nameEn": "Einsteinium",
-    "mass": 252,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 100,
-    "symbol": "Fm",
-    "name": "Fermiy",
-    "nameEn": "Fermium",
-    "mass": 257,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 101,
-    "symbol": "Md",
-    "name": "Mendeleviy",
-    "nameEn": "Mendelevium",
-    "mass": 258,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 102,
-    "symbol": "No",
-    "name": "Nobeliy",
-    "nameEn": "Nobelium",
-    "mass": 259,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 103,
-    "symbol": "Lr",
-    "name": "Lorensy",
-    "nameEn": "Lawrencium",
-    "mass": 266,
-    "period": 7,
-    "group": 3,
-    "category": "Actinoid",
-    "categoryUz": "Actinoid",
-    "color": "#D4A5D4"
-  },
-  {
-    "number": 104,
-    "symbol": "Rf",
-    "name": "Rutherfordiy",
-    "nameEn": "Rutherfordium",
-    "mass": 267,
-    "period": 7,
-    "group": 4,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 105,
-    "symbol": "Db",
-    "name": "Dubniy",
-    "nameEn": "Dubnium",
-    "mass": 268,
-    "period": 7,
-    "group": 5,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 106,
-    "symbol": "Sg",
-    "name": "Siborg",
-    "nameEn": "Seaborgium",
-    "mass": 269,
-    "period": 7,
-    "group": 6,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 107,
-    "symbol": "Bh",
-    "name": "Bohriy",
-    "nameEn": "Bohrium",
-    "mass": 270,
-    "period": 7,
-    "group": 7,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 108,
-    "symbol": "Hs",
-    "name": "Xassiy",
-    "nameEn": "Hassium",
-    "mass": 277,
-    "period": 7,
-    "group": 8,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 109,
-    "symbol": "Mt",
-    "name": "Meytniriy",
-    "nameEn": "Meitnerium",
-    "mass": 278,
-    "period": 7,
-    "group": 9,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 110,
-    "symbol": "Ds",
-    "name": "Darmshtadtiy",
-    "nameEn": "Darmstadtium",
-    "mass": 281,
-    "period": 7,
-    "group": 10,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 111,
-    "symbol": "Rg",
-    "name": "Rentgeniy",
-    "nameEn": "Roentgenium",
-    "mass": 282,
-    "period": 7,
-    "group": 11,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 112,
-    "symbol": "Cn",
-    "name": "Kopernitsiy",
-    "nameEn": "Copernicium",
-    "mass": 285,
-    "period": 7,
-    "group": 12,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#9D84B7"
-  },
-  {
-    "number": 113,
-    "symbol": "Nh",
-    "name": "Nihoniy",
-    "nameEn": "Nihonium",
-    "mass": 286,
-    "period": 7,
-    "group": 13,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#FFD700"
-  },
-  {
-    "number": 114,
-    "symbol": "Fl",
-    "name": "Fleroviy",
-    "nameEn": "Flerovium",
-    "mass": 289,
-    "period": 7,
-    "group": 14,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#FFD700"
-  },
-  {
-    "number": 115,
-    "symbol": "Mc",
-    "name": "Moskoviy",
-    "nameEn": "Moscovium",
-    "mass": 290,
-    "period": 7,
-    "group": 15,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#FFD700"
-  },
-  {
-    "number": 116,
-    "symbol": "Lv",
-    "name": "Livermoriy",
-    "nameEn": "Livermorium",
-    "mass": 293,
-    "period": 7,
-    "group": 16,
-    "category": "Synthetic",
-    "categoryUz": "Sintetik",
-    "color": "#FFD700"
-  },
-  {
-    "number": 117,
-    "symbol": "Ts",
-    "name": "Tennessiy",
-    "nameEn": "Tennessine",
-    "mass": 294,
-    "period": 7,
-    "group": 17,
-    "category": "Halogen",
-    "categoryUz": "Halogen",
-    "color": "#FFD700"
-  },
-  {
-    "number": 118,
-    "symbol": "Og",
-    "name": "Oganeson",
-    "nameEn": "Oganesson",
-    "mass": 294,
-    "period": 7,
-    "group": 18,
-    "category": "Noble gas",
-    "categoryUz": "Inert gaz",
-    "color": "#87CEEB"
+    "color": "#D4A5D4",
+    "electronConfig": "[Rn] 5f³ 6d¹ 7s²",
+    "oxidationStates": [
+      "+6"
+    ],
+    "uses": "Yadro energiya, dori"
   }
 ]
