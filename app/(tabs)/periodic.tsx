@@ -6,67 +6,88 @@ import {
   TextInput,
   Modal,
   Dimensions,
+  FlatList,
 } from "react-native";
 import { useState, useMemo } from "react";
 
 import { ScreenContainer } from "@/components/screen-container";
-import { PERIODIC_TABLE, searchElements } from "@/lib/data/periodic-table";
 import { useColors } from "@/hooks/use-colors";
+import periodicElements from "@/lib/data/periodic-elements.json";
 
 /**
- * Periodic Table Screen - Davriy Jadval
- * To'g'ri struktura: 7 davr, 18 guruh
+ * Periodic Table Screen - Davriy Jadval (ptable.com uslubida)
+ * To'rtburchak kartalar bilan 118 ta element
  */
-
-const PERIODS = 7;
-const GROUPS = 18;
-
-// Element kategoriyasi bo'yicha ranglar
-const getCategoryColor = (number: number): string => {
-  // Alkali metallar (1-davr, 1-guruh)
-  if (number === 3 || number === 11 || number === 19 || number === 37 || number === 55 || number === 87) return "#FF6B6B";
-  // Alkaline earth metallar (2-guruh)
-  if (number === 4 || number === 12 || number === 20 || number === 38 || number === 56 || number === 88) return "#FFA500";
-  // Transition metallar (3-12 guruh)
-  if ((number >= 21 && number <= 30) || (number >= 39 && number <= 48) || (number >= 72 && number <= 80) || (number >= 104 && number <= 112)) return "#9D84B7";
-  // Lantanidlar
-  if (number >= 58 && number <= 71) return "#B19CD9";
-  // Aktinidlar
-  if (number >= 90 && number <= 103) return "#D4A5D4";
-  // Metallar (13-guruh)
-  if (number === 13 || number === 31 || number === 49 || number === 81 || number === 113) return "#FFD700";
-  // Metalloidlar
-  if (number === 5 || number === 14 || number === 32 || number === 33 || number === 51 || number === 52 || number === 84 || number === 85) return "#A9A9A9";
-  // Nonmetallar
-  if (number === 1 || number === 6 || number === 7 || number === 8 || number === 15 || number === 16 || number === 34) return "#90EE90";
-  // Halogenlar (17-guruh)
-  if (number === 9 || number === 17 || number === 35 || number === 53 || number === 85 || number === 117) return "#FFB6C1";
-  // Noble gaslar (18-guruh)
-  if (number === 2 || number === 10 || number === 18 || number === 36 || number === 54 || number === 86 || number === 118) return "#87CEEB";
-  
-  return "#999";
-};
 
 export default function PeriodicScreen() {
   const [searchText, setSearchText] = useState("");
   const [selectedElement, setSelectedElement] = useState<any>(null);
   const colors = useColors();
-
-  // Davriy jadvalning to'g'ri strukturasi
-  const periodicGrid: (any | null)[][] = Array(PERIODS).fill(null).map(() => Array(GROUPS).fill(null));
-
-  // Elementlarni to'g'ri joyga qo'yish
-  PERIODIC_TABLE.forEach((el) => {
-    if (el.period >= 1 && el.period <= PERIODS && el.group >= 1 && el.group <= GROUPS) {
-      periodicGrid[el.period - 1][el.group - 1] = el;
-    }
-  });
+  const screenWidth = Dimensions.get("window").width;
+  const cardSize = (screenWidth - 24) / 6; // 6 ta kartaning eni
 
   // Qidiruv
   const filteredElements = useMemo(() => {
-    if (!searchText) return [];
-    return searchElements(searchText);
+    if (!searchText) return periodicElements;
+    const query = searchText.toLowerCase();
+    return periodicElements.filter(
+      (el) =>
+        el.name.toLowerCase().includes(query) ||
+        el.nameEn.toLowerCase().includes(query) ||
+        el.symbol.toLowerCase().includes(query) ||
+        el.number.toString().includes(query)
+    );
   }, [searchText]);
+
+  // Davriy jadvalga joylashtirish
+  const renderPeriodicTable = () => {
+    const grid: any[] = [];
+    const maxPeriod = 7;
+    const maxGroup = 18;
+
+    // Har bir davr uchun qator yaratish
+    for (let period = 1; period <= maxPeriod; period++) {
+      const row: any[] = [];
+
+      for (let group = 1; group <= maxGroup; group++) {
+        const element = periodicElements.find(
+          (el) => el.period === period && el.group === group
+        );
+
+        if (element) {
+          row.push(
+            <TouchableOpacity
+              key={`${period}-${group}`}
+              onPress={() => setSelectedElement(element)}
+              className="rounded-lg p-1 border-2 active:opacity-70"
+              style={{
+                width: cardSize,
+                height: cardSize,
+                backgroundColor: element.color + "40",
+                borderColor: element.color,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text className="text-xs text-muted text-center">{element.number}</Text>
+              <Text className="text-base font-bold text-foreground text-center">{element.symbol}</Text>
+              <Text className="text-xs text-muted text-center">{element.mass.toFixed(2)}</Text>
+            </TouchableOpacity>
+          );
+        } else {
+          row.push(<View key={`${period}-${group}-empty`} style={{ width: cardSize, height: cardSize }} />);
+        }
+      }
+
+      grid.push(
+        <View key={`row-${period}`} className="flex-row gap-1 mb-1">
+          {row}
+        </View>
+      );
+    }
+
+    return grid;
+  };
 
   return (
     <ScreenContainer className="p-0">
@@ -74,7 +95,7 @@ export default function PeriodicScreen() {
         {/* Header */}
         <View className="bg-primary/10 px-4 pt-4 pb-3 gap-2">
           <Text className="text-2xl font-bold text-foreground">📊 Davriy Jadval</Text>
-          
+
           {/* Search */}
           <View className="flex-row items-center gap-2 bg-surface rounded-lg border border-border px-3 py-2">
             <Text className="text-lg">🔍</Text>
@@ -92,51 +113,45 @@ export default function PeriodicScreen() {
         {/* Search Results */}
         {searchText && filteredElements.length > 0 && (
           <View className="px-4 py-3 bg-surface/50 border-b border-border gap-2">
-            <Text className="text-xs font-semibold text-muted uppercase">Qidiruv Natijalari ({filteredElements.length})</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="gap-2">
-              {filteredElements.map((el) => (
+            <Text className="text-xs font-semibold text-muted uppercase">
+              Qidiruv Natijalari ({filteredElements.length})
+            </Text>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={filteredElements}
+              keyExtractor={(item) => item.number.toString()}
+              renderItem={({ item }) => (
                 <TouchableOpacity
-                  key={el.id}
-                  onPress={() => setSelectedElement(el)}
-                  className="px-3 py-2 rounded-lg border border-border active:opacity-70"
-                  style={{ backgroundColor: getCategoryColor(el.number) + "30", borderColor: getCategoryColor(el.number) }}
+                  onPress={() => {
+                    setSelectedElement(item);
+                    setSearchText("");
+                  }}
+                  className="px-3 py-2 rounded-lg border mr-2 active:opacity-70"
+                  style={{
+                    backgroundColor: item.color + "30",
+                    borderColor: item.color,
+                  }}
                 >
-                  <Text className="text-sm font-bold text-foreground">{el.symbol}</Text>
-                  <Text className="text-xs text-muted">{el.name}</Text>
+                  <Text className="text-sm font-bold text-foreground">{item.symbol}</Text>
+                  <Text className="text-xs text-muted">{item.name}</Text>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              )}
+            />
           </View>
         )}
 
         {/* Periodic Table Grid */}
         {!searchText && (
-          <View className="px-2 py-4 gap-1">
-            {periodicGrid.map((row, periodIndex) => (
-              <View key={periodIndex} className="flex-row gap-1 justify-start">
-                {row.map((element, groupIndex) => (
-                  <View key={`${periodIndex}-${groupIndex}`} className="flex-1">
-                    {element ? (
-                      <TouchableOpacity
-                        onPress={() => setSelectedElement(element)}
-                        className="rounded-md p-1 border border-border active:opacity-70"
-                        style={{
-                          backgroundColor: getCategoryColor(element.number) + "40",
-                          borderColor: getCategoryColor(element.number),
-                          minHeight: 50,
-                        }}
-                      >
-                        <Text className="text-xs text-muted text-center">{element.number}</Text>
-                        <Text className="text-sm font-bold text-foreground text-center">{element.symbol}</Text>
-                        <Text className="text-xs text-muted text-center leading-tight">{element.mass.toFixed(2)}</Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <View className="flex-1" />
-                    )}
-                  </View>
-                ))}
-              </View>
-            ))}
+          <View className="px-3 py-4 gap-1">
+            {renderPeriodicTable()}
+          </View>
+        )}
+
+        {/* No Results */}
+        {searchText && filteredElements.length === 0 && (
+          <View className="flex-1 items-center justify-center p-4">
+            <Text className="text-lg text-muted">Natija topilmadi</Text>
           </View>
         )}
       </ScrollView>
@@ -151,97 +166,156 @@ export default function PeriodicScreen() {
                   {/* Header */}
                   <View
                     className="rounded-xl p-6 gap-3"
-                    style={{ backgroundColor: getCategoryColor(selectedElement.number) + "30" }}
+                    style={{ backgroundColor: selectedElement.color + "30" }}
                   >
                     <View className="flex-row items-center justify-between">
                       <View>
-                        <Text className="text-5xl font-bold text-foreground">{selectedElement.symbol}</Text>
-                        <Text className="text-lg text-muted">{selectedElement.name}</Text>
+                        <Text className="text-6xl font-bold text-foreground">
+                          {selectedElement.symbol}
+                        </Text>
+                        <Text className="text-xl text-muted mt-1">
+                          {selectedElement.name}
+                        </Text>
+                        <Text className="text-sm text-muted">
+                          {selectedElement.nameEn}
+                        </Text>
                       </View>
                       <View className="items-end gap-1">
-                        <Text className="text-2xl font-bold text-primary">#{selectedElement.number}</Text>
+                        <Text className="text-3xl font-bold text-primary">
+                          #{selectedElement.number}
+                        </Text>
+                        <View
+                          className="px-3 py-1 rounded-full"
+                          style={{ backgroundColor: selectedElement.color + "60" }}
+                        >
+                          <Text className="text-xs font-semibold text-foreground">
+                            {selectedElement.categoryUz}
+                          </Text>
+                        </View>
                       </View>
                     </View>
-                    <View className="flex-row gap-2">
-                      <View className="flex-1 bg-surface rounded-lg p-2">
+
+                    {/* Quick Stats */}
+                    <View className="flex-row gap-2 mt-2">
+                      <View className="flex-1 bg-surface rounded-lg p-3">
                         <Text className="text-xs text-muted">Massa</Text>
-                        <Text className="text-sm font-bold text-foreground">{selectedElement.mass.toFixed(3)}</Text>
+                        <Text className="text-base font-bold text-foreground">
+                          {selectedElement.mass.toFixed(3)}
+                        </Text>
                       </View>
-                      <View className="flex-1 bg-surface rounded-lg p-2">
+                      <View className="flex-1 bg-surface rounded-lg p-3">
                         <Text className="text-xs text-muted">Davr</Text>
-                        <Text className="text-sm font-bold text-foreground">{selectedElement.period}</Text>
+                        <Text className="text-base font-bold text-foreground">
+                          {selectedElement.period}
+                        </Text>
                       </View>
-                      <View className="flex-1 bg-surface rounded-lg p-2">
+                      <View className="flex-1 bg-surface rounded-lg p-3">
                         <Text className="text-xs text-muted">Guruh</Text>
-                        <Text className="text-sm font-bold text-foreground">{selectedElement.group}</Text>
+                        <Text className="text-base font-bold text-foreground">
+                          {selectedElement.group}
+                        </Text>
                       </View>
                     </View>
                   </View>
 
-                  {/* Description */}
+                  {/* Category Info */}
                   <View className="bg-surface rounded-lg p-4 border border-border gap-2">
-                    <Text className="text-sm font-semibold text-foreground">Tavsif</Text>
-                    <Text className="text-sm text-muted leading-relaxed">{selectedElement.description}</Text>
+                    <Text className="text-sm font-semibold text-foreground">Kategoriya</Text>
+                    <View className="flex-row gap-2 flex-wrap">
+                      <View
+                        className="px-3 py-2 rounded-lg"
+                        style={{ backgroundColor: selectedElement.color + "40" }}
+                      >
+                        <Text className="text-sm font-semibold text-foreground">
+                          {selectedElement.categoryUz}
+                        </Text>
+                      </View>
+                      <View className="px-3 py-2 rounded-lg bg-primary/10">
+                        <Text className="text-sm text-primary">
+                          {selectedElement.category}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
 
-                  {/* Physical Properties */}
+                  {/* Additional Info */}
                   <View className="bg-surface rounded-lg p-4 border border-border gap-3">
-                    <Text className="text-sm font-semibold text-foreground">Fizik Xususiyatlari</Text>
+                    <Text className="text-sm font-semibold text-foreground">Ma'lumotlar</Text>
                     <View className="gap-2">
                       <View className="flex-row justify-between">
-                        <Text className="text-sm text-muted">Zichlik:</Text>
-                        <Text className="text-sm font-mono text-foreground">{selectedElement.density} g/cm³</Text>
+                        <Text className="text-sm text-muted">Atom raqami:</Text>
+                        <Text className="text-sm font-mono text-foreground">
+                          {selectedElement.number}
+                        </Text>
                       </View>
                       <View className="flex-row justify-between">
-                        <Text className="text-sm text-muted">Erivish nuqtasi:</Text>
-                        <Text className="text-sm font-mono text-foreground">{selectedElement.meltingPoint}°C</Text>
+                        <Text className="text-sm text-muted">Simvoli:</Text>
+                        <Text className="text-sm font-mono text-foreground">
+                          {selectedElement.symbol}
+                        </Text>
                       </View>
                       <View className="flex-row justify-between">
-                        <Text className="text-sm text-muted">Qaynash nuqtasi:</Text>
-                        <Text className="text-sm font-mono text-foreground">{selectedElement.boilingPoint}°C</Text>
+                        <Text className="text-sm text-muted">Atom massasi:</Text>
+                        <Text className="text-sm font-mono text-foreground">
+                          {selectedElement.mass.toFixed(3)} u
+                        </Text>
+                      </View>
+                      <View className="flex-row justify-between">
+                        <Text className="text-sm text-muted">Davr:</Text>
+                        <Text className="text-sm font-mono text-foreground">
+                          {selectedElement.period}
+                        </Text>
+                      </View>
+                      <View className="flex-row justify-between">
+                        <Text className="text-sm text-muted">Guruh:</Text>
+                        <Text className="text-sm font-mono text-foreground">
+                          {selectedElement.group}
+                        </Text>
                       </View>
                     </View>
                   </View>
 
-                  {/* Atomic Properties */}
-                  <View className="bg-surface rounded-lg p-4 border border-border gap-3">
-                    <Text className="text-sm font-semibold text-foreground">Atom Xususiyatlari</Text>
-                    <View className="gap-2">
-                      <View className="flex-row justify-between">
-                        <Text className="text-sm text-muted">Protonlar:</Text>
-                        <Text className="text-sm font-mono text-foreground">{selectedElement.protons}</Text>
-                      </View>
-                      <View className="flex-row justify-between">
-                        <Text className="text-sm text-muted">Elektronlar:</Text>
-                        <Text className="text-sm font-mono text-foreground">{selectedElement.electrons}</Text>
-                      </View>
-                      <View className="flex-row justify-between">
-                        <Text className="text-sm text-muted">Neytronlar:</Text>
-                        <Text className="text-sm font-mono text-foreground">{selectedElement.neutrons}</Text>
-                      </View>
-                      <View className="gap-1 mt-2 pt-2 border-t border-border">
-                        <Text className="text-xs text-muted">Elektron Konfiguratsiyasi:</Text>
-                        <Text className="text-xs font-mono text-primary">{selectedElement.electronConfiguration}</Text>
-                      </View>
-                    </View>
-                  </View>
-
-                  {/* Discovery Info */}
+                  {/* Color Legend */}
                   <View className="bg-surface rounded-lg p-4 border border-border gap-2">
-                    <Text className="text-sm font-semibold text-foreground">Kashfiyot</Text>
-                    <View className="gap-1">
-                      <Text className="text-sm text-muted">
-                        Yil: <Text className="text-foreground font-mono">{selectedElement.discovered}</Text>
-                      </Text>
-                      <Text className="text-sm text-muted">
-                        Kashfiyotchi: <Text className="text-foreground">{selectedElement.discoverer}</Text>
-                      </Text>
+                    <Text className="text-sm font-semibold text-foreground">Kategoriya Ranglari</Text>
+                    <View className="gap-2">
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded bg-red-300" />
+                        <Text className="text-sm text-foreground">Alkali metallar</Text>
+                      </View>
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded bg-orange-300" />
+                        <Text className="text-sm text-foreground">Alkaline earth metallar</Text>
+                      </View>
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded" style={{ backgroundColor: "#9D84B7" }} />
+                        <Text className="text-sm text-foreground">Transition metallar</Text>
+                      </View>
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded" style={{ backgroundColor: "#B19CD9" }} />
+                        <Text className="text-sm text-foreground">Lantanidlar</Text>
+                      </View>
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded" style={{ backgroundColor: "#D4A5D4" }} />
+                        <Text className="text-sm text-foreground">Aktinidlar</Text>
+                      </View>
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded bg-yellow-300" />
+                        <Text className="text-sm text-foreground">Metallar va Halogenlar</Text>
+                      </View>
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded bg-gray-400" />
+                        <Text className="text-sm text-foreground">Metalloidlar</Text>
+                      </View>
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded bg-green-300" />
+                        <Text className="text-sm text-foreground">Nonmetallar</Text>
+                      </View>
+                      <View className="flex-row items-center gap-2">
+                        <View className="w-6 h-6 rounded bg-blue-300" />
+                        <Text className="text-sm text-foreground">Inert gazlar</Text>
+                      </View>
                     </View>
-                  </View>
-
-                  {/* Category Badge */}
-                  <View className="flex-row items-center gap-2 bg-primary/10 rounded-lg p-3 border border-primary">
-                    <Text className="text-lg font-bold text-foreground">{selectedElement.category}</Text>
                   </View>
                 </View>
               )}
@@ -252,7 +326,9 @@ export default function PeriodicScreen() {
               onPress={() => setSelectedElement(null)}
               className="bg-primary rounded-lg p-4 mt-4 active:opacity-80"
             >
-              <Text className="text-center text-base font-semibold text-background">Yopish</Text>
+              <Text className="text-center text-base font-semibold text-background">
+                Yopish
+              </Text>
             </TouchableOpacity>
           </ScreenContainer>
         </View>
