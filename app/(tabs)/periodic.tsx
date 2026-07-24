@@ -7,6 +7,8 @@ import {
   Modal,
   Dimensions,
   FlatList,
+  Image,
+  ScrollViewComponent,
 } from "react-native";
 import { useState, useMemo } from "react";
 
@@ -16,7 +18,7 @@ import periodicElements from "@/lib/data/periodic-elements.json";
 
 /**
  * Enhanced Periodic Table Screen - Davriy Jadval (ptable.com uslubida)
- * Period va Group labels bilan, Lanthanide/Actinide rows
+ * Fixed layout with horizontal scroll, H va He batafsil ma'lumot
  */
 
 export default function PeriodicScreen() {
@@ -24,7 +26,7 @@ export default function PeriodicScreen() {
   const [selectedElement, setSelectedElement] = useState<any>(null);
   const colors = useColors();
   const screenWidth = Dimensions.get("window").width;
-  const cardSize = (screenWidth - 60) / 6; // 6 ta kartaning eni (labels uchun joy)
+  const cardSize = 45; // Fixed card size
 
   // Qidiruv
   const filteredElements = useMemo(() => {
@@ -47,8 +49,8 @@ export default function PeriodicScreen() {
 
     // Group raqamlari (yuqori)
     const groupHeader = (
-      <View key="group-header" className="flex-row gap-1 mb-2">
-        <View style={{ width: 30 }} />
+      <View key="group-header" className="flex-row gap-0.5 mb-1">
+        <View style={{ width: 35 }} />
         {Array.from({ length: maxGroup }).map((_, i) => (
           <View
             key={`group-${i + 1}`}
@@ -70,7 +72,7 @@ export default function PeriodicScreen() {
       row.push(
         <View
           key={`period-${period}`}
-          style={{ width: 30, height: cardSize }}
+          style={{ width: 35, height: cardSize }}
           className="items-center justify-center"
         >
           <Text className="text-xs font-bold text-muted">{period}</Text>
@@ -87,24 +89,24 @@ export default function PeriodicScreen() {
             <TouchableOpacity
               key={`${period}-${group}`}
               onPress={() => setSelectedElement(element)}
-              className="rounded-lg p-1 border-2 active:opacity-70"
+              className="rounded border active:opacity-70"
               style={{
                 width: cardSize,
                 height: cardSize,
                 backgroundColor: element.color + "40",
                 borderColor: element.color,
+                borderWidth: 1,
                 justifyContent: "center",
                 alignItems: "center",
+                marginRight: 2,
+                marginBottom: 2,
               }}
             >
-              <Text className="text-xs text-muted text-center">
+              <Text className="text-xs text-muted text-center leading-none">
                 {element.number}
               </Text>
-              <Text className="text-sm font-bold text-foreground text-center">
+              <Text className="text-xs font-bold text-foreground text-center leading-none">
                 {element.symbol}
-              </Text>
-              <Text className="text-xs text-muted text-center">
-                {element.mass.toFixed(2)}
               </Text>
             </TouchableOpacity>
           );
@@ -112,14 +114,19 @@ export default function PeriodicScreen() {
           row.push(
             <View
               key={`${period}-${group}-empty`}
-              style={{ width: cardSize, height: cardSize }}
+              style={{
+                width: cardSize,
+                height: cardSize,
+                marginRight: 2,
+                marginBottom: 2,
+              }}
             />
           );
         }
       }
 
       grid.push(
-        <View key={`row-${period}`} className="flex-row gap-1 mb-1">
+        <View key={`row-${period}`} className="flex-row">
           {row}
         </View>
       );
@@ -127,11 +134,11 @@ export default function PeriodicScreen() {
 
     // Lanthanidlar qatori (6-davr)
     const lanthanideRow = (
-      <View key="lanthanide-row" className="mt-4 gap-1">
-        <Text className="text-xs font-semibold text-muted ml-8">
-          Lantanidlar (Lanthanoids) - 6-davr
+      <View key="lanthanide-row" className="mt-3 gap-1">
+        <Text className="text-xs font-semibold text-muted">
+          Lantanidlar (6-davr)
         </Text>
-        <View className="flex-row gap-1 ml-8">
+        <View className="flex-row gap-0.5 flex-wrap">
           {periodicElements
             .filter((el) => el.period === 6 && el.category === "Lanthanoid")
             .sort((a, b) => a.number - b.number)
@@ -139,24 +146,24 @@ export default function PeriodicScreen() {
               <TouchableOpacity
                 key={`lanthanide-${element.number}`}
                 onPress={() => setSelectedElement(element)}
-                className="rounded-lg p-1 border-2 active:opacity-70"
+                className="rounded border active:opacity-70"
                 style={{
                   width: cardSize,
                   height: cardSize,
                   backgroundColor: element.color + "40",
                   borderColor: element.color,
+                  borderWidth: 1,
                   justifyContent: "center",
                   alignItems: "center",
+                  marginRight: 2,
+                  marginBottom: 2,
                 }}
               >
-                <Text className="text-xs text-muted text-center">
+                <Text className="text-xs text-muted text-center leading-none">
                   {element.number}
                 </Text>
-                <Text className="text-sm font-bold text-foreground text-center">
+                <Text className="text-xs font-bold text-foreground text-center leading-none">
                   {element.symbol}
-                </Text>
-                <Text className="text-xs text-muted text-center">
-                  {element.mass.toFixed(2)}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -168,10 +175,10 @@ export default function PeriodicScreen() {
     // Aktinidlar qatori (7-davr)
     const actinideRow = (
       <View key="actinide-row" className="mt-2 gap-1">
-        <Text className="text-xs font-semibold text-muted ml-8">
-          Aktinidlar (Actinoids) - 7-davr
+        <Text className="text-xs font-semibold text-muted">
+          Aktinidlar (7-davr)
         </Text>
-        <View className="flex-row gap-1 ml-8">
+        <View className="flex-row gap-0.5 flex-wrap">
           {periodicElements
             .filter((el) => el.period === 7 && el.category === "Actinoid")
             .sort((a, b) => a.number - b.number)
@@ -179,24 +186,24 @@ export default function PeriodicScreen() {
               <TouchableOpacity
                 key={`actinide-${element.number}`}
                 onPress={() => setSelectedElement(element)}
-                className="rounded-lg p-1 border-2 active:opacity-70"
+                className="rounded border active:opacity-70"
                 style={{
                   width: cardSize,
                   height: cardSize,
                   backgroundColor: element.color + "40",
                   borderColor: element.color,
+                  borderWidth: 1,
                   justifyContent: "center",
                   alignItems: "center",
+                  marginRight: 2,
+                  marginBottom: 2,
                 }}
               >
-                <Text className="text-xs text-muted text-center">
+                <Text className="text-xs text-muted text-center leading-none">
                   {element.number}
                 </Text>
-                <Text className="text-sm font-bold text-foreground text-center">
+                <Text className="text-xs font-bold text-foreground text-center leading-none">
                   {element.symbol}
-                </Text>
-                <Text className="text-xs text-muted text-center">
-                  {element.mass.toFixed(2)}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -264,11 +271,17 @@ export default function PeriodicScreen() {
           </View>
         )}
 
-        {/* Periodic Table Grid */}
+        {/* Periodic Table Grid - Horizontal Scroll */}
         {!searchText && (
-          <View className="px-3 py-4 gap-1">
-            {renderPeriodicTable()}
-          </View>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={true}
+            className="px-2 py-4"
+          >
+            <View className="gap-0.5">
+              {renderPeriodicTable()}
+            </View>
+          </ScrollView>
         )}
 
         {/* No Results */}
@@ -341,6 +354,29 @@ export default function PeriodicScreen() {
                     </View>
                   </View>
 
+                  {/* Element Image */}
+                  {selectedElement.image && (
+                    <View className="bg-surface rounded-lg p-4 border border-border">
+                      <Image
+                        source={{ uri: selectedElement.image }}
+                        style={{ width: "100%", height: 200, borderRadius: 8 }}
+                        resizeMode="cover"
+                      />
+                    </View>
+                  )}
+
+                  {/* Description */}
+                  {selectedElement.description && (
+                    <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+                      <Text className="text-sm font-semibold text-foreground">
+                        Tavsif
+                      </Text>
+                      <Text className="text-sm text-muted leading-relaxed">
+                        {selectedElement.description}
+                      </Text>
+                    </View>
+                  )}
+
                   {/* Electron Configuration */}
                   <View className="bg-surface rounded-lg p-4 border border-border gap-2">
                     <Text className="text-sm font-semibold text-foreground">
@@ -379,6 +415,30 @@ export default function PeriodicScreen() {
                       {selectedElement.uses}
                     </Text>
                   </View>
+
+                  {/* Properties */}
+                  {selectedElement.properties && (
+                    <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+                      <Text className="text-sm font-semibold text-foreground">
+                        Xususiyatlari
+                      </Text>
+                      <Text className="text-sm text-muted leading-relaxed">
+                        {selectedElement.properties}
+                      </Text>
+                    </View>
+                  )}
+
+                  {/* Discovery */}
+                  {selectedElement.discovery && (
+                    <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+                      <Text className="text-sm font-semibold text-foreground">
+                        Kashfiyot
+                      </Text>
+                      <Text className="text-sm text-muted leading-relaxed">
+                        {selectedElement.discovery}
+                      </Text>
+                    </View>
+                  )}
 
                   {/* Category Info */}
                   <View className="bg-surface rounded-lg p-4 border border-border gap-2">
@@ -436,69 +496,6 @@ export default function PeriodicScreen() {
                         <Text className="text-sm text-muted">Guruh:</Text>
                         <Text className="text-sm font-mono text-foreground">
                           {selectedElement.group}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-
-                  {/* Color Legend */}
-                  <View className="bg-surface rounded-lg p-4 border border-border gap-2">
-                    <Text className="text-sm font-semibold text-foreground">
-                      Kategoriya Ranglari
-                    </Text>
-                    <View className="gap-2">
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded bg-red-300" />
-                        <Text className="text-sm text-foreground">
-                          Alkali metallar
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded bg-orange-300" />
-                        <Text className="text-sm text-foreground">
-                          Alkaline earth metallar
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded" style={{ backgroundColor: "#9D84B7" }} />
-                        <Text className="text-sm text-foreground">
-                          Transition metallar
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded" style={{ backgroundColor: "#B19CD9" }} />
-                        <Text className="text-sm text-foreground">
-                          Lantanidlar
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded" style={{ backgroundColor: "#D4A5D4" }} />
-                        <Text className="text-sm text-foreground">
-                          Aktinidlar
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded bg-yellow-300" />
-                        <Text className="text-sm text-foreground">
-                          Metallar va Halogenlar
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded bg-gray-400" />
-                        <Text className="text-sm text-foreground">
-                          Metalloidlar
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded bg-green-300" />
-                        <Text className="text-sm text-foreground">
-                          Nonmetallar
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-2">
-                        <View className="w-6 h-6 rounded bg-blue-300" />
-                        <Text className="text-sm text-foreground">
-                          Inert gazlar
                         </Text>
                       </View>
                     </View>
