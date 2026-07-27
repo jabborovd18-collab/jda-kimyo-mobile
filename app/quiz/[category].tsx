@@ -127,7 +127,7 @@ export default function QuizRunnerScreen() {
     return (
       <ScreenContainer className="p-4">
         <View className="flex-1 items-center justify-center gap-4">
-          <Text className="text-sm text-red-400 text-center">
+          <Text className="text-sm text-error text-center">
             {(error as Error)?.message || "Savollarni yuklab bo'lmadi"}
           </Text>
           <TouchableOpacity
@@ -185,8 +185,8 @@ export default function QuizRunnerScreen() {
                 </Text>
               </View>
             ) : submitState.status === "error" ? (
-              <View className="bg-red-500/10 border border-red-500/40 rounded-lg p-4">
-                <Text className="text-xs text-red-400">{submitState.message}</Text>
+              <View className="bg-error/10 border border-error/40 rounded-lg p-4">
+                <Text className="text-xs text-error">{submitState.message}</Text>
               </View>
             ) : null}
 
@@ -195,7 +195,7 @@ export default function QuizRunnerScreen() {
                 onPress={restart}
                 className="bg-primary rounded-lg py-4 items-center"
               >
-                <Text className="text-base font-semibold text-white">
+                <Text className="text-base font-semibold text-background">
                   Yana yechish
                 </Text>
               </TouchableOpacity>
@@ -257,8 +257,8 @@ export default function QuizRunnerScreen() {
               const isPicked = optionIndex === selected;
 
               let style = "bg-surface border-border";
-              if (answered && isCorrect) style = "bg-green-500/15 border-green-500";
-              else if (answered && isPicked) style = "bg-red-500/15 border-red-500";
+              if (answered && isCorrect) style = "bg-success/15 border-success";
+              else if (answered && isPicked) style = "bg-error/15 border-error";
 
               return (
                 <TouchableOpacity
@@ -296,7 +296,7 @@ export default function QuizRunnerScreen() {
               onPress={handleNext}
               className="bg-primary rounded-lg py-4 items-center"
             >
-              <Text className="text-base font-semibold text-white">
+              <Text className="text-base font-semibold text-background">
                 {isLast ? "Yakunlash" : "Keyingi savol →"}
               </Text>
             </TouchableOpacity>

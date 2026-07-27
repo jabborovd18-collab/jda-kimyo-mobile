@@ -71,8 +71,8 @@ export default function LoginScreen() {
 
             {/* Xato xabari */}
             {error ? (
-              <View className="bg-red-500/10 border border-red-500/40 rounded-lg p-3">
-                <Text className="text-sm text-red-400">{error}</Text>
+              <View className="bg-error/10 border border-error/40 rounded-lg p-3">
+                <Text className="text-sm text-error">{error}</Text>
               </View>
             ) : null}
 
@@ -128,9 +128,9 @@ export default function LoginScreen() {
               className={`rounded-lg py-4 items-center ${canSubmit ? "bg-primary" : "bg-primary/40"}`}
             >
               {isSubmitting ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={colors.background} />
               ) : (
-                <Text className="text-base font-semibold text-white">Kirish</Text>
+                <Text className="text-base font-semibold text-background">Kirish</Text>
               )}
             </TouchableOpacity>
 

@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 
+import { useColors } from "@/hooks/use-colors";
 import { ScreenContainer } from "@/components/screen-container";
 
 /**
@@ -14,6 +15,7 @@ import { ScreenContainer } from "@/components/screen-container";
  * Twitter-ga o'xshash chat interfeysi
  */
 export default function ChatScreen() {
+  const colors = useColors();
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([
     {
@@ -146,7 +148,7 @@ export default function ChatScreen() {
                     </Text>
                     <Text
                       className={`text-xs ${
-                        msg.liked ? "text-red-500" : "text-muted"
+                        msg.liked ? "text-error" : "text-muted"
                       }`}
                     >
                       {msg.likes}
@@ -173,7 +175,7 @@ export default function ChatScreen() {
           <View className="flex-row items-end gap-2">
             <TextInput
               placeholder="Xabar yozing..."
-              placeholderTextColor="#999"
+              placeholderTextColor={colors.muted}
               value={newMessage}
               onChangeText={setNewMessage}
               multiline
@@ -187,7 +189,7 @@ export default function ChatScreen() {
                 newMessage.trim() ? "bg-primary" : "bg-muted"
               }`}
             >
-              <Text className="text-white font-semibold">📤</Text>
+              <Text className="text-background font-semibold">📤</Text>
             </TouchableOpacity>
           </View>
           <Text className="text-xs text-muted text-right">

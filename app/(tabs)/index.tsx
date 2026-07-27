@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import {
   ActivityIndicator,
+  Image,
   RefreshControl,
   ScrollView,
   Text,
@@ -23,7 +24,7 @@ import { useColors } from "@/hooks/use-colors";
 export default function HomeScreen() {
   const colors = useColors();
   const router = useRouter();
-  const { user, signOut } = useJdaAuth();
+  const { user } = useJdaAuth();
 
   const { data, isLoading, isError, error, refetch, isRefetching } = useQuery({
     queryKey: ["jda", "home"],
@@ -51,12 +52,20 @@ export default function HomeScreen() {
                 Oliy Kimyoni o'rganishga xush kelibsiz
               </Text>
             </View>
+            {/* Avatar profilga olib boradi. Avval bu yerda chiqish tugmasi
+                turardi — u endi profil ekranining ichida, o'z o'rnida. */}
             <TouchableOpacity
-              onPress={signOut}
-              className="px-3 py-2 rounded-lg bg-surface border border-border"
-              accessibilityLabel="Chiqish"
+              onPress={() => router.push("/profile" as any)}
+              className="w-12 h-12 rounded-full bg-primary items-center justify-center overflow-hidden border border-border"
+              accessibilityLabel="Profil"
             >
-              <Text className="text-sm text-muted">🚪</Text>
+              {user?.avatar ? (
+                <Image source={{ uri: user.avatar }} className="w-full h-full" />
+              ) : (
+                <Text className="text-lg font-bold text-background">
+                  {displayName.charAt(0).toUpperCase()}
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
 
@@ -66,15 +75,15 @@ export default function HomeScreen() {
               <ActivityIndicator size="large" color={colors.primary} />
             </View>
           ) : isError || !data ? (
-            <View className="bg-red-500/10 border border-red-500/40 rounded-lg p-4 gap-3">
-              <Text className="text-sm text-red-400">
+            <View className="bg-error/10 border border-error/40 rounded-lg p-4 gap-3">
+              <Text className="text-sm text-error">
                 {(error as Error)?.message || "Ma'lumotlarni yuklab bo'lmadi"}
               </Text>
               <TouchableOpacity
                 onPress={() => refetch()}
                 className="bg-primary rounded-lg py-2 items-center"
               >
-                <Text className="text-sm font-semibold text-white">Qayta urinish</Text>
+                <Text className="text-sm font-semibold text-background">Qayta urinish</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -107,10 +116,10 @@ export default function HomeScreen() {
                 className="bg-primary rounded-lg p-5 active:opacity-90"
               >
                 <Text className="text-3xl mb-2">📝</Text>
-                <Text className="text-xl font-bold text-white mb-1">
+                <Text className="text-xl font-bold text-background mb-1">
                   Quiz yechish
                 </Text>
-                <Text className="text-sm text-white/80">
+                <Text className="text-sm text-background/80">
                   445 ta savol — istalgan joyda takrorlang
                 </Text>
               </TouchableOpacity>

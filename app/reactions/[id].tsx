@@ -73,7 +73,7 @@ export default function ReactionDetailScreen() {
     return (
       <ScreenContainer className="p-4">
         <View className="flex-1 items-center justify-center gap-4">
-          <Text className="text-sm text-red-400 text-center">
+          <Text className="text-sm text-error text-center">
             {(error as Error)?.message || "Reaksiya topilmadi"}
           </Text>
           <TouchableOpacity
@@ -290,12 +290,12 @@ export default function ReactionDetailScreen() {
 
           {/* 7. XAVFSIZLIK */}
           {hasItems(r.hazards) ? (
-            <View className="bg-red-500/10 border border-red-500/40 rounded-lg p-4 gap-2">
-              <Text className="text-sm font-semibold text-red-400">
+            <View className="bg-error/10 border border-error/40 rounded-lg p-4 gap-2">
+              <Text className="text-sm font-semibold text-error">
                 ⚠️ Xavfsizlik
               </Text>
               {r.hazards!.map((item, index) => (
-                <Text key={index} className="text-xs text-red-300">
+                <Text key={index} className="text-xs text-error">
                   • {item}
                 </Text>
               ))}

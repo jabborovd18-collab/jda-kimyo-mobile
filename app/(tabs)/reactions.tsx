@@ -126,7 +126,7 @@ export default function ReactionsScreen() {
             >
               <Text
                 className={`text-xs font-semibold ${
-                  category === "all" ? "text-white" : "text-foreground"
+                  category === "all" ? "text-background" : "text-foreground"
                 }`}
               >
                 Barchasi
@@ -145,7 +145,7 @@ export default function ReactionsScreen() {
               >
                 <Text
                   className={`text-xs font-semibold ${
-                    category === item.name ? "text-white" : "text-foreground"
+                    category === item.name ? "text-background" : "text-foreground"
                   }`}
                 >
                   {item.name} ({item.count})
@@ -161,15 +161,15 @@ export default function ReactionsScreen() {
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
         ) : isError ? (
-          <View className="bg-red-500/10 border border-red-500/40 rounded-lg p-4 gap-3">
-            <Text className="text-sm text-red-400">
+          <View className="bg-error/10 border border-error/40 rounded-lg p-4 gap-3">
+            <Text className="text-sm text-error">
               {(error as Error)?.message || "Reaksiyalarni yuklab bo'lmadi"}
             </Text>
             <TouchableOpacity
               onPress={() => refetch()}
               className="bg-primary rounded-lg py-2 items-center"
             >
-              <Text className="text-sm font-semibold text-white">Qayta urinish</Text>
+              <Text className="text-sm font-semibold text-background">Qayta urinish</Text>
             </TouchableOpacity>
           </View>
         ) : !data || data.reactions.length === 0 ? (

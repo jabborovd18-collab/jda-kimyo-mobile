@@ -65,7 +65,6 @@ function JdaAuthGate() {
 }
 
 export default function RootLayout() {
-  const colors = useColors();
   const [splashFinished, setSplashFinished] = useState(false);
   const initialInsets = initialWindowMetrics?.insets ?? DEFAULT_WEB_INSETS;
   const initialFrame = initialWindowMetrics?.frame ?? DEFAULT_WEB_FRAME;

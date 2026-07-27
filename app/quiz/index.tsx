@@ -47,15 +47,15 @@ export default function QuizCategoriesScreen() {
               <ActivityIndicator size="large" color={colors.primary} />
             </View>
           ) : isError || !data ? (
-            <View className="bg-red-500/10 border border-red-500/40 rounded-lg p-4 gap-3">
-              <Text className="text-sm text-red-400">
+            <View className="bg-error/10 border border-error/40 rounded-lg p-4 gap-3">
+              <Text className="text-sm text-error">
                 {(error as Error)?.message || "Kategoriyalarni yuklab bo'lmadi"}
               </Text>
               <TouchableOpacity
                 onPress={() => refetch()}
                 className="bg-primary rounded-lg py-2 items-center"
               >
-                <Text className="text-sm font-semibold text-white">Qayta urinish</Text>
+                <Text className="text-sm font-semibold text-background">Qayta urinish</Text>
               </TouchableOpacity>
             </View>
           ) : (
