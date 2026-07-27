@@ -211,6 +211,61 @@ export async function logout() {
   await clearCachedUser();
 }
 
+// ─── Dolzarb mavzular (sayt forumi) ─────────────────────────────
+
+export type ForumAuthor = {
+  id: string;
+  userId: string;
+  username: string;
+  fullName: string | null;
+  avatar: string | null;
+  role: string;
+};
+
+export type ForumPost = {
+  id: string;
+  articleId: string | null;
+  title: string | null;
+  content: string;
+  parentId: string | null;
+  isPinned: boolean;
+  status: string;
+  createdAt: string;
+  author: ForumAuthor;
+  likes: number;
+  replyCount: number;
+  likedByMe: boolean;
+};
+
+export type ForumFeed = {
+  success: true;
+  sort: string;
+  total: number;
+  hasMore: boolean;
+  posts: ForumPost[];
+  signedIn: boolean;
+};
+
+/**
+ * Saytdagi "Dolzarb mavzular" lentasi.
+ *
+ * Tartib va sahifalash server tomonda (lib/forum.js) — veb bilan aynan
+ * bir xil mantiq. "dolzarb" — vaqt bilan susayadigan ball bo'yicha.
+ */
+export function fetchForum(params?: {
+  sort?: "dolzarb" | "yangi" | "ommabop";
+  limit?: number;
+  offset?: number;
+}) {
+  const q = new URLSearchParams();
+  if (params?.sort) q.set("sort", params.sort);
+  if (params?.limit) q.set("limit", String(params.limit));
+  if (params?.offset) q.set("offset", String(params.offset));
+
+  const qs = q.toString();
+  return request<ForumFeed>(`/api/mobile/forum${qs ? `?${qs}` : ""}`);
+}
+
 // ─── Quiz ───────────────────────────────────────────────────────
 
 export type QuizCategory = {
