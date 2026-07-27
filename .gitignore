@@ -31,7 +31,10 @@ yarn-error.*
 *.pem
 
 # local env files
+# .env ham qo'shildi: server env'ida JWT_SECRET/DATABASE_URL bo'lishi mumkin
+.env
 .env*.local
+!.env.example
 
 # typescript
 *.tsbuildinfo

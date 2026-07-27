@@ -19,6 +19,11 @@ import type { EdgeInsets, Metrics, Rect } from "react-native-safe-area-context";
 
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/_core/manus-runtime";
+import { JdaAuthProvider, useJdaAuth } from "@/lib/jda/auth";
+import { ActivityIndicator } from "react-native";
+import JdaLoginScreen from "@/components/jda-login-screen";
+import JdaSplash from "@/components/jda-splash";
+import { useColors } from "@/hooks/use-colors";
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
@@ -27,7 +32,40 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
+/**
+ * Auth to'sig'i: JDA hisobiga kirmagan foydalanuvchiga login ekrani ko'rsatiladi.
+ * Kirgandan keyin odatdagi tab'lar ochiladi.
+ */
+function JdaAuthGate() {
+  const { isLoading, isSignedIn } = useJdaAuth();
+  const colors = useColors();
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  if (!isSignedIn) {
+    return <JdaLoginScreen />;
+  }
+
+  // Default to hiding native headers so raw route segments don't appear (e.g. "(tabs)").
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="quiz/index" />
+      <Stack.Screen name="quiz/[category]" />
+      <Stack.Screen name="reactions/[id]" />
+      <Stack.Screen name="oauth/callback" />
+    </Stack>
+  );
+}
+
 export default function RootLayout() {
+  const colors = useColors();
   const [splashFinished, setSplashFinished] = useState(false);
   const initialInsets = initialWindowMetrics?.insets ?? DEFAULT_WEB_INSETS;
   const initialFrame = initialWindowMetrics?.frame ?? DEFAULT_WEB_FRAME;
@@ -40,12 +78,11 @@ export default function RootLayout() {
     initManusRuntime();
   }, []);
 
-  // Hide splash screen after animation (3 seconds)
+  // Splash'ning davomiyligini JdaSplash o'zi belgilaydi va tugagach
+  // onFinish chaqiradi. Bu yerdagi taymer — faqat zaxira: agar animatsiya
+  // biror sababga ko'ra tugamasa, foydalanuvchi ekranda qamalib qolmasin.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSplashFinished(true);
-    }, 3000);
-
+    const timer = setTimeout(() => setSplashFinished(true), 6000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -89,12 +126,13 @@ export default function RootLayout() {
     };
   }, [initialInsets, initialFrame]);
 
-  // Show splash screen animation
+  // Kirish animatsiyasi. Avval bu yerda bo'sh View turardi — foydalanuvchi
+  // uch sekund davomida qop-qora ekranga qarab turardi.
   if (!splashFinished) {
     return (
-      <View style={{ flex: 1, backgroundColor: "#090B1D", justifyContent: "center", alignItems: "center" }}>
-        {/* Splash screen - simple version for web compatibility */}
-      </View>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <JdaSplash onFinish={() => setSplashFinished(true)} />
+      </GestureHandlerRootView>
     );
   }
 
@@ -102,14 +140,10 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          {/* Default to hiding native headers so raw route segments don't appear (e.g. "(tabs)", "products/[id]"). */}
-          {/* If a screen needs the native header, explicitly enable it and set a human title via Stack.Screen options. */}
-          {/* in order for ios apps tab switching to work properly, use presentation: "fullScreenModal" for login page, whenever you decide to use presentation: "modal*/}
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="oauth/callback" />
-          </Stack>
-          <StatusBar style="auto" />
+          <JdaAuthProvider>
+            <JdaAuthGate />
+            <StatusBar style="auto" />
+          </JdaAuthProvider>
         </QueryClientProvider>
       </trpc.Provider>
     </GestureHandlerRootView>

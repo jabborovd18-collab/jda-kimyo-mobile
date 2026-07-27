@@ -184,7 +184,7 @@ export default function ChatScreen() {
               onPress={handleSendMessage}
               disabled={!newMessage.trim()}
               className={`px-4 py-2 rounded-lg ${
-                newMessage.trim() ? "bg-primary" : "bg-gray-400"
+                newMessage.trim() ? "bg-primary" : "bg-muted"
               }`}
             >
               <Text className="text-white font-semibold">📤</Text>

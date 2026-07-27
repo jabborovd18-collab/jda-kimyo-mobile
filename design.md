@@ -6,12 +6,35 @@ JDA Kimyo Mobile — oliy kimyo va kompleks birikmalar bo'yicha o'quv ilovasinin
 ---
 
 ## 🎨 Branding va Ranglar
-- **Asosiy rang (Primary):** #0a7ea4 (Koʻk — kimyoviy tahlil va ilmiy mavzuning ramzi)
-- **Fon (Background):** #ffffff (Oq) / #151718 (Qora rejimda)
-- **Matn (Foreground):** #11181C (Qora) / #ECEDEE (Oq rejimda)
-- **Ikkinchi rang (Muted):** #687076 (Oq) / #9BA1A6 (Qora rejimda)
-- **Yuqori sath (Surface):** #f5f5f5 (Oq) / #1e2022 (Qora rejimda)
-- **Chiziq (Border):** #E5E7EB (Oq) / #334155 (Qora rejimda)
+
+Ranglarning yagona manbasi — ildizdagi **`theme.config.js`**. Tailwind ranglari
+ham (`tailwind.config.js`), runtime palitra ham (`lib/_core/theme.ts`) o'shandan
+quriladi, ya'ni ilovaning ko'rinishi bitta fayldan boshqariladi.
+
+Qiymatlar **jdakimyo.uz saytidan** olingan (qavsda Tailwind nomi). Avval bu
+yerda shablondan qolgan oq fon va ko'k `#0a7ea4` turardi — sayt esa to'q
+binafsha zamin ustida sariq-to'q sariq brend akssenti bilan ishlaydi.
+
+| Token | Yorug' | To'q | Izoh |
+|---|---|---|---|
+| `primary` | `#7E22CE` | `#FACC15` | brend akssenti (purple-700 / yellow-400) |
+| `background` | `#FAF7FF` | `#2A0A48` | zamin |
+| `surface` | `#FFFFFF` | `#3B0764` | karta (purple-950) |
+| `foreground` | `#1E1035` | `#FFFFFF` | matn |
+| `muted` | `#6B5B8A` | `#C084FC` | ikkilamchi matn (purple-400) |
+| `border` | `#E6DDF5` | `#6B21A8` | chiziq (purple-800) |
+| `success` | `#16A34A` | `#34D399` | emerald-400 |
+| `warning` | `#D97706` | `#FBBF24` | amber-400 |
+| `error` | `#DC2626` | `#F87171` | red-400 |
+
+**To'q rejim asosiy** — sayt butunlay to'q va brend shunga qurilgan. Yorug'
+rejim ham bor, lekin u umumiy oq-ko'k emas, o'sha binafsha/amber brendning
+yorug' varianti.
+
+**Qoida:** ekranlarda rang qo'lda yozilmaydi. Tailwind uchun `bg-surface`,
+`text-muted` kabi token klasslari; `ActivityIndicator color` yoki
+`placeholderTextColor` kabi RN props'lari uchun `useColors()` hooki
+(`hooks/use-colors.ts`).
 
 ---
 

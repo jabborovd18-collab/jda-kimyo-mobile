@@ -1,456 +1,210 @@
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  FlatList,
   ScrollView,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
-  Modal,
-  Pressable,
-  FlatList,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useState, useMemo, useEffect } from "react";
 
 import { ScreenContainer } from "@/components/screen-container";
-import reactionsData from "@/lib/data/reactions.json";
+import { fetchReactions, type ReactionListItem } from "@/lib/jda/api";
+import { useColors } from "@/hooks/use-colors";
 
-interface Reaction {
-  id: number;
-  name: string;
-  equation: string;
-  category: string;
-  conditions: string;
-  catalyst: string;
-  technique: string;
-  products: string;
-  intensity: string;
-}
-
-const ITEMS_PER_PAGE = 50;
+const PAGE_SIZE = 30;
 
 /**
- * Reactions Screen - Reaksiyalar
- * 1000+ reaksiya, Pagination, Lazy Loading
+ * Reaksiyalar ekrani.
+ *
+ * Ma'lumot saytning bazasidan olinadi. Qidiruv formula yozilishiga bog'liq
+ * emas: "H2SO4" deb yozilsa ham "H₂SO₄" topiladi — pastki indeks belgisi
+ * ko'p klaviaturada yo'q.
  */
 export default function ReactionsScreen() {
-  const [searchText, setSearchText] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedReaction, setSelectedReaction] = useState<Reaction | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const colors = useColors();
+  const router = useRouter();
+  const [searchInput, setSearchInput] = useState("");
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
 
-  const categories = [
-    "all",
-    "Sintez",
-    "Oksidlanish",
-    "Asid-baza",
-    "Dehidratatsiya",
-    "Dehidrogenatsiya",
-    "Fermentatsiya",
-  ];
-
-  const getCategoryColor = (category: string) => {
-    const categoryColors: Record<string, string> = {
-      Sintez: "#FF6B6B",
-      Oksidlanish: "#4ECDC4",
-      "Asid-baza": "#FFE66D",
-      Dehidratatsiya: "#95E1D3",
-      Dehidrogenatsiya: "#C7CEEA",
-      Fermentatsiya: "#B19CD9",
-    };
-    return categoryColors[category] || "#999";
-  };
-
-  // Indeksni oddiy raqamga o'tkazish funksiyasi
-  const normalizeFormula = (text: string): string => {
-    // H2 → H₂, O2 → O₂, va boshqalar
-    return text.replace(/(\D)(\d+)/g, (match, letter, number) => {
-      const subscripts: Record<string, string> = {
-        "0": "₀",
-        "1": "₁",
-        "2": "₂",
-        "3": "₃",
-        "4": "₄",
-        "5": "₅",
-        "6": "₆",
-        "7": "₇",
-        "8": "₈",
-        "9": "₉",
-      };
-      return (
-        letter + number.split("").map((d: string) => subscripts[d] || d).join("")
-      );
-    });
-  };
-
-  // Indeksni oddiy raqamga o'tkazish (H₂ → H2)
-  const removeSubscripts = (text: string): string => {
-    const subscriptMap: Record<string, string> = {
-      "₀": "0",
-      "₁": "1",
-      "₂": "2",
-      "₃": "3",
-      "₄": "4",
-      "₅": "5",
-      "₆": "6",
-      "₇": "7",
-      "₈": "8",
-      "₉": "9",
-    };
-    return text.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => subscriptMap[match] || match);
-  };
-
-  const filteredReactions = useMemo(() => {
-    const normalizedSearch = normalizeFormula(searchText.toLowerCase());
-    const searchLower = searchText.toLowerCase();
-    const searchWithoutSubscripts = removeSubscripts(searchLower);
-
-    return (reactionsData as Reaction[]).filter((reaction) => {
-      // Nomi bo'yicha qidiruv
-      const matchesName = reaction.name.toLowerCase().includes(searchLower);
-
-      // Tenglamada qidiruv (indeks bilan va indekssiz)
-      const equationLower = reaction.equation.toLowerCase();
-      const equationWithoutSubscripts = removeSubscripts(equationLower);
-      const normalizedEquation = normalizeFormula(equationLower);
-      
-      const matchesEquation =
-        equationLower.includes(searchLower) || // Exact match
-        normalizedEquation.includes(normalizedSearch) || // Normalized match
-        equationLower.includes(normalizeFormula(searchLower)) || // Formula with subscripts
-        equationWithoutSubscripts.includes(searchWithoutSubscripts) || // Formula without subscripts (H3PO4 → h3po4)
-        equationLower.includes(searchWithoutSubscripts); // Search without subscripts in equation
-
-      // Kategoriya bo'yicha filtr
-      const matchesCategory =
-        selectedCategory === "all" || reaction.category === selectedCategory;
-
-      return (matchesName || matchesEquation) && matchesCategory;
-    });
-  }, [searchText, selectedCategory]);
-
-  // Pagination
-  const totalPages = Math.ceil(filteredReactions.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedReactions = filteredReactions.slice(startIndex, endIndex);
-
-  // Qidiruv yoki kategoriya o'zgarsa, birinchi sahifaga qaytarish
+  // Har harfda so'rov yubormaslik uchun kechiktirish
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchText, selectedCategory]);
+    const timer = setTimeout(() => setQuery(searchInput.trim()), 350);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
-  // Sahifa sonini 10 tagacha cheklash
-  const visiblePages = useMemo(() => {
-    const maxVisible = 10;
-    if (totalPages <= maxVisible) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-    const start = Math.max(1, currentPage - 4);
-    const end = Math.min(totalPages, start + maxVisible - 1);
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }, [currentPage, totalPages]);
+  const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
+    queryKey: ["jda", "reactions", query, category],
+    queryFn: () => fetchReactions({ q: query, category, limit: PAGE_SIZE }),
+    placeholderData: keepPreviousData,
+  });
+
+  const renderItem = ({ item }: { item: ReactionListItem }) => (
+    <TouchableOpacity
+      onPress={() => router.push(`/reactions/${item.id}` as any)}
+      className="bg-surface rounded-lg p-4 border border-border mb-2 active:opacity-80"
+    >
+      <Text className="text-sm font-semibold text-foreground leading-5">
+        {item.equation}
+      </Text>
+
+      {item.name ? (
+        <Text className="text-xs text-muted mt-1">{item.name}</Text>
+      ) : null}
+
+      <View className="flex-row flex-wrap gap-2 mt-3">
+        <View className="bg-primary/15 rounded px-2 py-0.5">
+          <Text className="text-[10px] text-primary">{item.category}</Text>
+        </View>
+        {item.temperature ? (
+          <View className="bg-surface border border-border rounded px-2 py-0.5">
+            <Text className="text-[10px] text-muted">🌡 {item.temperature}</Text>
+          </View>
+        ) : null}
+        {item.catalyst ? (
+          <View className="bg-surface border border-border rounded px-2 py-0.5">
+            <Text className="text-[10px] text-muted">⚡ {item.catalyst}</Text>
+          </View>
+        ) : null}
+        {item.scale ? (
+          <View className="bg-surface border border-border rounded px-2 py-0.5">
+            <Text className="text-[10px] text-muted">{item.scale}</Text>
+          </View>
+        ) : null}
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <ScreenContainer className="p-4">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="gap-4">
-          {/* Header */}
-          <View className="gap-2">
-            <Text className="text-3xl font-bold text-foreground">
-              ⚗️ Reaksiyalar
-            </Text>
-            <Text className="text-sm text-muted">
-              {filteredReactions.length} ta reaksiya topildi
-            </Text>
-          </View>
+      <View className="flex-1 gap-3">
+        {/* Sarlavha */}
+        <View>
+          <Text className="text-3xl font-bold text-foreground">Reaksiyalar</Text>
+          <Text className="text-sm text-muted">
+            {isLoading
+              ? "Yuklanmoqda..."
+              : `${data?.total ?? 0} ta reaksiya topildi`}
+          </Text>
+        </View>
 
-          {/* Search */}
-          <View className="flex-row items-center gap-2 bg-surface rounded-lg border border-border px-3 py-2">
-            <Text className="text-lg">🔍</Text>
-            <TextInput
-              placeholder="Reaksiya qidiruv (H2, O2, Suv, ...)"
-              placeholderTextColor="#999"
-              value={searchText}
-              onChangeText={setSearchText}
-              className="flex-1 text-foreground"
-            />
-          </View>
+        {/* Qidiruv */}
+        <View>
+          <TextInput
+            value={searchInput}
+            onChangeText={setSearchInput}
+            placeholder="Masalan: H2SO4, NaOH, Cu"
+            autoCapitalize="none"
+            autoCorrect={false}
+            className="bg-surface border border-border rounded-lg px-4 py-3 text-foreground"
+            placeholderTextColor={colors.muted}
+          />
+          <Text className="text-[11px] text-muted mt-1">
+            Pastki indeks shart emas — &quot;H2O&quot; deb yozsangiz ham
+            &quot;H₂O&quot; topiladi
+          </Text>
+        </View>
 
-          {/* Categories */}
+        {/* Kategoriya filtri */}
+        {data?.categories?.length ? (
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            className="gap-2"
+            contentContainerStyle={{ gap: 8, paddingVertical: 2 }}
           >
-            {categories.map((category) => (
+            <TouchableOpacity
+              onPress={() => setCategory("all")}
+              className={`rounded-full px-3 py-1.5 border ${
+                category === "all"
+                  ? "bg-primary border-primary"
+                  : "bg-surface border-border"
+              }`}
+            >
+              <Text
+                className={`text-xs font-semibold ${
+                  category === "all" ? "text-white" : "text-foreground"
+                }`}
+              >
+                Barchasi
+              </Text>
+            </TouchableOpacity>
+
+            {data.categories.map((item) => (
               <TouchableOpacity
-                key={category}
-                onPress={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full ${
-                  selectedCategory === category
-                    ? "bg-primary"
-                    : "bg-surface border border-border"
+                key={item.name}
+                onPress={() => setCategory(item.name)}
+                className={`rounded-full px-3 py-1.5 border ${
+                  category === item.name
+                    ? "bg-primary border-primary"
+                    : "bg-surface border-border"
                 }`}
               >
                 <Text
-                  className={`text-sm font-semibold ${
-                    selectedCategory === category
-                      ? "text-background"
-                      : "text-foreground"
+                  className={`text-xs font-semibold ${
+                    category === item.name ? "text-white" : "text-foreground"
                   }`}
                 >
-                  {category === "all" ? "Barcha" : category}
+                  {item.name} ({item.count})
                 </Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
+        ) : null}
 
-          {/* Reactions List */}
-          <View className="gap-3">
-            {paginatedReactions.length > 0 ? (
-              <FlatList
-                data={paginatedReactions}
-                keyExtractor={(item) => item.id.toString()}
-                scrollEnabled={false}
-                renderItem={({ item: reaction }) => (
-                  <Pressable
-                    onPress={() => setSelectedReaction(reaction)}
-                    className="bg-surface rounded-lg p-4 border border-border active:opacity-80"
-                  >
-                    {/* Name & Category */}
-                    <View className="flex-row items-start justify-between mb-2 gap-2">
-                      <Text className="flex-1 text-base font-bold text-foreground">
-                        {reaction.name}
-                      </Text>
-                      <View
-                        className="px-2 py-1 rounded"
-                        style={{
-                          backgroundColor: getCategoryColor(reaction.category),
-                        }}
-                      >
-                        <Text className="text-xs font-semibold text-white">
-                          {reaction.category}
-                        </Text>
-                      </View>
-                    </View>
-
-                    {/* Equation */}
-                    <Text className="text-sm font-mono text-primary mb-3">
-                      {reaction.equation}
-                    </Text>
-
-                    {/* Details */}
-                    <View className="gap-2 border-t border-border pt-3">
-                      <View className="flex-row justify-between">
-                        <Text className="text-xs text-muted">Sharoit:</Text>
-                        <Text className="text-xs font-semibold text-foreground">
-                          {reaction.conditions}
-                        </Text>
-                      </View>
-                      <View className="flex-row justify-between">
-                        <Text className="text-xs text-muted">Katalizator:</Text>
-                        <Text className="text-xs font-semibold text-foreground">
-                          {reaction.catalyst}
-                        </Text>
-                      </View>
-                      <View className="flex-row justify-between">
-                        <Text className="text-xs text-muted">Intensivlik:</Text>
-                        <Text className="text-xs font-semibold text-foreground">
-                          {reaction.intensity}
-                        </Text>
-                      </View>
-                    </View>
-
-                    {/* More Button */}
-                    <Text className="text-sm text-primary font-semibold mt-3">
-                      Batafsil ma'lumot →
-                    </Text>
-                  </Pressable>
-                )}
-              />
-            ) : (
-              <View className="items-center justify-center py-8">
-                <Text className="text-lg text-muted">Reaksiya topilmadi</Text>
-              </View>
-            )}
+        {/* Ro'yxat */}
+        {isLoading ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size="large" color={colors.primary} />
           </View>
-
-          {/* Pagination */}
-          {filteredReactions.length > ITEMS_PER_PAGE && (
-            <View className="gap-3 mt-4">
-              <View className="flex-row items-center justify-between">
-                <Text className="text-sm text-muted">
-                  {startIndex + 1}-{Math.min(endIndex, filteredReactions.length)}{" "}
-                  / {filteredReactions.length}
+        ) : isError ? (
+          <View className="bg-red-500/10 border border-red-500/40 rounded-lg p-4 gap-3">
+            <Text className="text-sm text-red-400">
+              {(error as Error)?.message || "Reaksiyalarni yuklab bo'lmadi"}
+            </Text>
+            <TouchableOpacity
+              onPress={() => refetch()}
+              className="bg-primary rounded-lg py-2 items-center"
+            >
+              <Text className="text-sm font-semibold text-white">Qayta urinish</Text>
+            </TouchableOpacity>
+          </View>
+        ) : !data || data.reactions.length === 0 ? (
+          <View className="flex-1 items-center justify-center gap-2 py-12">
+            <Text className="text-4xl">🔍</Text>
+            <Text className="text-sm text-muted text-center">
+              {query
+                ? `"${query}" bo'yicha hech narsa topilmadi`
+                : "Reaksiya yo'q"}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={data.reactions}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 16 }}
+            ListFooterComponent={
+              data.hasMore ? (
+                <Text className="text-xs text-muted text-center py-3">
+                  {data.reactions.length} / {data.total} ko&apos;rsatilmoqda —
+                  qidiruvni aniqlashtiring
                 </Text>
-                <View className="flex-row gap-2">
-                  <TouchableOpacity
-                    onPress={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                    disabled={currentPage === 1}
-                    className={`px-4 py-2 rounded-lg ${
-                      currentPage === 1 ? "bg-border opacity-50" : "bg-primary"
-                    }`}
-                  >
-                    <Text
-                      className={`font-semibold ${
-                        currentPage === 1 ? "text-muted" : "text-background"
-                      }`}
-                    >
-                      ← Oldingi
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      setCurrentPage(Math.min(totalPages, currentPage + 1))
-                    }
-                    disabled={currentPage === totalPages}
-                    className={`px-4 py-2 rounded-lg ${
-                      currentPage === totalPages
-                        ? "bg-border opacity-50"
-                        : "bg-primary"
-                    }`}
-                  >
-                    <Text
-                      className={`font-semibold ${
-                        currentPage === totalPages
-                          ? "text-muted"
-                          : "text-background"
-                      }`}
-                    >
-                      Keyingi →
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View className="flex-row items-center justify-center gap-1">
-                {visiblePages.map((page) => (
-                  <TouchableOpacity
-                    key={page}
-                    onPress={() => setCurrentPage(page)}
-                    className={`w-8 h-8 rounded-lg items-center justify-center ${
-                      currentPage === page
-                        ? "bg-primary"
-                        : "bg-surface border border-border"
-                    }`}
-                  >
-                    <Text
-                      className={`text-xs font-semibold ${
-                        currentPage === page
-                          ? "text-background"
-                          : "text-foreground"
-                      }`}
-                    >
-                      {page}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+              ) : null
+            }
+          />
+        )}
 
-      {/* Reaction Details Modal */}
-      <Modal visible={!!selectedReaction} animationType="slide" transparent>
-        <View className="flex-1 bg-black/50">
-          <View className="flex-1 bg-background rounded-t-3xl mt-auto">
-            <ScrollView showsVerticalScrollIndicator={false} className="p-6">
-              {selectedReaction && (
-                <View className="gap-4">
-                  {/* Close Button */}
-                  <Pressable
-                    onPress={() => setSelectedReaction(null)}
-                    className="self-end"
-                  >
-                    <Text className="text-2xl text-foreground">✕</Text>
-                  </Pressable>
-
-                  {/* Title */}
-                  <View className="gap-2">
-                    <Text className="text-2xl font-bold text-foreground">
-                      {selectedReaction.name}
-                    </Text>
-                    <View
-                      className="px-3 py-1 rounded self-start"
-                      style={{
-                        backgroundColor: getCategoryColor(
-                          selectedReaction.category
-                        ),
-                      }}
-                    >
-                      <Text className="text-xs font-semibold text-white">
-                        {selectedReaction.category}
-                      </Text>
-                    </View>
-                  </View>
-
-                  {/* Equation */}
-                  <View className="bg-surface border border-border rounded-lg p-4 gap-2">
-                    <Text className="text-xs font-semibold text-muted">
-                      REAKSIYA TENGLAMASI
-                    </Text>
-                    <Text className="text-lg font-mono text-foreground">
-                      {selectedReaction.equation}
-                    </Text>
-                  </View>
-
-                  {/* Details Grid */}
-                  <View className="gap-3">
-                    {[
-                      {
-                        label: "SHAROIT",
-                        value: selectedReaction.conditions,
-                        icon: "🌡️",
-                      },
-                      {
-                        label: "KATALIZATOR",
-                        value: selectedReaction.catalyst,
-                        icon: "⚙️",
-                      },
-                      {
-                        label: "TEKNIKA",
-                        value: selectedReaction.technique,
-                        icon: "🧪",
-                      },
-                      {
-                        label: "O'RTA MAHSULOT",
-                        value: selectedReaction.products,
-                        icon: "🧬",
-                      },
-                      {
-                        label: "INTENSIVLIGI",
-                        value: selectedReaction.intensity,
-                        icon: "💥",
-                      },
-                    ].map((item) => (
-                      <View
-                        key={item.label}
-                        className="bg-surface border border-border rounded-lg p-4 gap-2"
-                      >
-                        <Text className="text-xs font-semibold text-muted">
-                          {item.icon} {item.label}
-                        </Text>
-                        <Text className="text-base text-foreground">
-                          {item.value}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-
-                  {/* Close Button */}
-                  <TouchableOpacity
-                    onPress={() => setSelectedReaction(null)}
-                    className="bg-primary rounded-lg py-3 mt-4"
-                  >
-                    <Text className="text-center font-semibold text-background">
-                      Yopish
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            </ScrollView>
+        {isFetching && !isLoading ? (
+          <View className="absolute top-2 right-2">
+            <ActivityIndicator color={colors.primary} />
           </View>
-        </View>
-      </Modal>
+        ) : null}
+      </View>
     </ScreenContainer>
   );
 }
