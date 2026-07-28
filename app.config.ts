@@ -47,6 +47,18 @@ const config: ExpoConfig = {
   scheme: env.scheme,
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
+
+  // EAS hisobi va loyihasi.
+  //
+  // Bu ikki qator qo'lda yozilgan: konfiguratsiya dinamik (app.config.ts)
+  // bo'lgani uchun `eas build` ularni o'zi qo'sha olmaydi va "Cannot
+  // automatically write to dynamic config" deb to'xtaydi.
+  owner: "jabborovd18",
+  extra: {
+    eas: {
+      projectId: "719eb8bc-bf8e-4054-b214-9a1ae19e8309",
+    },
+  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: env.iosBundleId,
