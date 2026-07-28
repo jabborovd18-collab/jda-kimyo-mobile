@@ -3,10 +3,10 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   ActivityIndicator,
   ScrollView,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/matn";
 
 import { useColors } from "@/hooks/use-colors";
 import { ScreenContainer } from "@/components/screen-container";
@@ -23,7 +23,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <View className="bg-surface rounded-lg p-4 border border-border gap-3">
+    <View className="bg-surface rounded-2xl p-4 border border-border gap-3">
       <Text className="text-sm font-semibold text-foreground">
         {icon} {title}
       </Text>
@@ -46,6 +46,14 @@ function Row({ label, value }: { label: string; value: string }) {
 
 function hasItems(value: unknown[] | null | undefined) {
   return Array.isArray(value) && value.length > 0;
+}
+
+/** ISO sanadan "28.07.2026" ko'rinishi */
+function sanaMatni(iso: string) {
+  const sana = new Date(iso);
+  if (Number.isNaN(sana.getTime())) return "";
+  const ikki = (son: number) => String(son).padStart(2, "0");
+  return `${ikki(sana.getDate())}.${ikki(sana.getMonth() + 1)}.${sana.getFullYear()}`;
 }
 
 export default function ReactionDetailScreen() {
@@ -78,7 +86,7 @@ export default function ReactionDetailScreen() {
           </Text>
           <TouchableOpacity
             onPress={() => router.back()}
-            className="bg-surface border border-border rounded-lg px-5 py-3"
+            className="bg-surface border border-border rounded-xl px-5 py-3"
           >
             <Text className="text-sm text-foreground">Orqaga</Text>
           </TouchableOpacity>
@@ -94,7 +102,10 @@ export default function ReactionDetailScreen() {
   const hasSolvent = r.bestSolvent || r.solventEffect || hasItems(r.solvents);
   const hasMechanism = r.mechanism || hasItems(r.intermediates);
   const hasPractice =
-    hasItems(r.techniques) || hasItems(r.equipment) || r.observations || r.yieldInfo;
+    hasItems(r.techniques) ||
+    hasItems(r.equipment) ||
+    r.observations ||
+    r.yieldInfo;
 
   // Boy ma'lumotning qanchasi to'ldirilgan
   const filledSections = [
@@ -111,12 +122,15 @@ export default function ReactionDetailScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="gap-4 pb-8">
           {/* Orqaga */}
-          <TouchableOpacity onPress={() => router.back()} className="self-start p-1">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="self-start p-1"
+          >
             <Text className="text-2xl text-foreground">←</Text>
           </TouchableOpacity>
 
           {/* Tenglama */}
-          <View className="bg-surface rounded-lg p-4 border border-border gap-2">
+          <View className="bg-surface rounded-2xl p-4 border border-border gap-2">
             <Text className="text-base font-semibold text-foreground leading-6">
               {r.equation}
             </Text>
@@ -129,20 +143,30 @@ export default function ReactionDetailScreen() {
               </View>
               {r.reactionType ? (
                 <View className="bg-surface border border-border rounded px-2 py-0.5">
-                  <Text className="text-[10px] text-muted">{r.reactionType}</Text>
+                  <Text className="text-[10px] text-muted">
+                    {r.reactionType}
+                  </Text>
                 </View>
               ) : null}
             </View>
           </View>
 
-          {/* Tasdiqlanmagan bo'lsa ochiq aytamiz */}
-          {!r.isVerified ? (
-            <View className="bg-warning/10 border border-warning/40 rounded-lg p-3">
+          {/* Tasdiq holati — ikkalasi ham ochiq aytiladi */}
+          {r.isVerified ? (
+            <View className="bg-success/10 border border-success/40 rounded-2xl p-3">
+              <Text className="text-xs text-success">
+                ✓ Tasdiqlangan
+                {r.verifiedByName ? ` — ${r.verifiedByName}` : ""}
+                {r.verifiedAt ? `, ${sanaMatni(r.verifiedAt)}` : ""}
+              </Text>
+            </View>
+          ) : (
+            <View className="bg-warning/10 border border-warning/40 rounded-2xl p-3">
               <Text className="text-xs text-warning">
                 ⚠️ Bu yozuv kimyogar tomonidan hali tasdiqlanmagan
               </Text>
             </View>
-          ) : null}
+          )}
 
           {r.description ? (
             <Text className="text-sm text-foreground leading-5">
@@ -153,10 +177,16 @@ export default function ReactionDetailScreen() {
           {/* 1. SHAROIT */}
           {hasConditions ? (
             <Section title="Borish sharoiti" icon="🌡">
-              {r.temperature ? <Row label="Harorat" value={r.temperature} /> : null}
+              {r.temperature ? (
+                <Row label="Harorat" value={r.temperature} />
+              ) : null}
               {r.pressure ? <Row label="Bosim" value={r.pressure} /> : null}
-              {r.catalyst ? <Row label="Katalizator" value={r.catalyst} /> : null}
-              {r.environment ? <Row label="Muhit" value={r.environment} /> : null}
+              {r.catalyst ? (
+                <Row label="Katalizator" value={r.catalyst} />
+              ) : null}
+              {r.environment ? (
+                <Row label="Muhit" value={r.environment} />
+              ) : null}
             </Section>
           ) : null}
 
@@ -196,7 +226,10 @@ export default function ReactionDetailScreen() {
               ) : null}
               {hasItems(r.solvents)
                 ? r.solvents!.map((item, index) => (
-                    <View key={index} className="flex-row justify-between gap-3">
+                    <View
+                      key={index}
+                      className="flex-row justify-between gap-3"
+                    >
                       <Text className="text-xs text-foreground flex-1">
                         {item.name}
                       </Text>
@@ -219,7 +252,9 @@ export default function ReactionDetailScreen() {
             <Section title="Qo'llanilishi" icon="🏭">
               <Row label="Ko'lam" value={r.scale} />
               {r.scaleNote ? (
-                <Text className="text-xs text-muted leading-5">{r.scaleNote}</Text>
+                <Text className="text-xs text-muted leading-5">
+                  {r.scaleNote}
+                </Text>
               ) : null}
             </Section>
           ) : null}
@@ -233,7 +268,9 @@ export default function ReactionDetailScreen() {
                     {item.factor}
                   </Text>
                   {item.effect ? (
-                    <Text className="text-[11px] text-muted">{item.effect}</Text>
+                    <Text className="text-[11px] text-muted">
+                      {item.effect}
+                    </Text>
                   ) : null}
                 </View>
               ))}
@@ -252,7 +289,9 @@ export default function ReactionDetailScreen() {
                         key={index}
                         className="bg-surface border border-border rounded px-2 py-0.5"
                       >
-                        <Text className="text-[10px] text-foreground">{item}</Text>
+                        <Text className="text-[10px] text-foreground">
+                          {item}
+                        </Text>
                       </View>
                     ))}
                   </View>
@@ -268,7 +307,9 @@ export default function ReactionDetailScreen() {
                         key={index}
                         className="bg-surface border border-border rounded px-2 py-0.5"
                       >
-                        <Text className="text-[10px] text-foreground">{item}</Text>
+                        <Text className="text-[10px] text-foreground">
+                          {item}
+                        </Text>
                       </View>
                     ))}
                   </View>
@@ -277,7 +318,9 @@ export default function ReactionDetailScreen() {
 
               {r.observations ? (
                 <View className="gap-0.5">
-                  <Text className="text-xs text-muted">Kuzatiladigan belgilar</Text>
+                  <Text className="text-xs text-muted">
+                    Kuzatiladigan belgilar
+                  </Text>
                   <Text className="text-xs text-foreground leading-5">
                     {r.observations}
                   </Text>
@@ -290,7 +333,7 @@ export default function ReactionDetailScreen() {
 
           {/* 7. XAVFSIZLIK */}
           {hasItems(r.hazards) ? (
-            <View className="bg-error/10 border border-error/40 rounded-lg p-4 gap-2">
+            <View className="bg-error/10 border border-error/40 rounded-2xl p-4 gap-2">
               <Text className="text-sm font-semibold text-error">
                 ⚠️ Xavfsizlik
               </Text>
@@ -304,7 +347,7 @@ export default function ReactionDetailScreen() {
 
           {/* Ma'lumot to'liq emasligi haqida ochiq xabar */}
           {filledSections < 3 ? (
-            <View className="bg-surface/50 border border-border border-dashed rounded-lg p-4 gap-1">
+            <View className="bg-surface/50 border border-border border-dashed rounded-2xl p-4 gap-1">
               <Text className="text-xs font-semibold text-muted">
                 📝 Ma&apos;lumot to&apos;ldirilmoqda
               </Text>

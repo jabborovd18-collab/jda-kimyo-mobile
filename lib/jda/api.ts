@@ -81,7 +81,9 @@ const isWeb = Platform.OS === "web";
 async function storageGet(key: string): Promise<string | null> {
   try {
     if (isWeb) {
-      return typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
+      return typeof window !== "undefined"
+        ? window.localStorage.getItem(key)
+        : null;
     }
     return await SecureStore.getItemAsync(key);
   } catch {
@@ -92,7 +94,8 @@ async function storageGet(key: string): Promise<string | null> {
 async function storageSet(key: string, value: string): Promise<void> {
   try {
     if (isWeb) {
-      if (typeof window !== "undefined") window.localStorage.setItem(key, value);
+      if (typeof window !== "undefined")
+        window.localStorage.setItem(key, value);
       return;
     }
     await SecureStore.setItemAsync(key, value);
@@ -127,7 +130,8 @@ export async function getCachedUser(): Promise<JdaUser | null> {
   }
 }
 
-export const setCachedUser = (user: JdaUser) => storageSet(JDA_USER_KEY, JSON.stringify(user));
+export const setCachedUser = (user: JdaUser) =>
+  storageSet(JDA_USER_KEY, JSON.stringify(user));
 export const clearCachedUser = () => storageRemove(JDA_USER_KEY);
 
 // ─── So'rov yuborish ────────────────────────────────────────────
@@ -172,7 +176,10 @@ async function request<T>(
     if ((error as Error).name === "AbortError") {
       throw new JdaApiError("Server javob bermadi. Internetni tekshiring.", 0);
     }
-    throw new JdaApiError("Tarmoqqa ulanib bo'lmadi. Internetni tekshiring.", 0);
+    throw new JdaApiError(
+      "Tarmoqqa ulanib bo'lmadi. Internetni tekshiring.",
+      0,
+    );
   } finally {
     clearTimeout(timeout);
   }
@@ -197,7 +204,9 @@ export async function login(loginId: string, password: string) {
 }
 
 export async function fetchMe() {
-  const data = await request<{ success: true; user: JdaUser }>("/api/mobile/auth/me");
+  const data = await request<{ success: true; user: JdaUser }>(
+    "/api/mobile/auth/me",
+  );
   await setCachedUser(data.user);
   return data.user;
 }
@@ -308,7 +317,9 @@ export function fetchQuizQuestions(category: string, limit = 20) {
     category: { slug: string; name: string; icon: string };
     total: number;
     questions: QuizQuestion[];
-  }>(`/api/mobile/quiz/questions?category=${encodeURIComponent(category)}&limit=${limit}`);
+  }>(
+    `/api/mobile/quiz/questions?category=${encodeURIComponent(category)}&limit=${limit}`,
+  );
 }
 
 export function submitQuiz(payload: {
@@ -337,8 +348,16 @@ export type ReactionListItem = {
   isVerified: boolean;
 };
 
-export type ReactionIntermediate = { formula?: string; name?: string; note?: string };
-export type ReactionSolvent = { name?: string; efficiency?: string; note?: string };
+export type ReactionIntermediate = {
+  formula?: string;
+  name?: string;
+  note?: string;
+};
+export type ReactionSolvent = {
+  name?: string;
+  efficiency?: string;
+  note?: string;
+};
 export type ReactionRateFactor = { factor?: string; effect?: string };
 
 export type ReactionDetail = ReactionListItem & {
@@ -359,6 +378,10 @@ export type ReactionDetail = ReactionListItem & {
   yieldInfo: string | null;
   source: string | null;
   sourceUrl: string | null;
+  /** Kimyogar tasdiqlagan sana (ISO). Tasdiqlanmagan bo'lsa null. */
+  verifiedAt: string | null;
+  /** Kim tasdiqlagani — to'liq ism yoki foydalanuvchi nomi */
+  verifiedByName: string | null;
 };
 
 export type ReactionsResponse = {
@@ -372,20 +395,25 @@ export type ReactionsResponse = {
   reactions: ReactionListItem[];
 };
 
-export function fetchReactions(params: {
-  q?: string;
-  category?: string;
-  limit?: number;
-  offset?: number;
-} = {}) {
+export function fetchReactions(
+  params: {
+    q?: string;
+    category?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+) {
   const search = new URLSearchParams();
   if (params.q) search.set("q", params.q);
-  if (params.category && params.category !== "all") search.set("category", params.category);
+  if (params.category && params.category !== "all")
+    search.set("category", params.category);
   if (params.limit) search.set("limit", String(params.limit));
   if (params.offset) search.set("offset", String(params.offset));
 
   const qs = search.toString();
-  return request<ReactionsResponse>(`/api/mobile/reactions${qs ? `?${qs}` : ""}`);
+  return request<ReactionsResponse>(
+    `/api/mobile/reactions${qs ? `?${qs}` : ""}`,
+  );
 }
 
 export function fetchReaction(id: string) {
