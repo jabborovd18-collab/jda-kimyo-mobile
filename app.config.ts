@@ -56,10 +56,11 @@ const config: ExpoConfig = {
   },
   android: {
     adaptiveIcon: {
-      // Brend zamini — ilova foni bilan bir xil (theme.config.js dagi background)
-      backgroundColor: "#2A0A48",
+      // Logotip plitkasining o'z rangi. Android old qatlamni doiraga qirqadi;
+      // fon shu rangda bo'lsa, plitkaning yumaloq burchagi ko'rinmay ketadi
+      // va ikonka yaxlit chiqadi.
+      backgroundColor: "#0B0E12",
       foregroundImage: "./assets/images/android-icon-foreground.png",
-      monochromeImage: "./assets/images/android-icon-monochrome.png",
     },
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,

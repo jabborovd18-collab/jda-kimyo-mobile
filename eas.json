@@ -11,11 +11,17 @@
         "simulator": true
       },
       "distribution": "internal",
-      "channel": "sinov"
+      "channel": "sinov",
+      "env": {
+        "EXPO_PUBLIC_JDA_API_URL": "https://www.jdakimyo.uz"
+      }
     },
     "ishlab-chiqarish": {
       "autoIncrement": true,
-      "channel": "ishlab-chiqarish"
+      "channel": "ishlab-chiqarish",
+      "env": {
+        "EXPO_PUBLIC_JDA_API_URL": "https://www.jdakimyo.uz"
+      }
     }
   },
   "submit": {
