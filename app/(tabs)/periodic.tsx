@@ -170,7 +170,10 @@ export default function PeriodicScreen() {
           onChangeText={setQidiruv}
           placeholder="Belgi, nom yoki raqam — Fe, temir, 26"
           placeholderTextColor={colors.muted}
-          className="bg-surface border border-border rounded-xl px-4 py-3 text-foreground"
+          className="bg-surface border border-border rounded-xl px-4 py-3"
+          // Matn rangi uslub orqali — Android'da className bilan berilgani
+          // TextInput'ga yetib bormasligi va yozuv ko'rinmay qolishi mumkin
+          style={{ color: colors.foreground, fontSize: 16 }}
         />
 
         {/* Ranglash rejimi */}

@@ -30,11 +30,22 @@ export default function LoginScreen() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const canSubmit =
-    login.trim().length > 0 && password.length > 0 && !isSubmitting;
-
   const handleSubmit = async () => {
-    if (!canSubmit) return;
+    if (isSubmitting) return;
+
+    // Ilgari tugma maydonlar to'lmaguncha o'chirilgan turardi: bosilsa hech
+    // narsa bo'lmasdi va sababi ham aytilmasdi. Foydalanuvchi uchun bu
+    // "ilova ishlamayapti" degani. Endi tugma har doim javob beradi.
+    if (!login.trim() || !password) {
+      setError(
+        !login.trim() && !password
+          ? "Username va parolni kiriting"
+          : !login.trim()
+            ? "Username yoki email kiriting"
+            : "Parolni kiriting",
+      );
+      return;
+    }
 
     setIsSubmitting(true);
     setError("");
@@ -92,8 +103,12 @@ export default function LoginScreen() {
                 spellCheck={false}
                 textContentType="username"
                 editable={!isSubmitting}
-                className="bg-surface border border-border rounded-xl px-4 py-3 text-foreground"
+                className="bg-surface border border-border rounded-xl px-4 py-3"
                 placeholderTextColor={colors.muted}
+                // Matn rangi ataylab uslub orqali: Android'da className
+                // bilan berilgan rang TextInput'ga har doim ham yetib
+                // bormaydi va yozilgan matn ko'rinmay qoladi.
+                style={{ color: colors.foreground, fontSize: 16 }}
               />
             </View>
 
@@ -112,8 +127,9 @@ export default function LoginScreen() {
                   editable={!isSubmitting}
                   onSubmitEditing={handleSubmit}
                   returnKeyType="go"
-                  className="bg-surface border border-border rounded-xl px-4 py-3 pr-12 text-foreground"
+                  className="bg-surface border border-border rounded-xl px-4 py-3 pr-12"
                   placeholderTextColor={colors.muted}
+                  style={{ color: colors.foreground, fontSize: 16 }}
                 />
                 <TouchableOpacity
                   onPress={() => setShowPassword((value) => !value)}
@@ -128,11 +144,7 @@ export default function LoginScreen() {
             </View>
 
             {/* Kirish tugmasi — ilovaning birinchi taassuroti, brend gradienti bilan */}
-            <JdaTugma
-              onPress={handleSubmit}
-              disabled={!canSubmit}
-              yuklanmoqda={isSubmitting}
-            >
+            <JdaTugma onPress={handleSubmit} yuklanmoqda={isSubmitting}>
               Kirish
             </JdaTugma>
 

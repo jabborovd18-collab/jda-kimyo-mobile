@@ -105,8 +105,11 @@ export default function ReactionsScreen() {
             placeholder="Masalan: H2SO4, NaOH, Cu"
             autoCapitalize="none"
             autoCorrect={false}
-            className="bg-surface border border-border rounded-xl px-4 py-3 text-foreground"
+            className="bg-surface border border-border rounded-xl px-4 py-3"
             placeholderTextColor={colors.muted}
+            // Matn rangi uslub orqali — Android'da className bilan berilgani
+            // TextInput'ga yetib bormasligi va yozuv ko'rinmay qolishi mumkin
+            style={{ color: colors.foreground, fontSize: 16 }}
           />
           <Text className="text-[11px] text-muted mt-1">
             Pastki indeks shart emas — &quot;H2O&quot; deb yozsangiz ham

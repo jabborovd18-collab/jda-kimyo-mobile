@@ -59,6 +59,12 @@ const config: ExpoConfig = {
       projectId: "719eb8bc-bf8e-4054-b214-9a1ae19e8309",
     },
   },
+  updates: {
+    url: "https://u.expo.dev/719eb8bc-bf8e-4054-b214-9a1ae19e8309",
+  },
+  runtimeVersion: {
+    policy: "appVersion",
+  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: env.iosBundleId,
