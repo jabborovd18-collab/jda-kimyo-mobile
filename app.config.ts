@@ -56,9 +56,9 @@ const config: ExpoConfig = {
   },
   android: {
     adaptiveIcon: {
-      backgroundColor: "#E6F4FE",
+      // Brend zamini — ilova foni bilan bir xil (theme.config.js dagi background)
+      backgroundColor: "#2A0A48",
       foregroundImage: "./assets/images/android-icon-foreground.png",
-      backgroundImage: "./assets/images/android-icon-background.png",
       monochromeImage: "./assets/images/android-icon-monochrome.png",
     },
     edgeToEdgeEnabled: true,
@@ -105,9 +105,11 @@ const config: ExpoConfig = {
         image: "./assets/images/splash-icon.png",
         imageWidth: 200,
         resizeMode: "contain",
-        backgroundColor: "#ffffff",
+        // Tizim splash'i ilovaning o'z kirish ekranidan (JdaSplash) oldin
+        // ko'rinadi. Oq bo'lsa, to'q binafsha ekranga o'tishda ko'z qamashadi.
+        backgroundColor: "#2A0A48",
         dark: {
-          backgroundColor: "#000000",
+          backgroundColor: "#2A0A48",
         },
       },
     ],
