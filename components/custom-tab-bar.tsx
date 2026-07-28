@@ -1,11 +1,20 @@
-import { View, TouchableOpacity, Text } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { View, TouchableOpacity } from "react-native";
+import { Text } from "@/components/matn";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { gradientRanglari } from "@/components/jda-tugma";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useColors } from "@/hooks/use-colors";
 
-export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export function CustomTabBar({
+  state,
+  descriptors,
+  navigation,
+}: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const colors = useColors();
+  const qorongi = useColorScheme() === "dark";
   const bottomPadding = Math.max(insets.bottom, 8);
 
   // Center index (Bosh sahifa)
@@ -69,19 +78,22 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
                 marginTop: -30,
               }}
             >
-              <View
+              {/* Saytdagi asosiy tugma gradientli — markaziy tugma ham shunday */}
+              <LinearGradient
+                colors={gradientRanglari(qorongi)}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
                 style={{
                   width: 70,
                   height: 70,
                   borderRadius: 35,
-                  backgroundColor: colors.primary,
                   alignItems: "center",
                   justifyContent: "center",
-                  shadowColor: "#000",
+                  shadowColor: gradientRanglari(qorongi)[0],
                   shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 8,
-                  elevation: 8,
+                  shadowOpacity: 0.45,
+                  shadowRadius: 12,
+                  elevation: 10,
                 }}
               >
                 {options.tabBarIcon ? (
@@ -93,7 +105,7 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
                 ) : (
                   <Text style={{ fontSize: 32 }}>🏠</Text>
                 )}
-              </View>
+              </LinearGradient>
             </TouchableOpacity>
           );
         }

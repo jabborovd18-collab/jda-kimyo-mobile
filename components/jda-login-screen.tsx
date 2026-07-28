@@ -4,11 +4,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { JdaTugma } from "@/components/jda-tugma";
+import { Text } from "@/components/matn";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { useJdaAuth } from "@/lib/jda/auth";
@@ -29,7 +30,8 @@ export default function LoginScreen() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const canSubmit = login.trim().length > 0 && password.length > 0 && !isSubmitting;
+  const canSubmit =
+    login.trim().length > 0 && password.length > 0 && !isSubmitting;
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
@@ -63,7 +65,9 @@ export default function LoginScreen() {
             {/* Sarlavha */}
             <View className="gap-2 items-center">
               <Text className="text-5xl">⚗️</Text>
-              <Text className="text-3xl font-bold text-foreground">JDA Kimyo</Text>
+              <Text sarlavha className="text-3xl font-bold text-foreground">
+                JDA Kimyo
+              </Text>
               <Text className="text-sm text-muted text-center">
                 Sayt hisobingiz bilan kiring
               </Text>
@@ -71,7 +75,7 @@ export default function LoginScreen() {
 
             {/* Xato xabari */}
             {error ? (
-              <View className="bg-error/10 border border-error/40 rounded-lg p-3">
+              <View className="bg-error/10 border border-error/40 rounded-2xl p-3">
                 <Text className="text-sm text-error">{error}</Text>
               </View>
             ) : null}
@@ -88,7 +92,7 @@ export default function LoginScreen() {
                 spellCheck={false}
                 textContentType="username"
                 editable={!isSubmitting}
-                className="bg-surface border border-border rounded-lg px-4 py-3 text-foreground"
+                className="bg-surface border border-border rounded-xl px-4 py-3 text-foreground"
                 placeholderTextColor={colors.muted}
               />
             </View>
@@ -108,31 +112,29 @@ export default function LoginScreen() {
                   editable={!isSubmitting}
                   onSubmitEditing={handleSubmit}
                   returnKeyType="go"
-                  className="bg-surface border border-border rounded-lg px-4 py-3 pr-12 text-foreground"
+                  className="bg-surface border border-border rounded-xl px-4 py-3 pr-12 text-foreground"
                   placeholderTextColor={colors.muted}
                 />
                 <TouchableOpacity
                   onPress={() => setShowPassword((value) => !value)}
                   className="absolute right-3"
-                  accessibilityLabel={showPassword ? "Parolni yashirish" : "Parolni ko'rsatish"}
+                  accessibilityLabel={
+                    showPassword ? "Parolni yashirish" : "Parolni ko'rsatish"
+                  }
                 >
                   <Text className="text-lg">{showPassword ? "🙈" : "👁️"}</Text>
                 </TouchableOpacity>
               </View>
             </View>
 
-            {/* Kirish tugmasi */}
-            <TouchableOpacity
+            {/* Kirish tugmasi — ilovaning birinchi taassuroti, brend gradienti bilan */}
+            <JdaTugma
               onPress={handleSubmit}
               disabled={!canSubmit}
-              className={`rounded-lg py-4 items-center ${canSubmit ? "bg-primary" : "bg-primary/40"}`}
+              yuklanmoqda={isSubmitting}
             >
-              {isSubmitting ? (
-                <ActivityIndicator color={colors.background} />
-              ) : (
-                <Text className="text-base font-semibold text-background">Kirish</Text>
-              )}
-            </TouchableOpacity>
+              Kirish
+            </JdaTugma>
 
             <Text className="text-xs text-muted text-center">
               Hisobingiz yo'qmi? jdakimyo.uz saytida ro'yxatdan o'ting

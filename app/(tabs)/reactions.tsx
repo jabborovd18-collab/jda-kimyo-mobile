@@ -5,11 +5,12 @@ import {
   ActivityIndicator,
   FlatList,
   ScrollView,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { JdaTugma } from "@/components/jda-tugma";
+import { Text } from "@/components/matn";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { fetchReactions, type ReactionListItem } from "@/lib/jda/api";
@@ -46,7 +47,7 @@ export default function ReactionsScreen() {
   const renderItem = ({ item }: { item: ReactionListItem }) => (
     <TouchableOpacity
       onPress={() => router.push(`/reactions/${item.id}` as any)}
-      className="bg-surface rounded-lg p-4 border border-border mb-2 active:opacity-80"
+      className="bg-surface rounded-2xl p-4 border border-border mb-2 active:opacity-80"
     >
       <Text className="text-sm font-semibold text-foreground leading-5">
         {item.equation}
@@ -62,7 +63,9 @@ export default function ReactionsScreen() {
         </View>
         {item.temperature ? (
           <View className="bg-surface border border-border rounded px-2 py-0.5">
-            <Text className="text-[10px] text-muted">🌡 {item.temperature}</Text>
+            <Text className="text-[10px] text-muted">
+              🌡 {item.temperature}
+            </Text>
           </View>
         ) : null}
         {item.catalyst ? (
@@ -84,7 +87,9 @@ export default function ReactionsScreen() {
       <View className="flex-1 gap-3">
         {/* Sarlavha */}
         <View>
-          <Text className="text-3xl font-bold text-foreground">Reaksiyalar</Text>
+          <Text sarlavha className="text-3xl font-bold text-foreground">
+            Reaksiyalar
+          </Text>
           <Text className="text-sm text-muted">
             {isLoading
               ? "Yuklanmoqda..."
@@ -100,7 +105,7 @@ export default function ReactionsScreen() {
             placeholder="Masalan: H2SO4, NaOH, Cu"
             autoCapitalize="none"
             autoCorrect={false}
-            className="bg-surface border border-border rounded-lg px-4 py-3 text-foreground"
+            className="bg-surface border border-border rounded-xl px-4 py-3 text-foreground"
             placeholderTextColor={colors.muted}
           />
           <Text className="text-[11px] text-muted mt-1">
@@ -145,7 +150,9 @@ export default function ReactionsScreen() {
               >
                 <Text
                   className={`text-xs font-semibold ${
-                    category === item.name ? "text-background" : "text-foreground"
+                    category === item.name
+                      ? "text-background"
+                      : "text-foreground"
                   }`}
                 >
                   {item.name} ({item.count})
@@ -161,16 +168,13 @@ export default function ReactionsScreen() {
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
         ) : isError ? (
-          <View className="bg-error/10 border border-error/40 rounded-lg p-4 gap-3">
+          <View className="bg-error/10 border border-error/40 rounded-2xl p-4 gap-3">
             <Text className="text-sm text-error">
               {(error as Error)?.message || "Reaksiyalarni yuklab bo'lmadi"}
             </Text>
-            <TouchableOpacity
-              onPress={() => refetch()}
-              className="bg-primary rounded-lg py-2 items-center"
-            >
-              <Text className="text-sm font-semibold text-background">Qayta urinish</Text>
-            </TouchableOpacity>
+            <JdaTugma onPress={() => refetch()} kichik>
+              Qayta urinish
+            </JdaTugma>
           </View>
         ) : !data || data.reactions.length === 0 ? (
           <View className="flex-1 items-center justify-center gap-2 py-12">

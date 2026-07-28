@@ -5,10 +5,11 @@ import {
   Image,
   RefreshControl,
   ScrollView,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { JdaTugma } from "@/components/jda-tugma";
+import { Text } from "@/components/matn";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -54,7 +55,10 @@ export default function ProfileScreen() {
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
         refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} />
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={() => refetch()}
+          />
         }
       >
         <View className="gap-5">
@@ -63,11 +67,16 @@ export default function ProfileScreen() {
             <TouchableOpacity
               onPress={() => router.back()}
               accessibilityLabel="Orqaga"
-              className="px-3 py-2 rounded-lg bg-surface border border-border"
+              className="px-3 py-2 rounded-xl bg-surface border border-border"
             >
               <Text className="text-base text-muted">←</Text>
             </TouchableOpacity>
-            <Text className="text-2xl font-bold text-foreground flex-1">Profil</Text>
+            <Text
+              sarlavha
+              className="text-2xl font-bold text-foreground flex-1"
+            >
+              Profil
+            </Text>
           </View>
 
           {/* Shaxs kartasi */}
@@ -76,25 +85,31 @@ export default function ProfileScreen() {
               {u?.avatar ? (
                 <Image source={{ uri: u.avatar }} className="w-full h-full" />
               ) : (
-                <Text className="text-4xl font-bold text-background">
+                <Text sarlavha className="text-4xl font-bold text-background">
                   {ism.charAt(0).toUpperCase()}
                 </Text>
               )}
             </View>
 
             <View className="items-center gap-1">
-              <Text className="text-xl font-bold text-foreground">{ism}</Text>
+              <Text sarlavha className="text-xl font-bold text-foreground">
+                {ism}
+              </Text>
               {u?.username ? (
                 <Text className="text-sm text-muted">@{u.username}</Text>
               ) : null}
               {u?.university ? (
-                <Text className="text-xs text-muted mt-1">🏛️ {u.university}</Text>
+                <Text className="text-xs text-muted mt-1">
+                  🏛️ {u.university}
+                </Text>
               ) : null}
             </View>
 
             {u?.role ? (
               <View className="px-3 py-1 rounded-full bg-primary/15 border border-primary/40">
-                <Text className="text-xs font-semibold text-primary">{u.role}</Text>
+                <Text className="text-xs font-semibold text-primary">
+                  {u.role}
+                </Text>
               </View>
             ) : null}
           </View>
@@ -108,14 +123,9 @@ export default function ProfileScreen() {
               <Text className="text-sm text-error">
                 {error instanceof Error ? error.message : "Ma'lumot yuklanmadi"}
               </Text>
-              <TouchableOpacity
-                onPress={() => refetch()}
-                className="bg-primary rounded-lg py-2 items-center"
-              >
-                <Text className="text-sm font-semibold text-background">
-                  Qayta urinish
-                </Text>
-              </TouchableOpacity>
+              <JdaTugma onPress={() => refetch()} kichik>
+                Qayta urinish
+              </JdaTugma>
             </View>
           ) : (
             <>
@@ -166,8 +176,14 @@ export default function ProfileScreen() {
 
                 <View className="flex-row justify-between">
                   <Raqam qiymat={data?.quizStats.total ?? 0} nom="Yechilgan" />
-                  <Raqam qiymat={`${data?.quizStats.average ?? 0}%`} nom="O'rtacha" />
-                  <Raqam qiymat={`${data?.quizStats.best ?? 0}%`} nom="Eng yaxshi" />
+                  <Raqam
+                    qiymat={`${data?.quizStats.average ?? 0}%`}
+                    nom="O'rtacha"
+                  />
+                  <Raqam
+                    qiymat={`${data?.quizStats.best ?? 0}%`}
+                    nom="Eng yaxshi"
+                  />
                 </View>
 
                 {data?.quizStats.bestQuizName ? (
@@ -183,8 +199,10 @@ export default function ProfileScreen() {
                   🥇 Haftalik reyting
                 </Text>
                 <View className="flex-row items-baseline gap-2">
-                  <Text className="text-3xl font-bold text-primary">
-                    {data?.leaderboard.myRank ? `#${data.leaderboard.myRank}` : "—"}
+                  <Text sarlavha className="text-3xl font-bold text-primary">
+                    {data?.leaderboard.myRank
+                      ? `#${data.leaderboard.myRank}`
+                      : "—"}
                   </Text>
                   <Text className="text-sm text-muted">
                     {data?.leaderboard.myWeeklyStars ?? 0} yulduz
@@ -192,7 +210,8 @@ export default function ProfileScreen() {
                 </View>
                 {!data?.leaderboard.myRank ? (
                   <Text className="text-xs text-muted">
-                    Bu hafta hali natija yo&apos;q — quiz yechsangiz reytingga tushasiz
+                    Bu hafta hali natija yo&apos;q — quiz yechsangiz reytingga
+                    tushasiz
                   </Text>
                 ) : null}
               </View>
@@ -208,7 +227,10 @@ export default function ProfileScreen() {
                       key={q.id}
                       className="flex-row items-center justify-between gap-3"
                     >
-                      <Text className="text-sm text-foreground flex-1" numberOfLines={1}>
+                      <Text
+                        className="text-sm text-foreground flex-1"
+                        numberOfLines={1}
+                      >
                         {q.quizName}
                       </Text>
                       <Text
@@ -264,7 +286,9 @@ function Katak({
     <View className="flex-1 bg-surface border border-border rounded-2xl p-4 items-center gap-1">
       <Text className="text-2xl">{belgi}</Text>
       <View className="flex-row items-baseline gap-1">
-        <Text className="text-2xl font-bold text-foreground">{qiymat}</Text>
+        <Text sarlavha className="text-2xl font-bold text-foreground">
+          {qiymat}
+        </Text>
         {birlik ? <Text className="text-xs text-muted">{birlik}</Text> : null}
       </View>
       <Text className="text-xs text-muted text-center">{nom}</Text>
@@ -275,7 +299,9 @@ function Katak({
 function Raqam({ qiymat, nom }: { qiymat: number | string; nom: string }) {
   return (
     <View className="items-center gap-1">
-      <Text className="text-2xl font-bold text-foreground">{qiymat}</Text>
+      <Text sarlavha className="text-2xl font-bold text-foreground">
+        {qiymat}
+      </Text>
       <Text className="text-xs text-muted">{nom}</Text>
     </View>
   );

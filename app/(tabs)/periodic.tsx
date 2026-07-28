@@ -3,11 +3,11 @@ import {
   Modal,
   Pressable,
   ScrollView,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/matn";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -41,15 +41,16 @@ const QADAM = KATAK + ORALIQ;
 type Rejim = "kategoriya" | "blok" | "xossa";
 type Xossa = "electronegativity" | "density" | "meltingPointC" | "atomicRadius";
 
-const XOSSALAR: { kalit: Xossa; nom: string; birlik: string; log?: boolean }[] = [
-  { kalit: "electronegativity", nom: "Elektromanfiylik", birlik: "" },
-  { kalit: "atomicRadius", nom: "Atom radiusi", birlik: " pm" },
-  // Zichlik 0.00009 (vodorod) dan 22.57 (osmiy) gacha — 250 000 barobar farq.
-  // Chiziqli shkalada barcha gazlar bitta rangga tushib, jadval ma'nosini
-  // yo'qotardi, shuning uchun logarifmik.
-  { kalit: "density", nom: "Zichlik", birlik: " g/sm³", log: true },
-  { kalit: "meltingPointC", nom: "Erish harorati", birlik: " °C" },
-];
+const XOSSALAR: { kalit: Xossa; nom: string; birlik: string; log?: boolean }[] =
+  [
+    { kalit: "electronegativity", nom: "Elektromanfiylik", birlik: "" },
+    { kalit: "atomicRadius", nom: "Atom radiusi", birlik: " pm" },
+    // Zichlik 0.00009 (vodorod) dan 22.57 (osmiy) gacha — 250 000 barobar farq.
+    // Chiziqli shkalada barcha gazlar bitta rangga tushib, jadval ma'nosini
+    // yo'qotardi, shuning uchun logarifmik.
+    { kalit: "density", nom: "Zichlik", birlik: " g/sm³", log: true },
+    { kalit: "meltingPointC", nom: "Erish harorati", birlik: " °C" },
+  ];
 
 const BLOK_RANGI: Record<string, string> = {
   s: "#F87171",
@@ -68,7 +69,12 @@ function kategoriyaRangi(e: Element) {
  * Qiymati yo'q element rangsiz qoladi — bu ham ma'lumot: sun'iy og'ir
  * elementlarda o'lchangan qiymat yo'q.
  */
-function xossaRangi(qiymat: number | null, min: number, max: number, log = false) {
+function xossaRangi(
+  qiymat: number | null,
+  min: number,
+  max: number,
+  log = false,
+) {
   if (qiymat === null || max === min) return null;
 
   // Logarifmik shkalada nol va manfiy qiymat bo'lmaydi
@@ -89,7 +95,8 @@ function xossaRangi(qiymat: number | null, min: number, max: number, log = false
 }
 
 /** Uzun o'nlik sonlarni qisqartirish (masalan 1537.9). */
-const qisqa = (v: number) => (Number.isInteger(v) ? v : Math.round(v * 100) / 100);
+const qisqa = (v: number) =>
+  Number.isInteger(v) ? v : Math.round(v * 100) / 100;
 
 // ─── Ekran ───────────────────────────────────────────────────────
 
@@ -127,21 +134,32 @@ export default function PeriodicScreen() {
     if (rejim === "blok") return BLOK_RANGI[(e as any).block] ?? null;
     if (rejim === "xossa") {
       const x = XOSSALAR.find((v) => v.kalit === xossa);
-      return xossaRangi((e as any)[xossa] ?? null, chegara.min, chegara.max, x?.log);
+      return xossaRangi(
+        (e as any)[xossa] ?? null,
+        chegara.min,
+        chegara.max,
+        x?.log,
+      );
     }
     return kategoriyaRangi(e);
   };
 
   const fBlokda = (n: number) => (n >= 57 && n <= 71) || (n >= 89 && n <= 103);
   const asosiy = elementlar.filter((e) => !fBlokda(e.number));
-  const lantanoidlar = elementlar.filter((e) => e.number >= 57 && e.number <= 71);
-  const aktinoidlar = elementlar.filter((e) => e.number >= 89 && e.number <= 103);
+  const lantanoidlar = elementlar.filter(
+    (e) => e.number >= 57 && e.number <= 71,
+  );
+  const aktinoidlar = elementlar.filter(
+    (e) => e.number >= 89 && e.number <= 103,
+  );
 
   return (
     <ScreenContainer className="p-4">
       <View className="flex-1 gap-3">
         <View className="gap-1">
-          <Text className="text-3xl font-bold text-foreground">Davriy jadval</Text>
+          <Text sarlavha className="text-3xl font-bold text-foreground">
+            Davriy jadval
+          </Text>
           <Text className="text-sm text-muted">
             118 element · PubChem ma&apos;lumoti
           </Text>
@@ -168,8 +186,10 @@ export default function PeriodicScreen() {
               key={k}
               onPress={() => setRejim(k)}
               accessibilityState={{ selected: rejim === k }}
-              className={`flex-1 py-2 rounded-lg border items-center ${
-                rejim === k ? "bg-primary border-primary" : "bg-surface border-border"
+              className={`flex-1 py-2 rounded-xl border items-center ${
+                rejim === k
+                  ? "bg-primary border-primary"
+                  : "bg-surface border-border"
               }`}
             >
               <Text
@@ -198,7 +218,9 @@ export default function PeriodicScreen() {
                 >
                   <Text
                     className={`text-xs ${
-                      xossa === x.kalit ? "text-primary font-semibold" : "text-muted"
+                      xossa === x.kalit
+                        ? "text-primary font-semibold"
+                        : "text-muted"
                     }`}
                   >
                     {x.nom}
@@ -304,7 +326,12 @@ function Katak({
         justifyContent: "space-between",
       }}
     >
-      <Text style={{ fontSize: 8, color: rang ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.5)" }}>
+      <Text
+        style={{
+          fontSize: 8,
+          color: rang ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.5)",
+        }}
+      >
         {element.number}
       </Text>
       <Text
@@ -318,7 +345,10 @@ function Katak({
       </Text>
       <Text
         numberOfLines={1}
-        style={{ fontSize: 6.5, color: rang ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.45)" }}
+        style={{
+          fontSize: 6.5,
+          color: rang ? "rgba(0,0,0,0.6)" : "rgba(255,255,255,0.45)",
+        }}
       >
         {element.name}
       </Text>
@@ -326,7 +356,15 @@ function Katak({
   );
 }
 
-function OrinBelgisi({ chap, tep, matn }: { chap: number; tep: number; matn: string }) {
+function OrinBelgisi({
+  chap,
+  tep,
+  matn,
+}: {
+  chap: number;
+  tep: number;
+  matn: string;
+}) {
   return (
     <View
       style={{
@@ -343,7 +381,9 @@ function OrinBelgisi({ chap, tep, matn }: { chap: number; tep: number; matn: str
         justifyContent: "center",
       }}
     >
-      <Text style={{ fontSize: 8, color: "rgba(255,255,255,0.5)" }}>{matn}</Text>
+      <Text style={{ fontSize: 8, color: "rgba(255,255,255,0.5)" }}>
+        {matn}
+      </Text>
     </View>
   );
 }
@@ -372,7 +412,10 @@ function Izoh({
             {Array.from({ length: 24 }, (_, i) => (
               <View
                 key={i}
-                style={{ flex: 1, backgroundColor: xossaRangi(i, 0, 23) ?? "transparent" }}
+                style={{
+                  flex: 1,
+                  backgroundColor: xossaRangi(i, 0, 23) ?? "transparent",
+                }}
               />
             ))}
           </View>
@@ -393,7 +436,14 @@ function Izoh({
       <View className="flex-row gap-3 flex-wrap">
         {Object.entries(BLOK_RANGI).map(([b, rang]) => (
           <View key={b} className="flex-row items-center gap-1.5">
-            <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: rang }} />
+            <View
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: 3,
+                backgroundColor: rang,
+              }}
+            />
             <Text className="text-[11px] text-muted">{b}-blok</Text>
           </View>
         ))}
@@ -455,16 +505,24 @@ function ElementOynasi({
                 justifyContent: "center",
               }}
             >
-              <Text style={{ fontSize: 26, fontWeight: "800", color: "#12061F" }}>
+              <Text
+                style={{ fontSize: 26, fontWeight: "800", color: "#12061F" }}
+              >
                 {element.symbol}
               </Text>
-              <Text style={{ fontSize: 9, color: "rgba(0,0,0,0.6)" }}>{element.number}</Text>
+              <Text style={{ fontSize: 9, color: "rgba(0,0,0,0.6)" }}>
+                {element.number}
+              </Text>
             </View>
 
             <View className="flex-1">
-              <Text className="text-2xl font-bold text-foreground">{element.name}</Text>
+              <Text sarlavha className="text-2xl font-bold text-foreground">
+                {element.name}
+              </Text>
               <Text className="text-sm text-muted">{element.nameEn}</Text>
-              <Text className="text-xs text-primary mt-1">{element.categoryUz}</Text>
+              <Text className="text-xs text-primary mt-1">
+                {element.categoryUz}
+              </Text>
             </View>
 
             <TouchableOpacity onPress={onClose} accessibilityLabel="Yopish">
@@ -483,15 +541,30 @@ function ElementOynasi({
             <Qiymat nom="Qaynash" qiymat={e.boilingPointC} birlik="°C" />
             <Qiymat nom="Elektromanfiylik" qiymat={e.electronegativity} />
             <Qiymat nom="Atom radiusi" qiymat={e.atomicRadius} birlik="pm" />
-            <Qiymat nom="Ionlanish en." qiymat={e.ionizationEnergy} birlik="eV" />
-            <Qiymat nom="Elektronga moyillik" qiymat={e.electronAffinity} birlik="eV" />
+            <Qiymat
+              nom="Ionlanish en."
+              qiymat={e.ionizationEnergy}
+              birlik="eV"
+            />
+            <Qiymat
+              nom="Elektronga moyillik"
+              qiymat={e.electronAffinity}
+              birlik="eV"
+            />
           </View>
 
-          <Bolim nom="Elektron konfiguratsiya" matn={element.electronConfig} mono />
+          <Bolim
+            nom="Elektron konfiguratsiya"
+            matn={element.electronConfig}
+            mono
+          />
 
-          {Array.isArray(element.oxidationStates) && element.oxidationStates.length ? (
+          {Array.isArray(element.oxidationStates) &&
+          element.oxidationStates.length ? (
             <View className="mb-4">
-              <Text className="text-xs text-muted mb-1.5">Oksidlanish darajalari</Text>
+              <Text className="text-xs text-muted mb-1.5">
+                Oksidlanish darajalari
+              </Text>
               <View className="flex-row flex-wrap gap-1.5">
                 {element.oxidationStates.map((o: string) => (
                   <View
@@ -539,14 +612,24 @@ function Qiymat({
       <Text className="text-[10px] text-muted" numberOfLines={1}>
         {nom}
       </Text>
-      <Text className={`text-sm font-bold ${bor ? "text-foreground" : "text-muted"}`}>
+      <Text
+        className={`text-sm font-bold ${bor ? "text-foreground" : "text-muted"}`}
+      >
         {bor ? `${korinish}${birlik ? ` ${birlik}` : ""}` : "—"}
       </Text>
     </View>
   );
 }
 
-function Bolim({ nom, matn, mono }: { nom: string; matn?: string; mono?: boolean }) {
+function Bolim({
+  nom,
+  matn,
+  mono,
+}: {
+  nom: string;
+  matn?: string;
+  mono?: boolean;
+}) {
   if (!matn) return null;
   return (
     <View className="mb-4">

@@ -3,10 +3,11 @@ import { useRouter } from "expo-router";
 import {
   ActivityIndicator,
   ScrollView,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { JdaTugma } from "@/components/jda-tugma";
+import { Text } from "@/components/matn";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { fetchQuizCategories } from "@/lib/jda/api";
@@ -35,7 +36,9 @@ export default function QuizCategoriesScreen() {
               <Text className="text-2xl text-foreground">←</Text>
             </TouchableOpacity>
             <View className="flex-1">
-              <Text className="text-2xl font-bold text-foreground">Quiz</Text>
+              <Text sarlavha className="text-2xl font-bold text-foreground">
+                Quiz
+              </Text>
               <Text className="text-sm text-muted">
                 Mavzuni tanlang va bilimingizni sinang
               </Text>
@@ -47,16 +50,13 @@ export default function QuizCategoriesScreen() {
               <ActivityIndicator size="large" color={colors.primary} />
             </View>
           ) : isError || !data ? (
-            <View className="bg-error/10 border border-error/40 rounded-lg p-4 gap-3">
+            <View className="bg-error/10 border border-error/40 rounded-2xl p-4 gap-3">
               <Text className="text-sm text-error">
                 {(error as Error)?.message || "Kategoriyalarni yuklab bo'lmadi"}
               </Text>
-              <TouchableOpacity
-                onPress={() => refetch()}
-                className="bg-primary rounded-lg py-2 items-center"
-              >
-                <Text className="text-sm font-semibold text-background">Qayta urinish</Text>
-              </TouchableOpacity>
+              <JdaTugma onPress={() => refetch()} kichik>
+                Qayta urinish
+              </JdaTugma>
             </View>
           ) : (
             <View className="gap-3">
@@ -64,7 +64,7 @@ export default function QuizCategoriesScreen() {
                 <TouchableOpacity
                   key={category.slug}
                   onPress={() => router.push(`/quiz/${category.slug}` as any)}
-                  className="bg-surface rounded-lg p-4 border border-border active:opacity-80"
+                  className="bg-surface rounded-2xl p-4 border border-border active:opacity-80"
                 >
                   <View className="flex-row items-center gap-3">
                     <Text className="text-3xl">{category.icon}</Text>
@@ -86,7 +86,9 @@ export default function QuizCategoriesScreen() {
 
                   {category.bestPercentage !== null ? (
                     <View className="mt-3 pt-3 border-t border-border flex-row items-center justify-between">
-                      <Text className="text-xs text-muted">Eng yaxshi natijangiz</Text>
+                      <Text className="text-xs text-muted">
+                        Eng yaxshi natijangiz
+                      </Text>
                       <Text className="text-xs font-semibold text-primary">
                         {Math.round(category.bestPercentage)}%
                       </Text>

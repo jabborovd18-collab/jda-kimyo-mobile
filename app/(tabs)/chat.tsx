@@ -4,10 +4,11 @@ import {
   ActivityIndicator,
   RefreshControl,
   ScrollView,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { JdaTugma } from "@/components/jda-tugma";
+import { Text } from "@/components/matn";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -30,7 +31,12 @@ import { fetchForum, type ForumPost } from "@/lib/jda/api";
 
 type Bolim = "dolzarb" | "shaxsiy" | "ommaviy";
 
-const BOLIMLAR: { kalit: Bolim; nom: string; belgi: string; tayyor: boolean }[] = [
+const BOLIMLAR: {
+  kalit: Bolim;
+  nom: string;
+  belgi: string;
+  tayyor: boolean;
+}[] = [
   { kalit: "dolzarb", nom: "Dolzarb mavzular", belgi: "🔥", tayyor: true },
   { kalit: "shaxsiy", nom: "Shaxsiy", belgi: "✉️", tayyor: false },
   { kalit: "ommaviy", nom: "Ommaviy", belgi: "🌐", tayyor: false },
@@ -44,7 +50,9 @@ export default function ChatScreen() {
     <ScreenContainer className="p-4">
       <View className="flex-1 gap-4">
         <View className="gap-1">
-          <Text className="text-3xl font-bold text-foreground">💬 Muhokama</Text>
+          <Text sarlavha className="text-3xl font-bold text-foreground">
+            💬 Muhokama
+          </Text>
           <Text className="text-sm text-muted">
             Savol bering, tajriba ulashing
           </Text>
@@ -61,7 +69,9 @@ export default function ChatScreen() {
                 accessibilityRole="tab"
                 accessibilityState={{ selected: faol }}
                 className={`flex-1 px-2 py-2.5 rounded-xl border items-center ${
-                  faol ? "bg-primary border-primary" : "bg-surface border-border"
+                  faol
+                    ? "bg-primary border-primary"
+                    : "bg-surface border-border"
                 }`}
               >
                 <Text className="text-base">{b.belgi}</Text>
@@ -116,16 +126,13 @@ function DolzarbLenta({ rangPrimary }: { rangPrimary: string }) {
     return (
       <View className="bg-error/10 border border-error/40 rounded-2xl p-4 gap-3">
         <Text className="text-sm text-error">
-          {error instanceof Error ? error.message : "Mavzularni yuklab bo'lmadi"}
+          {error instanceof Error
+            ? error.message
+            : "Mavzularni yuklab bo'lmadi"}
         </Text>
-        <TouchableOpacity
-          onPress={() => refetch()}
-          className="bg-primary rounded-lg py-2 items-center"
-        >
-          <Text className="text-sm font-semibold text-background">
-            Qayta urinish
-          </Text>
-        </TouchableOpacity>
+        <JdaTugma onPress={() => refetch()} kichik>
+          Qayta urinish
+        </JdaTugma>
       </View>
     );
   }
@@ -183,10 +190,15 @@ function MavzuKartasi({ mavzu }: { mavzu: ForumPost }) {
           </Text>
         </View>
         <View className="flex-1">
-          <Text className="text-sm font-semibold text-foreground" numberOfLines={1}>
+          <Text
+            className="text-sm font-semibold text-foreground"
+            numberOfLines={1}
+          >
             {muallif}
           </Text>
-          <Text className="text-[11px] text-muted">{qachon(mavzu.createdAt)}</Text>
+          <Text className="text-[11px] text-muted">
+            {qachon(mavzu.createdAt)}
+          </Text>
         </View>
         {mavzu.isPinned ? <Text className="text-xs">📌</Text> : null}
         {kutmoqda ? (
@@ -200,7 +212,10 @@ function MavzuKartasi({ mavzu }: { mavzu: ForumPost }) {
         </Text>
       ) : null}
 
-      <Text className="text-sm text-foreground leading-relaxed" numberOfLines={4}>
+      <Text
+        className="text-sm text-foreground leading-relaxed"
+        numberOfLines={4}
+      >
         {mavzu.content}
       </Text>
 
@@ -221,20 +236,20 @@ function TezKunda({ bolim }: { bolim: Bolim }) {
       ? {
           belgi: "✉️",
           sarlavha: "Shaxsiy yozishmalar",
-          izoh:
-            "Ustoz va do'stlaringiz bilan yakkama-yakka yozishish. Hozircha tayyor emas.",
+          izoh: "Ustoz va do'stlaringiz bilan yakkama-yakka yozishish. Hozircha tayyor emas.",
         }
       : {
           belgi: "🌐",
           sarlavha: "Ommaviy chat",
-          izoh:
-            "Barcha foydalanuvchilar uchun umumiy jonli suhbat. Hozircha tayyor emas.",
+          izoh: "Barcha foydalanuvchilar uchun umumiy jonli suhbat. Hozircha tayyor emas.",
         };
 
   return (
     <View className="flex-1 items-center justify-center gap-3 px-6">
       <Text className="text-6xl">{matn.belgi}</Text>
-      <Text className="text-xl font-bold text-foreground">{matn.sarlavha}</Text>
+      <Text sarlavha className="text-xl font-bold text-foreground">
+        {matn.sarlavha}
+      </Text>
       <Text className="text-sm text-muted text-center leading-relaxed">
         {matn.izoh}
       </Text>
@@ -260,8 +275,18 @@ function qachon(sana: string): string {
 
   const d = new Date(sana);
   const oylar = [
-    "yanvar", "fevral", "mart", "aprel", "may", "iyun",
-    "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr",
+    "yanvar",
+    "fevral",
+    "mart",
+    "aprel",
+    "may",
+    "iyun",
+    "iyul",
+    "avgust",
+    "sentabr",
+    "oktabr",
+    "noyabr",
+    "dekabr",
   ];
   return `${d.getDate()} ${oylar[d.getMonth()]} ${d.getFullYear()}`;
 }

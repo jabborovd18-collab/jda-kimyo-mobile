@@ -4,10 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   ScrollView,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { JdaTugma } from "@/components/jda-tugma";
+import { Text } from "@/components/matn";
 
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -46,7 +47,9 @@ export default function QuizRunnerScreen() {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [submitState, setSubmitState] = useState<
-    { status: "idle" | "sending" } | { status: "done"; result: QuizSubmitResult } | { status: "error"; message: string }
+    | { status: "idle" | "sending" }
+    | { status: "done"; result: QuizSubmitResult }
+    | { status: "error"; message: string }
   >({ status: "idle" });
 
   const startedAt = useRef(Date.now());
@@ -83,7 +86,9 @@ export default function QuizRunnerScreen() {
 
         // Bosh sahifa va kategoriyalar statistikasi yangilansin
         queryClient.invalidateQueries({ queryKey: ["jda", "home"] });
-        queryClient.invalidateQueries({ queryKey: ["jda", "quiz", "categories"] });
+        queryClient.invalidateQueries({
+          queryKey: ["jda", "quiz", "categories"],
+        });
       } catch (err) {
         setSubmitState({
           status: "error",
@@ -132,7 +137,7 @@ export default function QuizRunnerScreen() {
           </Text>
           <TouchableOpacity
             onPress={() => router.back()}
-            className="bg-surface border border-border rounded-lg px-5 py-3"
+            className="bg-surface border border-border rounded-xl px-5 py-3"
           >
             <Text className="text-sm text-foreground">Orqaga</Text>
           </TouchableOpacity>
@@ -145,20 +150,30 @@ export default function QuizRunnerScreen() {
   if (finished) {
     const percentage = Math.round((score / questions.length) * 100);
     const verdict =
-      percentage >= 80 ? "Ajoyib! 🎉" : percentage >= 60 ? "Yaxshi 👍" : "Takrorlash kerak 📚";
+      percentage >= 80
+        ? "Ajoyib! 🎉"
+        : percentage >= 60
+          ? "Yaxshi 👍"
+          : "Takrorlash kerak 📚";
 
     return (
       <ScreenContainer className="p-4">
-        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+        >
           <View className="gap-6">
             <View className="items-center gap-2">
               <Text className="text-6xl">{percentage >= 60 ? "🏆" : "📚"}</Text>
-              <Text className="text-2xl font-bold text-foreground">{verdict}</Text>
+              <Text sarlavha className="text-2xl font-bold text-foreground">
+                {verdict}
+              </Text>
               <Text className="text-sm text-muted">{data.category.name}</Text>
             </View>
 
-            <View className="bg-surface rounded-lg p-6 border border-border items-center gap-2">
-              <Text className="text-5xl font-bold text-primary">{percentage}%</Text>
+            <View className="bg-surface rounded-xl p-6 border border-border items-center gap-2">
+              <Text className="text-5xl font-bold text-primary">
+                {percentage}%
+              </Text>
               <Text className="text-sm text-muted">
                 {questions.length} savoldan {score} ta to&apos;g&apos;ri
               </Text>
@@ -168,10 +183,12 @@ export default function QuizRunnerScreen() {
             {submitState.status === "sending" ? (
               <View className="flex-row items-center justify-center gap-2">
                 <ActivityIndicator color={colors.primary} />
-                <Text className="text-sm text-muted">Natija saqlanmoqda...</Text>
+                <Text className="text-sm text-muted">
+                  Natija saqlanmoqda...
+                </Text>
               </View>
             ) : submitState.status === "done" ? (
-              <View className="bg-primary/10 rounded-lg p-4 gap-1 items-center">
+              <View className="bg-primary/10 rounded-2xl p-4 gap-1 items-center">
                 <Text className="text-sm font-semibold text-primary">
                   +{submitState.result.xpGained} XP
                 </Text>
@@ -185,25 +202,22 @@ export default function QuizRunnerScreen() {
                 </Text>
               </View>
             ) : submitState.status === "error" ? (
-              <View className="bg-error/10 border border-error/40 rounded-lg p-4">
-                <Text className="text-xs text-error">{submitState.message}</Text>
+              <View className="bg-error/10 border border-error/40 rounded-2xl p-4">
+                <Text className="text-xs text-error">
+                  {submitState.message}
+                </Text>
               </View>
             ) : null}
 
             <View className="gap-3">
-              <TouchableOpacity
-                onPress={restart}
-                className="bg-primary rounded-lg py-4 items-center"
-              >
-                <Text className="text-base font-semibold text-background">
-                  Yana yechish
-                </Text>
-              </TouchableOpacity>
+              <JdaTugma onPress={restart}>Yana yechish</JdaTugma>
               <TouchableOpacity
                 onPress={() => router.back()}
-                className="bg-surface border border-border rounded-lg py-4 items-center"
+                className="bg-surface border border-border rounded-xl py-4 items-center"
               >
-                <Text className="text-base text-foreground">Kategoriyalarga</Text>
+                <Text className="text-base text-foreground">
+                  Kategoriyalarga
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -241,7 +255,7 @@ export default function QuizRunnerScreen() {
           </View>
 
           {/* Savol */}
-          <View className="bg-surface rounded-lg p-4 border border-border">
+          <View className="bg-surface rounded-2xl p-4 border border-border">
             <Text className="text-[11px] text-muted mb-2 uppercase">
               {current.difficulty}
             </Text>
@@ -265,13 +279,15 @@ export default function QuizRunnerScreen() {
                   key={optionIndex}
                   onPress={() => handleAnswer(optionIndex)}
                   disabled={answered}
-                  className={`rounded-lg p-4 border ${style} active:opacity-80`}
+                  className={`rounded-2xl p-4 border ${style} active:opacity-80`}
                 >
                   <View className="flex-row items-center gap-3">
                     <Text className="text-sm font-bold text-muted w-5">
                       {String.fromCharCode(65 + optionIndex)}
                     </Text>
-                    <Text className="text-sm text-foreground flex-1">{option}</Text>
+                    <Text className="text-sm text-foreground flex-1">
+                      {option}
+                    </Text>
                     {answered && isCorrect ? <Text>✓</Text> : null}
                     {answered && isPicked && !isCorrect ? <Text>✕</Text> : null}
                   </View>
@@ -282,8 +298,10 @@ export default function QuizRunnerScreen() {
 
           {/* Izoh */}
           {answered && current.explanation ? (
-            <View className="bg-primary/10 rounded-lg p-4">
-              <Text className="text-xs font-semibold text-primary mb-1">Izoh</Text>
+            <View className="bg-primary/10 rounded-2xl p-4">
+              <Text className="text-xs font-semibold text-primary mb-1">
+                Izoh
+              </Text>
               <Text className="text-sm text-foreground leading-5">
                 {current.explanation}
               </Text>
@@ -292,14 +310,9 @@ export default function QuizRunnerScreen() {
 
           {/* Keyingi */}
           {answered ? (
-            <TouchableOpacity
-              onPress={handleNext}
-              className="bg-primary rounded-lg py-4 items-center"
-            >
-              <Text className="text-base font-semibold text-background">
-                {isLast ? "Yakunlash" : "Keyingi savol →"}
-              </Text>
-            </TouchableOpacity>
+            <JdaTugma onPress={handleNext}>
+              {isLast ? "Yakunlash" : "Keyingi savol →"}
+            </JdaTugma>
           ) : null}
 
           <View className="h-4" />

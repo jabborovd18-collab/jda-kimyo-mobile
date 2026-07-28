@@ -1,5 +1,6 @@
 import "@/global.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -18,8 +19,12 @@ import type { EdgeInsets, Metrics, Rect } from "react-native-safe-area-context";
 // import LottieView from "lottie-react-native"; // Disabled for web compatibility
 
 import { trpc, createTRPCClient } from "@/lib/trpc";
-import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/_core/manus-runtime";
+import {
+  initManusRuntime,
+  subscribeSafeAreaInsets,
+} from "@/lib/_core/manus-runtime";
 import { JdaAuthProvider, useJdaAuth } from "@/lib/jda/auth";
+import { SHRIFT_FAYLLARI } from "@/lib/jda/shrift";
 import { ActivityIndicator } from "react-native";
 import JdaLoginScreen from "@/components/jda-login-screen";
 import JdaSplash from "@/components/jda-splash";
@@ -42,7 +47,14 @@ function JdaAuthGate() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: colors.background,
+        }}
+      >
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
@@ -66,6 +78,12 @@ function JdaAuthGate() {
 
 export default function RootLayout() {
   const [splashFinished, setSplashFinished] = useState(false);
+
+  // Shriftlar splash ko'rsatilayotgan paytda yuklanadi — foydalanuvchi
+  // kutmaydi. Yuklanmasa (masalan fayl buzilgan bo'lsa) ilova to'xtab
+  // qolmaydi: tizim shrifti bilan davom etadi.
+  const [shriftlarTayyor, shriftXatosi] = useFonts(SHRIFT_FAYLLARI);
+  const shriftHalQilindi = shriftlarTayyor || Boolean(shriftXatosi);
   const initialInsets = initialWindowMetrics?.insets ?? DEFAULT_WEB_INSETS;
   const initialFrame = initialWindowMetrics?.frame ?? DEFAULT_WEB_FRAME;
 
@@ -114,7 +132,10 @@ export default function RootLayout() {
 
   // Ensure minimum 8px padding for top and bottom on mobile
   const providerInitialMetrics = useMemo(() => {
-    const metrics = initialWindowMetrics ?? { insets: initialInsets, frame: initialFrame };
+    const metrics = initialWindowMetrics ?? {
+      insets: initialInsets,
+      frame: initialFrame,
+    };
     return {
       ...metrics,
       insets: {
@@ -127,7 +148,7 @@ export default function RootLayout() {
 
   // Kirish animatsiyasi. Avval bu yerda bo'sh View turardi — foydalanuvchi
   // uch sekund davomida qop-qora ekranga qarab turardi.
-  if (!splashFinished) {
+  if (!splashFinished || !shriftHalQilindi) {
     return (
       <GestureHandlerRootView style={{ flex: 1 }}>
         <JdaSplash onFinish={() => setSplashFinished(true)} />
@@ -166,7 +187,9 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <SafeAreaProvider initialMetrics={providerInitialMetrics}>{content}</SafeAreaProvider>
+      <SafeAreaProvider initialMetrics={providerInitialMetrics}>
+        {content}
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }
